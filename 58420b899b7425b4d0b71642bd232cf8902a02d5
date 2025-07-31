@@ -1,0 +1,22 @@
+Purpose: Deep dive into existing Emacs Lisp client architecture
+
+This experiment establishes a systematic workflow for analyzing the existing Wave client implementation to understand its architecture and extract key patterns that will inform our API design decisions.
+
+Files to analyze: All lisp/*.el files (wave-client.el, websocket.el, etc.)
+
+The analysis will focus on mapping the complete client codebase to understand how different modules interact and what protocols they implement.
+
+Research goals:
+- Map module dependencies and understand the overall architecture
+- Understand protocols used for Wave communication
+- Extract API expectations and message formats
+- Identify key client-server interaction patterns
+
+Key questions to investigate:
+- WebSocket vs browser channel communication mechanisms
+- Message formats and serialization approaches
+- Client state management strategies and patterns
+- Error handling and reconnection logic
+
+FPO workflow:
+The Makefile provides a structured approach for parsing and documenting the client codebase, with targets for analysis, documentation generation, and pattern extraction. This systematic approach ensures we don't miss critical architectural decisions when designing our own API layer.
