@@ -10,8 +10,30 @@ import json
 import asyncio
 import logging
 from enum import Enum
+import os
+from datetime import datetime as dt
 
-logging.basicConfig(level=logging.INFO)
+# Create logs directory
+os.makedirs("logs", exist_ok=True)
+
+# Configure logging
+log_level = os.getenv("WAVE_DEBUG", "false").lower() in ("true", "1", "yes")
+logging_level = logging.DEBUG if log_level else logging.INFO
+
+# File handler for detailed logs
+file_handler = logging.FileHandler(f"logs/wave_server_{dt.now().strftime('%Y%m%d_%H%M%S')}.log")
+file_handler.setLevel(logging.DEBUG)
+file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(file_formatter)
+
+# Console handler
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging_level)
+console_formatter = logging.Formatter('%(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+
+# Configure root logger
+logging.basicConfig(level=logging.DEBUG, handlers=[file_handler, console_handler])
 logger = logging.getLogger(__name__)
 
 app = FastAPI(
@@ -173,10 +195,13 @@ class ConnectionManager:
         self.channel_counter = 0
 
     async def connect(self, websocket: WebSocket, client_id: str):
+        logger.info(f"WebSocket connection attempt from client: {client_id}")
         await websocket.accept()
+        logger.info(f"WebSocket connection accepted for client: {client_id}")
         if client_id not in self.active_connections:
             self.active_connections[client_id] = []
         self.active_connections[client_id].append(websocket)
+        logger.debug(f"Active connections: {list(self.active_connections.keys())}")
 
     def disconnect(self, websocket: WebSocket, client_id: str):
         if client_id in self.active_connections:
@@ -234,17 +259,38 @@ def init_demo_data(db: Session):
     db.add(index_wavelet)
     db.commit()
 
+# Middleware for request logging
+@app.middleware("http")
+async def log_requests(request, call_next):
+    logger.info(f"Incoming request: {request.method} {request.url}")
+    logger.debug(f"Headers: {dict(request.headers)}")
+    
+    # Log request body for POST/PUT
+    if request.method in ["POST", "PUT"]:
+        body = await request.body()
+        logger.debug(f"Request body: {body.decode('utf-8') if body else 'empty'}")
+        # Recreate request with body
+        from starlette.requests import Request
+        request = Request(request.scope, receive=lambda: {"type": "http.request", "body": body})
+    
+    response = await call_next(request)
+    logger.info(f"Response status: {response.status_code}")
+    return response
+
 # API Endpoints
 @app.get("/")
 async def root():
+    logger.debug("Root endpoint accessed")
     return {"message": "Wave Server API", "status": "running", "version": "0.2.0"}
 
 @app.get("/api/inbox", response_model=List[InboxItem])
 async def get_inbox(db: Session = Depends(get_db)):
+    logger.info("GET /api/inbox - Fetching inbox")
     init_demo_data(db)
     
     # Get all wavelets from indexwave (inbox)
     wavelets = db.query(Wavelet).all()
+    logger.debug(f"Found {len(wavelets)} wavelets in database")
     inbox_items = []
     
     for wavelet in wavelets:
@@ -266,7 +312,9 @@ async def get_inbox(db: Session = Depends(get_db)):
 
 @app.get("/api/waves/{wave_id}", response_model=List[WaveletResponse])
 async def get_wave(wave_id: str, db: Session = Depends(get_db)):
+    logger.info(f"GET /api/waves/{wave_id} - Fetching wave")
     wavelets = db.query(Wavelet).filter(Wavelet.wave_id == wave_id).all()
+    logger.debug(f"Found {len(wavelets)} wavelets for wave {wave_id}")
     if not wavelets:
         raise HTTPException(status_code=404, detail="Wave not found")
     
@@ -297,6 +345,8 @@ async def get_wave(wave_id: str, db: Session = Depends(get_db)):
 
 @app.post("/api/waves/{wave_id}/submit", response_model=SubmitResponse)
 async def submit_delta(wave_id: str, submission: DeltaSubmission, db: Session = Depends(get_db)):
+    logger.info(f"POST /api/waves/{wave_id}/submit - Submitting delta")
+    logger.debug(f"Delta submission: {submission.dict()}")
     wavelet = db.query(Wavelet).filter(
         Wavelet.wave_id == wave_id,
         Wavelet.wavelet_id == submission.wavelet_name.wavelet_id
@@ -363,9 +413,11 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
     try:
         while True:
             data = await websocket.receive_text()
+            logger.debug(f"Raw WebSocket data received: {data}")
             message = json.loads(data)
             
-            logger.info(f"Received WebSocket message: {message}")
+            logger.info(f"WebSocket message type: {message.get('messageType')}")
+            logger.debug(f"Full WebSocket message: {json.dumps(message, indent=2)}")
             
             # Handle different message types
             if message.get("messageType") == "ProtocolOpenRequest":
@@ -401,7 +453,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
         manager.disconnect(websocket, client_id)
         logger.info(f"Client {client_id} disconnected")
     except Exception as e:
-        logger.error(f"WebSocket error: {e}")
+        logger.error(f"WebSocket error: {e}", exc_info=True)
         manager.disconnect(websocket, client_id)
 
 if __name__ == "__main__":
