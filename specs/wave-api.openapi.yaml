@@ -1,0 +1,310 @@
+openapi: 3.0.3
+info:
+  title: Wave Server API
+  description: |
+    Wave Server API specification reverse-engineered from the Emacs Wave client.
+    This API supports both HTTP REST endpoints and WebSocket connections for real-time updates.
+  version: 0.2.0
+  contact:
+    name: Wave Client for Emacs
+    url: https://github.com/aygp-dr/wave-client-for-emacs
+
+servers:
+  - url: http://localhost:9898
+    description: Local development server
+  - url: ws://localhost:9898
+    description: WebSocket endpoint
+
+paths:
+  /api/inbox:
+    get:
+      summary: Get inbox waves
+      description: List all waves in the user's inbox
+      operationId: getInbox
+      responses:
+        '200':
+          description: List of waves in inbox
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InboxItem'
+
+  /api/waves/{waveId}:
+    get:
+      summary: Get wave details
+      description: Get full wave content including all wavelets
+      operationId: getWave
+      parameters:
+        - name: waveId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "indexwave!indexwave"
+      responses:
+        '200':
+          description: Wave with all wavelets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wavelet'
+
+  /api/waves/{waveId}/submit:
+    post:
+      summary: Submit delta to wave
+      description: Submit operations to modify a wave
+      operationId: submitDelta
+      parameters:
+        - name: waveId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeltaSubmission'
+      responses:
+        '200':
+          description: Delta submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitResponse'
+
+  /ws:
+    get:
+      summary: WebSocket connection
+      description: |
+        Establish WebSocket connection for real-time updates.
+        Protocol messages are JSON-encoded with the following structure:
+        - ProtocolOpenRequest: Open a channel for a wave
+        - ProtocolSubmitRequest: Submit changes to a wave
+        - ProtocolWaveletUpdate: Receive updates for a wave
+      responses:
+        '101':
+          description: Switching Protocols
+
+components:
+  schemas:
+    InboxItem:
+      type: object
+      required:
+        - id
+        - digest
+        - unread
+        - creator
+      properties:
+        id:
+          type: string
+          description: Wavelet ID
+          example: "googlewave.com!conv+root"
+        digest:
+          type: string
+          description: Preview text of the wave
+        unread:
+          type: integer
+          description: Number of unread blips
+          default: 0
+        creator:
+          type: string
+          description: Wave creator email
+          example: "author@googlewave.com"
+
+    Wavelet:
+      type: object
+      required:
+        - waveletName
+        - creator
+        - version
+        - participants
+        - docs
+      properties:
+        waveletName:
+          type: object
+          properties:
+            waveId:
+              type: string
+              example: "googlewave.com!w+abc123"
+            waveletId:
+              type: string
+              example: "googlewave.com!conv+root"
+        creator:
+          type: string
+          description: Creator email address
+        creationTime:
+          type: integer
+          description: Creation timestamp
+        version:
+          type: object
+          properties:
+            version:
+              type: integer
+            historyHash:
+              type: string
+        lastModifiedTime:
+          type: integer
+        participants:
+          type: array
+          items:
+            type: string
+            description: Participant email addresses
+        docs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Document'
+
+    Document:
+      type: object
+      required:
+        - docId
+        - content
+        - contributors
+      properties:
+        docId:
+          type: string
+          description: Document ID (e.g., 'main', 'digest')
+        contributors:
+          type: array
+          items:
+            type: string
+        lastModifiedVersion:
+          type: integer
+        lastModifiedTime:
+          type: integer
+        content:
+          type: array
+          description: Document content as operation sequence
+          items:
+            oneOf:
+              - type: string
+                description: Text content
+              - $ref: '#/components/schemas/Element'
+
+    Element:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: ['blip', 'image', 'line', 'attachment']
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+
+    DeltaSubmission:
+      type: object
+      required:
+        - waveletName
+        - delta
+      properties:
+        waveletName:
+          type: object
+          properties:
+            waveId:
+              type: string
+            waveletId:
+              type: string
+        delta:
+          $ref: '#/components/schemas/Delta'
+
+    Delta:
+      type: object
+      required:
+        - author
+        - operations
+      properties:
+        author:
+          type: string
+          description: Author email address
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Operation'
+
+    Operation:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: ['addParticipant', 'removeParticipant', 'documentOp', 'noOp']
+        participant:
+          type: string
+          description: For add/remove participant operations
+        docOp:
+          $ref: '#/components/schemas/DocumentOperation'
+
+    DocumentOperation:
+      type: object
+      required:
+        - docId
+        - components
+      properties:
+        docId:
+          type: string
+        components:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocOpComponent'
+
+    DocOpComponent:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: ['retain', 'characters', 'elementStart', 'elementEnd', 'deleteCharacters']
+        count:
+          type: integer
+          description: For retain operations
+        text:
+          type: string
+          description: For character operations
+        element:
+          $ref: '#/components/schemas/Element'
+          description: For element start operations
+
+    SubmitResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        version:
+          type: object
+          properties:
+            version:
+              type: integer
+            historyHash:
+              type: string
+
+    WebSocketMessage:
+      type: object
+      required:
+        - version
+        - sequenceNumber
+        - messageType
+        - messageJson
+      properties:
+        version:
+          type: integer
+          default: 0
+        sequenceNumber:
+          type: integer
+          description: Channel number for multiplexing
+        messageType:
+          type: string
+          enum: ['ProtocolOpenRequest', 'ProtocolSubmitRequest', 'ProtocolWaveletUpdate']
+        messageJson:
+          type: string
+          description: JSON-encoded message payload
