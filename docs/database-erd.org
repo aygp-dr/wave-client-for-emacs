@@ -1,0 +1,120 @@
+#+TITLE: Wave Server Database Schema
+#+DATE: 2025-07-31
+#+OPTIONS: toc:2
+
+* Entity Relationship Diagram
+
+#+begin_src plantuml :file wave-erd.png
+@startuml
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+!define primary_key(x) <u>x</u>
+!define foreign_key(x) <i>x</i>
+
+Table(waves, "waves") {
+  primary_key(id): INTEGER
+  wave_id: STRING
+  creator: STRING
+  created_at: DATETIME
+}
+
+Table(wavelets, "wavelets") {
+  primary_key(id): INTEGER
+  foreign_key(wave_id): STRING
+  wavelet_id: STRING
+  creator: STRING
+  creation_time: DATETIME
+  version: INTEGER
+  history_hash: STRING
+  last_modified_time: DATETIME
+  participants: JSON
+  docs: JSON
+}
+
+Table(wavelet_updates, "wavelet_updates") {
+  primary_key(id): INTEGER
+  foreign_key(wave_id): STRING
+  foreign_key(wavelet_id): STRING
+  channel_id: INTEGER
+  update_data: JSON
+  timestamp: DATETIME
+}
+
+waves ||--o{ wavelets : contains
+wavelets ||--o{ wavelet_updates : tracks
+@enduml
+#+end_src
+
+* Schema Details
+
+** waves
+Primary table for Wave instances
+- =id=: Primary key
+- =wave_id=: Unique Wave identifier (e.g., "localhost!w+abc123")
+- =creator=: Email of wave creator
+- =created_at=: Creation timestamp
+
+** wavelets
+Wavelets are conversation threads within a Wave
+- =id=: Primary key
+- =wave_id=: Foreign key to waves table
+- =wavelet_id=: Unique wavelet identifier (e.g., "localhost!conv+root")
+- =creator=: Email of wavelet creator
+- =creation_time=: Creation timestamp
+- =version=: Current version number
+- =history_hash=: Hash for version verification
+- =last_modified_time=: Last modification timestamp
+- =participants=: JSON array of participant emails
+- =docs=: JSON object containing documents (main, digest, etc.)
+
+** wavelet_updates
+Tracks all updates/operations on wavelets
+- =id=: Primary key
+- =wave_id=: Foreign key to waves table
+- =wavelet_id=: Foreign key reference
+- =channel_id=: WebSocket channel number
+- =update_data=: JSON containing the operation details
+- =timestamp=: When the update occurred
+
+* Document Structure
+
+The =docs= JSON field in wavelets contains:
+
+#+begin_src json
+{
+  "main": {
+    "docId": "main",
+    "contributors": ["user@domain"],
+    "content": [
+      "Text content",
+      {"type": "line"},
+      {"type": "element", "attributes": {...}}
+    ]
+  },
+  "digest": {
+    "docId": "digest",
+    "contributors": ["user@domain"],
+    "content": ["Summary text"]
+  }
+}
+#+end_src
+
+* Operations
+
+Updates in =wavelet_updates.update_data= follow the Wave protocol:
+
+#+begin_src json
+{
+  "type": "ProtocolWaveletUpdate",
+  "operations": [
+    {
+      "type": "documentOp",
+      "docId": "main",
+      "components": [
+        {"type": "retain", "count": 10},
+        {"type": "characters", "text": "new text"},
+        {"type": "deleteCharacters", "count": 5}
+      ]
+    }
+  ]
+}
+#+end_src
