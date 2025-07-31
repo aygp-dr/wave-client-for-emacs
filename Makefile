@@ -12,7 +12,11 @@ deps-check: ## Check if required dependencies are installed
 	@echo "✅ uv found: $$(uv --version)"
 	@command -v hg >/dev/null 2>&1 || { echo "❌ hg (mercurial) is not installed"; exit 1; }
 	@echo "✅ hg found: $$(hg --version | head -1)"
-	@echo "All dependencies are installed! 🎉"
+	@command -v tmux >/dev/null 2>&1 || { echo "⚠️  tmux is not installed (needed for dashboard)"; }
+	@command -v tmux >/dev/null 2>&1 && echo "✅ tmux found: $$(tmux -V)"
+	@command -v jq >/dev/null 2>&1 || { echo "⚠️  jq is not installed (optional for dashboard)"; }
+	@command -v jq >/dev/null 2>&1 && echo "✅ jq found: $$(jq --version)"
+	@echo "All required dependencies are installed! 🎉"
 
 install: deps-check ## Install Python dependencies
 	uv sync
@@ -63,21 +67,33 @@ explore-hg: deps-check ## Explore original Mercurial repository contents
 		echo "Edit .env to configure your environment"; \
 	fi
 
-dashboard: install .env ## Run Wave server and Emacs client in dashboard mode
-	@echo "Starting Wave Dashboard..."
-	@echo "========================="
-	@if [ -f .env ]; then \
-		echo "Loading environment from .env"; \
-		. ./.env; \
+dashboard: install .env ## Run Wave server and Emacs client in tmux dashboard
+	@./scripts/dashboard.sh
+
+db-seed: ## Seed database with test data
+	@echo "Seeding database with test data..."
+	@sqlite3 wave_server.db < scripts/seed.sql
+	@echo "Database seeded successfully!"
+
+db-summary: ## Show database summary and statistics
+	@echo "=== Wave Server Database Summary ==="
+	@if [ -f wave_server.db ]; then \
+		python3 scripts/check_db.py; \
+	else \
+		echo "No database found. Run 'make server' first to create it."; \
 	fi
-	@echo "Starting server on port 9898..."
-	@trap 'kill $$(jobs -p) 2>/dev/null' EXIT; \
-	uv run wave-client-server & \
-	SERVER_PID=$$!; \
-	echo "Server PID: $$SERVER_PID"; \
-	echo "Waiting for server to start..."; \
-	sleep 3; \
-	echo "Starting Emacs client..."; \
-	$${EMACS_BIN:-emacs} -nw -Q -l init.el; \
-	echo "Stopping server..."; \
-	kill $$SERVER_PID 2>/dev/null || true
+
+db-query: ## Interactive SQLite prompt for database queries
+	@if [ -f wave_server.db ]; then \
+		echo "Opening SQLite prompt. Type .help for commands, .quit to exit"; \
+		sqlite3 wave_server.db; \
+	else \
+		echo "No database found. Run 'make server' first to create it."; \
+	fi
+
+db-report: ## Generate quick database report
+	@if [ -f wave_server.db ]; then \
+		./scripts/db_query.sh; \
+	else \
+		echo "No database found. Run 'make server' first to create it."; \
+	fi
