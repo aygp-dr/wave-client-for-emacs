@@ -1,0 +1,401 @@
+#+TITLE: Wave Server HTTP API Examples
+#+AUTHOR: Wave Client Team
+#+DATE: [2025-07-31 Thu]
+#+PROPERTY: header-args:http :exports both :results output :wrap src json
+
+* Overview
+
+This document contains literate programming examples for the Wave Server HTTP API.
+You can execute these requests directly in Emacs using =ob-http= or =restclient-mode=.
+
+* Setup
+
+** Required Emacs packages
+
+Add this to your Emacs configuration:
+
+#+BEGIN_SRC elisp :tangle no
+(use-package ob-http
+  :ensure t
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((http . t))))
+
+(use-package restclient
+  :ensure t)
+#+END_SRC
+
+** Start the Wave Server
+
+Before running these examples, start the server:
+
+#+BEGIN_SRC bash :tangle no
+make server
+#+END_SRC
+
+* Basic API Tests
+:PROPERTIES:
+:header-args:http: :host localhost :port 9898
+:END:
+
+** Health Check
+
+Test if the server is running:
+
+#+BEGIN_SRC http :tangle ../tests/http/health-check.http
+GET http://localhost:9898/health
+#+END_SRC
+
+Expected response:
+#+BEGIN_SRC json
+{
+  "status": "healthy",
+  "timestamp": "2025-07-31T15:30:00.000Z"
+}
+#+END_SRC
+
+** Server Info
+
+Get server information:
+
+#+BEGIN_SRC http :tangle ../tests/http/server-info.http
+GET http://localhost:9898/api/server/info
+#+END_SRC
+
+* Wave Operations
+
+** Get User Inbox
+
+Retrieve waves for a specific user:
+
+#+BEGIN_SRC http :tangle ../tests/http/get-inbox.http
+GET http://localhost:9898/api/inbox/test@localhost
+#+END_SRC
+
+** Create a New Wave
+
+Create a new wave:
+
+#+BEGIN_SRC http :tangle ../tests/http/create-wave.http
+POST http://localhost:9898/api/waves
+Content-Type: application/json
+
+{
+  "creator": "test@localhost"
+}
+#+END_SRC
+
+** Get Wave Details
+
+Retrieve a specific wave:
+
+#+BEGIN_SRC http :tangle ../tests/http/get-wave.http
+GET http://localhost:9898/api/waves/localhost!w+abc123
+#+END_SRC
+
+* Wavelet Operations
+
+** Create a Wavelet
+
+Create a new wavelet in a wave:
+
+#+BEGIN_SRC http :tangle ../tests/http/create-wavelet.http
+POST http://localhost:9898/api/waves/localhost!w+abc123/wavelets
+Content-Type: application/json
+
+{
+  "wavelet_id": "localhost!conv+root",
+  "creator": "test@localhost",
+  "participants": ["test@localhost", "other@localhost"],
+  "docs": {
+    "main": {
+      "docId": "main",
+      "contributors": ["test@localhost"],
+      "content": ["Hello from HTTP test!"]
+    }
+  }
+}
+#+END_SRC
+
+** Update a Wavelet
+
+Submit a delta to update a wavelet:
+
+#+BEGIN_SRC http :tangle ../tests/http/update-wavelet.http
+PUT http://localhost:9898/api/waves/localhost!w+abc123/wavelets/localhost!conv+root
+Content-Type: application/json
+
+{
+  "version": 2,
+  "docs": {
+    "main": {
+      "docId": "main",
+      "contributors": ["test@localhost"],
+      "content": ["Hello from HTTP test!", {"type": "line"}, "This is an update!"]
+    }
+  }
+}
+#+END_SRC
+
+* Browser Channel API
+
+** Initialize Channel
+
+Start a browser channel session:
+
+#+BEGIN_SRC http :tangle ../tests/http/browser-channel-init.http
+POST http://localhost:9898/channel
+Content-Type: application/x-www-form-urlencoded
+
+VER=8&RID=rpc&t=1
+#+END_SRC
+
+** Send Channel Request
+
+Send a request through the browser channel:
+
+#+BEGIN_SRC http :tangle ../tests/http/browser-channel-request.http
+POST http://localhost:9898/channel
+Content-Type: application/x-www-form-urlencoded
+
+VER=8&RID=1001&AID=0&TYPE=xmlhttp&zx=abcdef123456&t=1
+#+END_SRC
+
+* WebSocket Testing
+
+WebSocket testing requires a different approach. Here's a Node.js script for WebSocket testing:
+
+#+BEGIN_SRC javascript :tangle ../tests/http/websocket-test.js
+const WebSocket = require('ws');
+
+const ws = new WebSocket('ws://localhost:9898/ws');
+
+ws.on('open', function open() {
+  console.log('Connected to Wave Server WebSocket');
+  
+  // Send open wave request
+  ws.send(JSON.stringify({
+    type: 'open_wave',
+    wave_id: 'localhost!w+abc123'
+  }));
+});
+
+ws.on('message', function message(data) {
+  console.log('Received:', JSON.parse(data));
+});
+
+ws.on('error', function error(err) {
+  console.error('WebSocket error:', err);
+});
+
+ws.on('close', function close() {
+  console.log('Disconnected from Wave Server');
+});
+
+// Keep the connection alive
+setTimeout(() => {
+  ws.close();
+  process.exit(0);
+}, 5000);
+#+END_SRC
+
+* Database Operations
+
+** Query Database Status
+
+Check database statistics:
+
+#+BEGIN_SRC http :tangle ../tests/http/db-status.http
+GET http://localhost:9898/api/admin/db/status
+#+END_SRC
+
+** Seed Database
+
+Seed the database with test data:
+
+#+BEGIN_SRC http :tangle ../tests/http/db-seed.http
+POST http://localhost:9898/api/admin/db/seed
+#+END_SRC
+
+* Error Handling Tests
+
+** Invalid Wave ID
+
+Test error handling with invalid wave ID:
+
+#+BEGIN_SRC http :tangle ../tests/http/error-invalid-wave.http
+GET http://localhost:9898/api/waves/invalid-wave-id
+#+END_SRC
+
+** Missing Required Fields
+
+Test error handling with missing fields:
+
+#+BEGIN_SRC http :tangle ../tests/http/error-missing-fields.http
+POST http://localhost:9898/api/waves
+Content-Type: application/json
+
+{
+  "invalid": "data"
+}
+#+END_SRC
+
+* Batch Operations
+
+** Get Multiple Waves
+
+Retrieve multiple waves at once:
+
+#+BEGIN_SRC http :tangle ../tests/http/batch-get-waves.http
+POST http://localhost:9898/api/waves/batch
+Content-Type: application/json
+
+{
+  "wave_ids": [
+    "localhost!w+abc123",
+    "localhost!w+def456",
+    "localhost!w+ghi789"
+  ]
+}
+#+END_SRC
+
+* Running the Tests
+
+** Using Org Babel
+
+To run a specific test block in this file:
+1. Place cursor in the code block
+2. Press =C-c C-c= to execute
+
+** Using Tangled Files
+
+Generate all HTTP files:
+#+BEGIN_SRC bash :tangle no
+make -C examples tangle
+#+END_SRC
+
+Then use with REST client:
+#+BEGIN_SRC bash :tangle no
+# Using httpie
+http --print=HhBb < tests/http/health-check.http
+
+# Using curl
+curl -X GET http://localhost:9898/health
+#+END_SRC
+
+** Using restclient-mode
+
+1. Open any =.http= file in =tests/http/=
+2. Press =C-c C-c= on a request to execute it
+
+* Test Utilities
+
+** Generate Test Wave ID
+
+#+BEGIN_SRC elisp :tangle ../tests/http/utils.el
+(defun wave-generate-test-id ()
+  "Generate a test wave ID."
+  (format "localhost!w+test%s" (format-time-string "%Y%m%d%H%M%S")))
+
+(defun wave-test-request (endpoint &optional method data)
+  "Make a test request to wave server."
+  (let ((url (format "http://localhost:9898%s" endpoint))
+        (url-request-method (or method "GET"))
+        (url-request-extra-headers '(("Content-Type" . "application/json")))
+        (url-request-data (when data (json-encode data))))
+    (with-current-buffer (url-retrieve-synchronously url)
+      (goto-char (point-min))
+      (re-search-forward "^$")
+      (json-read))))
+#+END_SRC
+
+* Integration Test Suite
+
+#+BEGIN_SRC python :tangle ../tests/integration/test_http_api.py
+"""HTTP API integration tests using the .http files."""
+
+import pytest
+import httpx
+import json
+from pathlib import Path
+
+HTTP_TEST_DIR = Path(__file__).parent.parent / "http"
+BASE_URL = "http://localhost:9898"
+
+class TestHTTPAPI:
+    """Test HTTP API using the .http file definitions."""
+    
+    @pytest.fixture(scope="class")
+    def client(self):
+        """Create HTTP client."""
+        return httpx.Client(base_url=BASE_URL)
+    
+    def test_health_check(self, client):
+        """Test health check endpoint."""
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "healthy"
+        assert "timestamp" in data
+    
+    def test_create_wave(self, client):
+        """Test wave creation."""
+        response = client.post(
+            "/api/waves",
+            json={"creator": "test@localhost"}
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert "wave_id" in data
+        assert data["creator"] == "test@localhost"
+        return data["wave_id"]
+    
+    def test_get_inbox(self, client):
+        """Test inbox retrieval."""
+        response = client.get("/api/inbox/test@localhost")
+        assert response.status_code == 200
+        data = response.json()
+        assert isinstance(data, list)
+    
+    def test_wave_lifecycle(self, client):
+        """Test complete wave lifecycle."""
+        # Create wave
+        create_response = client.post(
+            "/api/waves",
+            json={"creator": "test@localhost"}
+        )
+        wave_id = create_response.json()["wave_id"]
+        
+        # Get wave
+        get_response = client.get(f"/api/waves/{wave_id}")
+        assert get_response.status_code == 200
+        
+        # Create wavelet
+        wavelet_response = client.post(
+            f"/api/waves/{wave_id}/wavelets",
+            json={
+                "wavelet_id": "localhost!conv+root",
+                "creator": "test@localhost",
+                "participants": ["test@localhost"],
+                "docs": {"main": {"content": ["Test"]}}
+            }
+        )
+        assert wavelet_response.status_code == 200
+        
+        # Update wavelet
+        update_response = client.put(
+            f"/api/waves/{wave_id}/wavelets/localhost!conv+root",
+            json={
+                "version": 2,
+                "docs": {"main": {"content": ["Updated"]}}
+            }
+        )
+        assert update_response.status_code == 200
+#+END_SRC
+
+* Local Variables
+
+# Local Variables:
+# org-confirm-babel-evaluate: nil
+# End:
