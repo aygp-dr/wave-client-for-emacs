@@ -1,0 +1,69 @@
+Context: Testing Infrastructure Implementation
+=============================================
+
+Date: 2025-07-31
+Session: Wave Client Testing Setup
+
+## Discussion Context
+User requested comprehensive testing setup for the Wave client, specifically:
+- Unit tests for Python code
+- Integration tests using .http files for Emacs rest-client/http-client modes
+- Literate programming support with Org mode
+- Preservation of 15-year-old Elisp code (read-only features)
+
+## Goals
+1. Enable testing without modifying legacy Elisp code
+2. Support multiple testing approaches (pytest, HTTP files, Org Babel)
+3. Create development-friendly environment for Emacs users
+4. Implement literate programming for documentation and testing
+
+## Implementation Details
+
+### Python Testing
+- Created pytest configuration with coverage support
+- Unit tests for WaveServer, ConnectionManager, and API endpoints
+- Integration tests for WebSocket functionality
+- Fixtures for test data and temporary databases
+
+### HTTP Testing
+- Literate programming approach with examples/README.org
+- Tangles to .http files compatible with rest-client-mode
+- Covers all major API endpoints
+- Includes error handling and batch operation tests
+
+### Development Environment
+- init-dev.el for development setup
+- Automatic package installation (restclient, ob-http, etc.)
+- Org Babel configuration for multiple languages
+- Helper functions for common development tasks
+
+### Build System Updates
+- Separate lint-python target (user requirement)
+- Test targets for Python and Elisp
+- Tangle support in examples/Makefile
+- Format target using black and ruff
+
+## Deviations from Original Plan
+- Added init-dev.el instead of modifying init.el (better separation)
+- Created comprehensive HTTP test suite beyond basic examples
+- Added Python integration tests alongside HTTP files
+- Included WebSocket testing utilities
+
+## Issues Encountered
+- None significant; straightforward implementation
+
+## Timing
+- Total implementation: ~20 minutes
+- Most time spent on comprehensive HTTP examples
+
+## Next Steps
+1. Start server with `make server`
+2. Run tests with `make test`
+3. Use `emacs -l init-dev.el` for development
+4. Execute HTTP tests in Emacs with C-c C-c in .http files
+
+## Technical Notes
+- pytest configured with asyncio support for WebSocket tests
+- Org Babel configured to not ask for evaluation confirmation
+- HTTP files use standard format compatible with multiple tools
+- Makefile uses uv for dependency management
