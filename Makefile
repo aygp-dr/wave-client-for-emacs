@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test clean server dashboard .env
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -27,17 +27,27 @@ dev: install ## Run development server
 server: install ## Run production server
 	uv run uvicorn wave_client_server.wave_server:app --host 0.0.0.0 --port 9898
 
-test: install ## Run tests
-	@echo "Running tests..."
-	@if [ -f "tests/test_*.py" ]; then \
-		uv run pytest tests/; \
-	else \
-		echo "No Python tests found"; \
-	fi
-	@if [ -f "tests/wave-tests.el" ]; then \
-		echo "Emacs Lisp tests found in tests/wave-tests.el"; \
-		echo "Run with: emacs -batch -l tests/wave-tests.el"; \
-	fi
+test: test-python test-elisp ## Run all tests
+
+test-python: install ## Run Python tests
+	@echo "Running Python tests..."
+	uv run --extra test pytest -v
+
+test-elisp: ## Run Elisp tests
+	@echo "Running Elisp tests..."
+	@./scripts/test-elisp.sh
+
+lint: lint-python ## Run linters
+
+lint-python: install ## Run Python linters
+	@echo "Running Python linters..."
+	uv run --extra dev ruff check src/ tests/
+	uv run --extra dev mypy src/
+
+format: install ## Format Python code
+	@echo "Formatting Python code..."
+	uv run --extra dev black src/ tests/
+	uv run --extra dev ruff check --fix src/ tests/
 
 clean: ## Clean up generated files
 	rm -rf __pycache__/
@@ -97,3 +107,8 @@ db-report: ## Generate quick database report
 	else \
 		echo "No database found. Run 'make server' first to create it."; \
 	fi
+
+README.md: README.org ## Generate README.md from README.org
+	@echo "Generating README.md from README.org..."
+	@emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
+	@echo "README.md generated successfully!"

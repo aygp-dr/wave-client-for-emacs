@@ -1,0 +1,183 @@
+#+TITLE: Feed Reader Seed Data Usage Guide
+#+AUTHOR: Wave Client Team
+#+DATE: [2025-07-31 Thu]
+
+* Overview
+
+The =seed.sql= file contains sample data to populate your Feed Reader with a tech/programming-focused feed that matches the look and feel of the original screenshot. It includes:
+
+- *8 Popular Tech Feeds*: Hacker News, Reddit r/programming, Ars Technica, GitHub Trending, TechCrunch, Lobsters, Slashdot, and DEV Community
+- *25 Articles*: Mix of recent (unread) and older (read) articles
+- *Realistic Content*: Programming tutorials, tech news, open source projects, and developer discussions
+- *Read/Unread Status*: Newer articles are unread (bold), older ones are marked as read
+- *Starred Articles*: A few articles are pre-starred to show the feature
+
+* Quick Start
+
+** Method 1: Using the Seed Script
+
+#+BEGIN_SRC bash
+# From the project root
+python seed_database.py
+
+# Or specify custom paths
+python seed_database.py path/to/feedreader.db path/to/seed.sql
+#+END_SRC
+
+** Method 2: Manual SQLite
+
+#+BEGIN_SRC bash
+# Using SQLite command line
+sqlite3 feedreader/data/feedreader.db < seed.sql
+
+# Or from within SQLite
+sqlite> .read seed.sql
+#+END_SRC
+
+** Method 3: From Within the Application
+
+Add this option to your Feed Reader's menu or toolbar:
+
+#+BEGIN_SRC python
+def load_seed_data(self):
+    """Load sample seed data"""
+    result = messagebox.askyesno(
+        "Load Sample Data", 
+        "This will replace all existing feeds and articles with sample data. Continue?"
+    )
+    if result:
+        import subprocess
+        subprocess.run(['python', 'seed_database.py'])
+        self.refresh_feeds()
+#+END_SRC
+
+* Data Structure
+
+** Feeds Included
+
+| Feed             | Type              | Focus                      |
+|------------------+-------------------+----------------------------|
+| Hacker News      | Link aggregator   | Startups, Tech, Programming|
+| r/programming    | Reddit community  | Programming discussions    |
+| Ars Technica     | Tech news         | Hardware, Science, Technology|
+| GitHub Trending  | Code repos        | Popular open source projects|
+| TechCrunch       | Tech news         | Startups, Industry news    |
+| Lobsters         | Link aggregator   | Programming, Computing     |
+| Slashdot         | Tech news         | Open source, Linux, Tech   |
+| DEV Community    | Developer blog    | Tutorials, Career, Web dev |
+
+** Article Distribution
+
+- *Last 10 hours*: 10 unread articles (fresh content)
+- *Yesterday*: 5 articles (mix of read/unread)
+- *2-3 days ago*: 10 articles (mostly read)
+
+** Visual Indicators
+
+- *Bold titles*: Unread articles
+- *Normal text*: Read articles
+- *★ Star icon*: Starred/favorited articles
+- *Colored feed names*: Different colors for each feed source
+
+* Customization
+
+To modify the seed data for your needs:
+
+1. *Change the time ranges*: Adjust the =datetime('now', '-X hours')= values
+2. *Add more feeds*: Insert new records in the =feeds= table
+3. *Modify content*: Update article titles and content to match your interests
+4. *Adjust read status*: Change which articles appear as read/unread
+
+* Sample Article Content
+
+The seed includes various article types:
+
+- *Show HN posts*: "Show HN: I built a distributed key-value store in Rust"
+- *Tutorials*: "Understanding WebAssembly: A Practical Guide"
+- *News*: "Apple Silicon M4 benchmarks leaked: 20% faster than M3"
+- *Discussions*: "[AMA] I maintain a 20-year-old open source project"
+- *Resources*: "awesome-rust: A curated list of Rust code and resources"
+
+* Resetting the Database
+
+To start fresh:
+
+#+BEGIN_SRC bash
+# Delete the database
+rm feedreader/data/feedreader.db
+
+# Run the application (creates new database)
+python feedreader/main.py
+
+# Load seed data
+python seed_database.py
+#+END_SRC
+
+* Tips
+
+1. The seed data creates a realistic feed reader experience with mixed read/unread states
+2. Articles are timestamped to create a natural flow (newest at top)
+3. Content includes code snippets and technical details for authenticity
+4. Feed colors in the UI can be customized by modifying the CSS/styling
+
+Enjoy your populated Feed Reader! 📰
+
+* SQL Schema Reference
+
+** Categories Table
+#+BEGIN_SRC sql
+CREATE TABLE categories (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    color TEXT,
+    icon TEXT,
+    priority INTEGER
+);
+#+END_SRC
+
+** Feeds Table
+#+BEGIN_SRC sql
+CREATE TABLE feeds (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    url TEXT NOT NULL,
+    description TEXT,
+    last_updated TIMESTAMP,
+    icon_url TEXT,
+    active INTEGER DEFAULT 1
+);
+#+END_SRC
+
+** Articles Table
+#+BEGIN_SRC sql
+CREATE TABLE articles (
+    id TEXT PRIMARY KEY,
+    feed_id TEXT REFERENCES feeds(id),
+    title TEXT NOT NULL,
+    content TEXT,
+    summary TEXT,
+    author TEXT,
+    published TIMESTAMP,
+    url TEXT,
+    thumbnail_url TEXT,
+    starred INTEGER DEFAULT 0
+);
+#+END_SRC
+
+** Read Status Table
+#+BEGIN_SRC sql
+CREATE TABLE read_status (
+    article_id TEXT REFERENCES articles(id),
+    is_read INTEGER DEFAULT 0,
+    read_at TIMESTAMP
+);
+#+END_SRC
+
+** Feed Categories Table
+#+BEGIN_SRC sql
+CREATE TABLE feed_categories (
+    feed_id TEXT REFERENCES feeds(id),
+    category_id TEXT REFERENCES categories(id),
+    PRIMARY KEY (feed_id, category_id)
+);
+#+END_SRC

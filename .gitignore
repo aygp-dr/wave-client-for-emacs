@@ -56,3 +56,6 @@ logs/
 \#*\#
 .\#*
 *.elc
+
+# Generated files
+README.md

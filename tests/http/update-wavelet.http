@@ -1,0 +1,13 @@
+PUT http://localhost:9898/api/waves/localhost!w+abc123/wavelets/localhost!conv+root
+Content-Type: application/json
+
+{
+  "version": 2,
+  "docs": {
+    "main": {
+      "docId": "main",
+      "contributors": ["test@localhost"],
+      "content": ["Hello from HTTP test!", {"type": "line"}, "This is an update!"]
+    }
+  }
+}

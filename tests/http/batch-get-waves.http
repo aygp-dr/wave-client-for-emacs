@@ -1,0 +1,10 @@
+POST http://localhost:9898/api/waves/batch
+Content-Type: application/json
+
+{
+  "wave_ids": [
+    "localhost!w+abc123",
+    "localhost!w+def456",
+    "localhost!w+ghi789"
+  ]
+}

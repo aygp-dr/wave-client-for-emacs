@@ -1,0 +1,6 @@
+POST http://localhost:9898/api/waves
+Content-Type: application/json
+
+{
+  "invalid": "data"
+}
