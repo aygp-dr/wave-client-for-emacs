@@ -1,0 +1,33 @@
+Purpose: Reverse-engineer Wave API specs from client analysis
+
+This experiment establishes a systematic approach to documenting the Wave protocol API
+by analyzing client-side JavaScript code and creating comprehensive OpenAPI 3.0 specifications.
+
+Goal: Create comprehensive OpenAPI 3.0 specification for Wave protocol
+- Analyze Wave client JavaScript for API patterns and endpoints
+- Document authentication, session management, and WebSocket protocols
+- Create machine-readable API specifications with examples and schemas
+
+Expected areas:
+- Session management (authentication, tokens, user sessions)
+- Wavelet operations (create, read, update, delete wavelets)
+- Blip CRUD operations (create, modify, delete blips and content)
+- WebSocket protocol (real-time updates, operational transforms)
+- User management (participants, permissions, presence)
+- File operations (attachments, media handling)
+
+Output: wave-api.openapi.yaml with schemas, examples, and documentation
+- Complete OpenAPI 3.0 specification
+- Request/response schemas with validation
+- Example requests and responses
+- Comprehensive documentation of all endpoints
+
+Dependency: Builds on findings from experiment 002 client analysis
+- Uses client code analysis from experiment 002
+- Leverages understanding of Wave protocol internals
+- Maps client-side API calls to server-side specifications
+
+FPO workflow: Placeholder structure for systematic API documentation
+- Makefile provides reproducible documentation generation
+- README establishes methodology and standards
+- Framework for iterative specification development
