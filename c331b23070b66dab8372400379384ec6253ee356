@@ -1,0 +1,38 @@
+Context: Discussion revealed original Clojure implementation in .hg/ directory
+
+During analysis of the wave-client-for-emacs repository, we discovered that the original
+server implementation was written in Clojure and exists in the Mercurial history within
+the .hg/store/data/ directory. This finding highlighted the need for a more structured
+research approach rather than continuing with ad-hoc exploration.
+
+Need for structured research approach instead of ad-hoc exploration
+
+The complexity of the Wave protocol and the distributed nature of the original codebase
+(spanning Clojure server, Emacs Lisp client, and various protocol implementations)
+requires systematic investigation rather than random deep-dives that could lead to
+incomplete understanding or missed connections.
+
+Goal: Enable `make -C experiments run` for coordinated experiment execution
+
+The experiments infrastructure provides a standardized way to execute research tasks
+in a repeatable manner. Each experiment has clear objectives, methodology, and expected
+outputs, allowing for systematic knowledge building and easy reproduction of findings.
+
+Strategy: Breadth-first exploration to avoid going "full DFS" on any single path
+
+Rather than diving deep into any single aspect (like only the Clojure code or only the
+Emacs client), the experiments are designed to build broad understanding across all
+components first. This prevents getting lost in implementation details before
+understanding the overall architecture and relationships.
+
+Infrastructure: Master Makefile coordinates individual experiment execution
+
+The master experiments/Makefile provides:
+- Centralized experiment discovery and execution
+- Consistent interface across all experiments
+- Ability to run experiments individually or in sequence
+- Standardized cleanup and maintenance operations
+- Clear documentation of available research paths
+
+This infrastructure supports the research methodology of systematic exploration while
+maintaining flexibility for iterative refinement of individual experiments.
