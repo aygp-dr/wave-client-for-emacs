@@ -1,0 +1,26 @@
+Purpose: Investigate original Clojure server implementation from Mercurial history
+
+Files to analyze:
+- src/client.clj (2.8KB) - Main implementation file
+- start-repl.sh - Startup script
+- fedone-api JARs - Wave protocol dependencies
+
+Research questions:
+- Was it client or server? Name suggests client but behavior unclear
+- How did it use Wave protocol? Direct API calls or federation?
+- What dependencies were required? JAR analysis needed
+- Architecture patterns used? Ring, Compojure, raw HTTP?
+
+FPO approach:
+- Makefile provides placeholder workflow for extraction and analysis
+- Structured investigation with clear deliverables
+- Incremental analysis building to implementation recommendation
+
+Expected outputs:
+- Architecture documentation
+- Dependency analysis report
+- Protocol usage patterns
+- Implementation recommendation for Emacs client
+
+This experiment establishes the foundation for understanding the original
+server implementation to inform modern Emacs client development.
