@@ -2,7 +2,7 @@
 
 help: ## Show this help message
 	@echo "Available targets:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*## .*' Makefile | sort
 
 deps-check: ## Check if required dependencies are installed
 	@echo "Checking dependencies..."
@@ -112,3 +112,8 @@ README.md: README.org ## Generate README.md from README.org
 	@echo "Generating README.md from README.org..."
 	@emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
 	@echo "README.md generated successfully!"
+
+logs/websocket.log: ## Debugging support
+	websocat -t ws://localhost:9898 - | tee $@
+
+
