@@ -1,0 +1,193 @@
+#+TITLE: Wave API Integration Tests
+#+AUTHOR: Wave Client Team
+#+PROPERTY: header-args:restclient :host http://localhost:9898
+
+* Overview
+
+This file contains integration tests for the Wave Server API. Tests can be
+executed interactively using =restclient-mode= or =ob-restclient=.
+
+** Prerequisites
+
+- Wave server running: =gmake server= or =gmake mock-server=
+- Emacs with =restclient= package installed
+
+** Running Tests
+
+1. Start the server in one terminal: =gmake server=
+2. Open this file in Emacs
+3. Position cursor in a source block and press =C-c C-c=
+
+* Server Health
+
+** Root Endpoint
+#+begin_src restclient
+GET http://localhost:9898/
+#+end_src
+
+** API Documentation
+#+begin_src restclient
+GET http://localhost:9898/docs
+#+end_src
+
+* Inbox Operations
+
+** Get Inbox - Default User
+#+begin_src restclient
+GET http://localhost:9898/api/inbox
+#+end_src
+
+** Get Inbox - Specific User
+#+begin_src restclient
+GET http://localhost:9898/api/inbox/user@localhost
+#+end_src
+
+* Wave Operations
+
+** Get Wave by ID
+#+begin_src restclient
+GET http://localhost:9898/api/waves/localhost!w+abc123
+#+end_src
+
+** Get Wave - URL Encoded ID
+#+begin_src restclient
+GET http://localhost:9898/api/waves/localhost%21w%2Babc123
+#+end_src
+
+** Get Non-existent Wave (expect 404)
+#+begin_src restclient
+GET http://localhost:9898/api/waves/nonexistent!wave
+#+end_src
+
+* Delta Submission
+
+** Add Participant
+#+begin_src restclient
+POST http://localhost:9898/api/waves/localhost!w+abc123/submit
+Content-Type: application/json
+
+{
+  "waveletName": {
+    "waveId": "localhost!w+abc123",
+    "waveletId": "localhost!conv+root"
+  },
+  "delta": {
+    "author": "user@localhost",
+    "operations": [
+      {
+        "type": "addParticipant",
+        "participant": "newuser@localhost"
+      }
+    ]
+  }
+}
+#+end_src
+
+** Remove Participant
+#+begin_src restclient
+POST http://localhost:9898/api/waves/localhost!w+abc123/submit
+Content-Type: application/json
+
+{
+  "waveletName": {
+    "waveId": "localhost!w+abc123",
+    "waveletId": "localhost!conv+root"
+  },
+  "delta": {
+    "author": "admin@localhost",
+    "operations": [
+      {
+        "type": "removeParticipant",
+        "participant": "olduser@localhost"
+      }
+    ]
+  }
+}
+#+end_src
+
+** Document Operation - Insert Text
+#+begin_src restclient
+POST http://localhost:9898/api/waves/localhost!w+abc123/submit
+Content-Type: application/json
+
+{
+  "waveletName": {
+    "waveId": "localhost!w+abc123",
+    "waveletId": "localhost!conv+root"
+  },
+  "delta": {
+    "author": "user@localhost",
+    "operations": [
+      {
+        "type": "documentOp",
+        "docOp": {
+          "docId": "main",
+          "components": [
+            {"type": "retain", "count": 10},
+            {"type": "characters", "text": "Hello, Wave!"}
+          ]
+        }
+      }
+    ]
+  }
+}
+#+end_src
+
+* WebSocket Protocol Messages
+
+These are example JSON payloads for WebSocket communication.
+Use with =websocat ws://localhost:9898/ws=
+
+** ProtocolOpenRequest
+#+begin_src json
+{
+  "version": 0,
+  "sequenceNumber": 1,
+  "messageType": "ProtocolOpenRequest",
+  "messageJson": "{\"waveId\":\"localhost!w+abc123\",\"waveletId\":\"localhost!conv+root\"}"
+}
+#+end_src
+
+** ProtocolSubmitRequest
+#+begin_src json
+{
+  "version": 0,
+  "sequenceNumber": 2,
+  "messageType": "ProtocolSubmitRequest",
+  "messageJson": "{\"waveletName\":{\"waveId\":\"localhost!w+abc123\",\"waveletId\":\"localhost!conv+root\"},\"delta\":{\"author\":\"user@localhost\",\"operations\":[{\"type\":\"noOp\"}]}}"
+}
+#+end_src
+
+* Error Cases
+
+** Invalid JSON Body
+#+begin_src restclient
+POST http://localhost:9898/api/waves/test/submit
+Content-Type: application/json
+
+{invalid json}
+#+end_src
+
+** Missing Required Fields
+#+begin_src restclient
+POST http://localhost:9898/api/waves/test/submit
+Content-Type: application/json
+
+{
+  "waveletName": {}
+}
+#+end_src
+
+* Mock Server Tests
+
+When running against the mock server (port 4010):
+
+** Mock Inbox
+#+begin_src restclient
+GET http://localhost:4010/api/inbox
+#+end_src
+
+** Mock Wave Details
+#+begin_src restclient
+GET http://localhost:4010/api/waves/localhost%21w%2Babc123
+#+end_src
