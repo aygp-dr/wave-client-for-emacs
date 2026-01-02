@@ -30,6 +30,19 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/InboxItem'
+              example:
+                - id: "localhost!w+abc123"
+                  digest: "Welcome to Wave - Getting Started Guide"
+                  unread: 2
+                  creator: "admin@localhost"
+                - id: "localhost!w+def456"
+                  digest: "Project Planning Discussion"
+                  unread: 0
+                  creator: "user@localhost"
+                - id: "localhost!w+ghi789"
+                  digest: "Weekly Team Sync Notes"
+                  unread: 5
+                  creator: "team@localhost"
 
   /api/waves/{waveId}:
     get:
@@ -42,7 +55,7 @@ paths:
           required: true
           schema:
             type: string
-          example: "indexwave!indexwave"
+          example: "localhost!w+abc123"
       responses:
         '200':
           description: Wave with all wavelets
@@ -52,6 +65,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Wavelet'
+              example:
+                - waveletName:
+                    waveId: "localhost!w+abc123"
+                    waveletId: "localhost!conv+root"
+                  creator: "admin@localhost"
+                  creationTime: 1704067200000
+                  version:
+                    version: 42
+                    historyHash: "abc123def456"
+                  lastModifiedTime: 1704153600000
+                  participants:
+                    - "admin@localhost"
+                    - "user@localhost"
+                  docs:
+                    main:
+                      docId: "main"
+                      contributors:
+                        - "admin@localhost"
+                      lastModifiedVersion: 42
+                      content:
+                        - type: "line"
+                        - "Welcome to Wave!"
+                        - type: "line"
+                        - "This is a collaborative document."
+                    b+abc:
+                      docId: "b+abc"
+                      contributors:
+                        - "user@localhost"
+                      content:
+                        - type: "line"
+                        - "This is a reply blip."
 
   /api/waves/{waveId}/submit:
     post:
@@ -64,12 +108,22 @@ paths:
           required: true
           schema:
             type: string
+          example: "localhost!w+abc123"
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/DeltaSubmission'
+            example:
+              waveletName:
+                waveId: "localhost!w+abc123"
+                waveletId: "localhost!conv+root"
+              delta:
+                author: "user@localhost"
+                operations:
+                  - type: "addParticipant"
+                    participant: "newuser@localhost"
       responses:
         '200':
           description: Delta submitted successfully
@@ -77,6 +131,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SubmitResponse'
+              example:
+                success: true
+                version:
+                  version: 43
+                  historyHash: "def789ghi012"
 
   /ws:
     get:
