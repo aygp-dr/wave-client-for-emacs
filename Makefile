@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -131,4 +131,14 @@ mock-test: ## Test mock server endpoints with curl
 	@echo "Testing mock server at http://localhost:4010..."
 	@curl -sf http://localhost:4010/api/inbox >/dev/null && echo "✅ GET /api/inbox" || echo "❌ GET /api/inbox"
 	@curl -sf "http://localhost:4010/api/waves/test" >/dev/null && echo "✅ GET /api/waves/{id}" || echo "❌ GET /api/waves/{id}"
+
+test-connection: ## Test Emacs client can connect to Wave server
+	@echo "Testing Emacs Wave client connection..."
+	@emacs -Q -batch -l tests/http/connection-test.el 2>&1 || echo "Note: Run 'gmake server' first"
+
+test-api: ## Quick API smoke test with curl
+	@echo "Testing Wave server at http://localhost:9898..."
+	@curl -sf http://localhost:9898/ >/dev/null && echo "✅ Server responding" || { echo "❌ Server not running"; exit 1; }
+	@curl -sf http://localhost:9898/api/inbox >/dev/null && echo "✅ GET /api/inbox" || echo "⚠️  /api/inbox returned error"
+	@echo "API tests complete"
 
