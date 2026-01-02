@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-listen-mock ws-open-wave
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -114,7 +114,24 @@ README.md: README.org ## Generate README.md from README.org
 	@echo "README.md generated successfully!"
 
 logs/websocket.log: ## Debugging support
-	websocat -t ws://localhost:9898 - | tee $@
+	websocat -t ws://localhost:9898/ws - | tee $@
+
+# WebSocket debugging targets
+ws-listen: ## Listen to WebSocket messages from Wave server (port 9898)
+	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found. Install with: cargo install websocat"; exit 1; }
+	@echo "Connecting to ws://localhost:9898/ws ..."
+	@echo "Type JSON messages to send, Ctrl-C to exit"
+	websocat -v ws://localhost:9898/ws
+
+ws-listen-mock: ## Listen to WebSocket messages from mock server (port 4010)
+	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found. Install with: cargo install websocat"; exit 1; }
+	@echo "Connecting to ws://localhost:4010/ws ..."
+	@echo "Type JSON messages to send, Ctrl-C to exit"
+	websocat -v ws://localhost:4010/ws
+
+ws-open-wave: ## Send ProtocolOpenRequest for test wave
+	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found."; exit 1; }
+	@echo '{"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":"{\"waveId\":\"localhost!w+abc123\",\"waveletId\":\"localhost!conv+root\"}"}' | websocat ws://localhost:9898/ws
 
 # Mock Server targets
 mock-server: ## Run OpenAPI mock server using prism (port 4010)
