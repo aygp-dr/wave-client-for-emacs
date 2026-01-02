@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -116,4 +116,19 @@ README.md: README.org ## Generate README.md from README.org
 logs/websocket.log: ## Debugging support
 	websocat -t ws://localhost:9898 - | tee $@
 
+# Mock Server targets
+mock-server: ## Run OpenAPI mock server using prism (port 4010)
+	@command -v npx >/dev/null 2>&1 || { echo "❌ npx not found. Install Node.js first."; exit 1; }
+	@echo "Starting Prism mock server on http://localhost:4010..."
+	npx @stoplight/prism-cli mock specs/wave-api.openapi.yaml --port 4010 --host 0.0.0.0
+
+mock-validate: ## Validate OpenAPI specification with Spectral
+	@command -v npx >/dev/null 2>&1 || { echo "❌ npx not found. Install Node.js first."; exit 1; }
+	@echo "Validating OpenAPI spec..."
+	npx @stoplight/spectral-cli lint specs/wave-api.openapi.yaml --ruleset spectral:oas
+
+mock-test: ## Test mock server endpoints with curl
+	@echo "Testing mock server at http://localhost:4010..."
+	@curl -sf http://localhost:4010/api/inbox >/dev/null && echo "✅ GET /api/inbox" || echo "❌ GET /api/inbox"
+	@curl -sf "http://localhost:4010/api/waves/test" >/dev/null && echo "✅ GET /api/waves/{id}" || echo "❌ GET /api/waves/{id}"
 
