@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave rest-client rest-client-mock rest-client-interactive
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -152,4 +152,13 @@ test-api: ## Quick API smoke test with curl
 	@curl -sf http://localhost:9898/ >/dev/null && echo "✅ Server responding" || { echo "❌ Server not running"; exit 1; }
 	@curl -sf http://localhost:9898/api/inbox >/dev/null && echo "✅ GET /api/inbox" || echo "⚠️  /api/inbox returned error"
 	@echo "API tests complete"
+
+rest-client: ## Run REST client tests against real server
+	python3 scripts/rest-client.py
+
+rest-client-mock: ## Run REST client tests against mock server
+	python3 scripts/rest-client.py --mock
+
+rest-client-interactive: ## Interactive REST client REPL
+	python3 scripts/rest-client.py --interactive
 
