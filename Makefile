@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-listen-mock ws-open-wave
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -122,12 +122,6 @@ ws-listen: ## Listen to WebSocket messages from Wave server (port 9898)
 	@echo "Connecting to ws://localhost:9898/ws ..."
 	@echo "Type JSON messages to send, Ctrl-C to exit"
 	websocat -v ws://localhost:9898/ws
-
-ws-listen-mock: ## Listen to WebSocket messages from mock server (port 4010)
-	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found. Install with: cargo install websocat"; exit 1; }
-	@echo "Connecting to ws://localhost:4010/ws ..."
-	@echo "Type JSON messages to send, Ctrl-C to exit"
-	websocat -v ws://localhost:4010/ws
 
 ws-open-wave: ## Send ProtocolOpenRequest for test wave
 	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found."; exit 1; }
