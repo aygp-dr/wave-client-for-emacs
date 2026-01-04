@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave rest-client rest-client-mock rest-client-interactive
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -123,9 +123,15 @@ ws-listen: ## Listen to WebSocket messages from Wave server (port 9898)
 	@echo "Type JSON messages to send, Ctrl-C to exit"
 	websocat -v ws://localhost:9898/ws
 
-ws-open-wave: ## Send ProtocolOpenRequest for test wave
+ws-open-wave: ## Send ProtocolOpenRequest for index wave
 	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found."; exit 1; }
-	@echo '{"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":"{\"waveId\":\"localhost!w+abc123\",\"waveletId\":\"localhost!conv+root\"}"}' | websocat ws://localhost:9898/ws
+	@python3 -c 'import json; print(json.dumps({"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":json.dumps({"2":"indexwave!indexwave"})}))' | websocat ws://localhost:9898/ws
+
+ws-test: ## Run WebSocket test client
+	python3 scripts/ws-test.py
+
+ws-test-interactive: ## Interactive WebSocket client
+	python3 scripts/ws-test.py --interactive
 
 # Mock Server targets
 mock-server: ## Run OpenAPI mock server using prism (port 4010)
