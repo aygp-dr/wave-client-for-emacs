@@ -349,14 +349,14 @@ async def submit_delta(wave_id: str, submission: DeltaSubmission, db: Session = 
     logger.debug(f"Delta submission: {submission.dict()}")
     wavelet = db.query(Wavelet).filter(
         Wavelet.wave_id == wave_id,
-        Wavelet.wavelet_id == submission.wavelet_name.wavelet_id
+        Wavelet.wavelet_id == submission.waveletName.waveletId
     ).first()
-    
+
     if not wavelet:
         # Create new wavelet
         wavelet = Wavelet(
             wave_id=wave_id,
-            wavelet_id=submission.wavelet_name.wavelet_id,
+            wavelet_id=submission.waveletName.waveletId,
             creator=submission.delta.author,
             participants=[submission.delta.author],
             docs={}
@@ -395,7 +395,7 @@ async def submit_delta(wave_id: str, submission: DeltaSubmission, db: Session = 
         "sequenceNumber": manager.get_channel_number(wave_id),
         "messageType": "ProtocolWaveletUpdate",
         "messageJson": json.dumps({
-            "1": f"wave://localhost/{wave_id}/{submission.wavelet_name.wavelet_id}",
+            "1": f"wave://localhost/{wave_id}/{submission.waveletName.waveletId}",
             "2": [],  # deltas
             "4": {"1": wavelet.version, "2": wavelet.history_hash or ""}
         })
