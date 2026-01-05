@@ -87,7 +87,7 @@ def run_tests(client: WaveRestClient) -> bool:
 
     # Test 2: Get specific wave
     print("\n2. GET /api/waves/{id}")
-    wave_id = "localhost!w+abc123"
+    wave_id = "indexwave!indexwave"
     result = client.get_wave(wave_id)
     if "error" in result:
         print(f"   FAIL: {result}")
@@ -102,8 +102,8 @@ def run_tests(client: WaveRestClient) -> bool:
     # Test 3: Submit delta (add participant)
     print("\n3. POST /api/waves/{id}/submit (add participant)")
     result = client.add_participant(
-        wave_id="localhost!w+abc123",
-        wavelet_id="localhost!conv+root",
+        wave_id="indexwave!indexwave",
+        wavelet_id="indexwave!indexwave",
         author="test@localhost",
         participant="newuser@localhost"
     )
