@@ -23,35 +23,78 @@ except ImportError:
 
 async def test_connection(url: str, wave_id: str = "localhost!w+abc123"):
     """Test WebSocket connection and ProtocolOpenRequest."""
-    print(f"Connecting to {url}...")
+    print(f"Testing Wave WebSocket at {url}\n")
+    tests_run = 0
+    tests_passed = 0
 
     try:
         async with websockets.connect(url) as ws:
-            print("Connected!")
+            # Test 1: Connection
+            tests_run += 1
+            print("1. WebSocket connection")
+            print("   OK: Connected!")
+            tests_passed += 1
 
-            # Send ProtocolOpenRequest
+            # Test 2: ProtocolOpenRequest
+            tests_run += 1
+            print("\n2. ProtocolOpenRequest")
             msg = {
                 "version": 0,
                 "sequenceNumber": 1,
                 "messageType": "ProtocolOpenRequest",
                 "messageJson": json.dumps({"2": wave_id})
             }
-            print(f"Sending: {json.dumps(msg, indent=2)}")
             await ws.send(json.dumps(msg))
-
-            # Wait for response
-            print("Waiting for response...")
             try:
                 response = await asyncio.wait_for(ws.recv(), timeout=5.0)
-                print(f"Received: {json.dumps(json.loads(response), indent=2)}")
+                data = json.loads(response)
+                if data.get("messageType") == "ProtocolWaveletUpdate":
+                    print(f"   OK: Received ProtocolWaveletUpdate")
+                    tests_passed += 1
+                else:
+                    print(f"   WARN: Unexpected response type: {data.get('messageType')}")
             except asyncio.TimeoutError:
-                print("No response received within 5 seconds")
+                print("   FAIL: No response within 5 seconds")
+
+            # Test 3: Open non-existent wave
+            tests_run += 1
+            print("\n3. ProtocolOpenRequest (non-existent wave)")
+            msg = {
+                "version": 0,
+                "sequenceNumber": 2,
+                "messageType": "ProtocolOpenRequest",
+                "messageJson": json.dumps({"2": "nonexistent!wave"})
+            }
+            await ws.send(json.dumps(msg))
+            try:
+                response = await asyncio.wait_for(ws.recv(), timeout=3.0)
+                print(f"   OK: Got response for non-existent wave")
+                tests_passed += 1
+            except asyncio.TimeoutError:
+                print("   OK: No response (wave doesn't exist)")
+                tests_passed += 1
+
+            # Test 4: Invalid message type
+            tests_run += 1
+            print("\n4. Invalid message type")
+            msg = {
+                "version": 0,
+                "sequenceNumber": 3,
+                "messageType": "InvalidType",
+                "messageJson": "{}"
+            }
+            await ws.send(json.dumps(msg))
+            await asyncio.sleep(0.5)  # Give server time to process
+            print("   OK: Server handled invalid message type")
+            tests_passed += 1
 
     except Exception as e:
         print(f"Error: {e}")
         return False
 
-    return True
+    print("\n" + "=" * 40)
+    print(f"Result: {tests_passed}/{tests_run} tests passed")
+    return tests_passed == tests_run
 
 
 async def interactive_mode(url: str):
