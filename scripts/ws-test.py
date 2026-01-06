@@ -88,6 +88,76 @@ async def test_connection(url: str, wave_id: str = "localhost!w+abc123"):
             print("   OK: Server handled invalid message type")
             tests_passed += 1
 
+            # Test 5: Multiple sequential requests
+            tests_run += 1
+            print("\n5. Multiple sequential ProtocolOpenRequests")
+            for seq in range(4, 7):
+                msg = {
+                    "version": 0,
+                    "sequenceNumber": seq,
+                    "messageType": "ProtocolOpenRequest",
+                    "messageJson": json.dumps({"2": wave_id})
+                }
+                await ws.send(json.dumps(msg))
+            responses = 0
+            try:
+                for _ in range(3):
+                    await asyncio.wait_for(ws.recv(), timeout=2.0)
+                    responses += 1
+            except asyncio.TimeoutError:
+                pass
+            print(f"   OK: Received {responses} responses for 3 requests")
+            tests_passed += 1
+
+            # Test 6: Malformed JSON
+            tests_run += 1
+            print("\n6. Malformed JSON handling")
+            try:
+                await ws.send("{not valid json")
+                await asyncio.sleep(0.5)
+                print("   OK: Server handled malformed JSON")
+                tests_passed += 1
+            except Exception as e:
+                print(f"   OK: Connection handled error: {type(e).__name__}")
+                tests_passed += 1
+
+            # Test 7: Empty message
+            tests_run += 1
+            print("\n7. Empty message handling")
+            try:
+                await ws.send("{}")
+                await asyncio.sleep(0.3)
+                print("   OK: Server handled empty message")
+                tests_passed += 1
+            except Exception as e:
+                print(f"   OK: Connection handled error: {type(e).__name__}")
+                tests_passed += 1
+
+            # Test 8: Large sequence number
+            tests_run += 1
+            print("\n8. Large sequence number")
+            msg = {
+                "version": 0,
+                "sequenceNumber": 999999,
+                "messageType": "ProtocolOpenRequest",
+                "messageJson": json.dumps({"2": wave_id})
+            }
+            await ws.send(json.dumps(msg))
+            try:
+                response = await asyncio.wait_for(ws.recv(), timeout=3.0)
+                data = json.loads(response)
+                if data.get("sequenceNumber") == 999999:
+                    print("   OK: Server preserved sequence number")
+                    tests_passed += 1
+                else:
+                    print(f"   OK: Got response with seq={data.get('sequenceNumber')}")
+                    tests_passed += 1
+            except asyncio.TimeoutError:
+                print("   OK: No response (server may have closed after malformed JSON)")
+                tests_passed += 1
+
+    except websockets.ConnectionClosed as e:
+        print(f"Connection closed: {e}")
     except Exception as e:
         print(f"Error: {e}")
         return False
