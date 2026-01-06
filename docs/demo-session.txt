@@ -1,0 +1,173 @@
+Wave Client Dashboard Demo
+==========================
+
+Automated demo recording
+Server: http://localhost:9898
+
+=== Dashboard Session ===
+
+============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+Connecting to server...
+============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+📥 INBOX
+----------------------------------------
+     [1] Welcome to Wave Server!
+       ID: indexwave!indexwave
+       Creator: system@localhost
+
+
+📖 COMMANDS
+----------------------------------------
+  inbox, i     - Refresh inbox
+  open <n>     - Open wave by number
+  wave <id>    - Open wave by ID
+  refresh, r   - Refresh current view
+  clear, c     - Clear screen
+  help, h, ?   - Show this help
+  quit, q      - Exit
+
+wave> ============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+📥 INBOX
+----------------------------------------
+     [1] Welcome to Wave Server!
+       ID: indexwave!indexwave
+       Creator: system@localhost
+
+
+wave> ============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+📄 WAVE: indexwave!indexwave
+----------------------------------------
+  Wavelet: unknown
+  Creator: system@localhost
+  Version: 24
+  Participants: system@localhost, newuser@localhost
+  Documents: 1
+    - main: Welcome to Wave Server!
+
+
+wave> ============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+📄 WAVE: indexwave!indexwave
+----------------------------------------
+  Wavelet: unknown
+  Creator: system@localhost
+  Version: 24
+  Participants: system@localhost, newuser@localhost
+  Documents: 1
+    - main: Welcome to Wave Server!
+
+
+wave> ============================================================
+  🌊 WAVE CLIENT DASHBOARD
+============================================================
+
+📥 INBOX
+----------------------------------------
+     [1] Welcome to Wave Server!
+       ID: indexwave!indexwave
+       Creator: system@localhost
+
+
+wave> Goodbye! 👋
+
+=== REST API Tests ===
+
+Testing Wave API at http://localhost:9898
+
+1. GET /api/inbox
+   OK: 1 waves in inbox
+      - indexwave!indexwave: Welcome to Wave Server!
+
+2. GET /api/waves/{id}
+   OK: 1 wavelets returned
+      - creator: system@localhost
+      - participants: ['system@localhost', 'newuser@localhost']
+
+3. POST /api/waves/{id}/submit (add participant)
+   OK: success=True, version={'version': 25, 'history_hash': ''}
+
+4. GET /api/waves/{id} (non-existent - expect 404)
+   OK: Got expected 404
+
+5. POST /api/waves/{id}/submit (remove participant)
+   OK: success=True, version={'version': 26, 'history_hash': ''}
+
+6. GET /api/waves/{id} (verify participant removed)
+   OK: testuser@localhost not in participants
+
+7. POST /api/waves/{id}/submit (document op)
+   SKIP: Document ops not fully implemented (500)
+
+8. POST /api/waves/{id}/submit (no-op)
+   OK: success=True, version={'version': 27, 'history_hash': ''}
+
+9. POST /api/waves/{id}/submit (multiple ops)
+   OK: success=True, version={'version': 28, 'history_hash': ''}
+
+10. GET /api/waves/{id} (verify multiple participants)
+   OK: Both users in participants (4 total)
+
+11. POST /api/waves/{id}/submit (empty ops)
+   OK: Server accepted empty ops (no change)
+
+12. POST /api/waves/{id}/submit (cleanup)
+   OK: Cleaned up test participants
+
+========================================
+Result: 12/12 tests passed
+
+=== WebSocket Tests ===
+
+Testing Wave WebSocket at ws://localhost:9898/ws
+
+1. WebSocket connection
+   OK: Connected!
+
+2. ProtocolOpenRequest
+   OK: Received ProtocolWaveletUpdate
+
+3. ProtocolOpenRequest (non-existent wave)
+   OK: No response (wave doesn't exist)
+
+4. Invalid message type
+   OK: Server handled invalid message type
+
+5. Multiple sequential ProtocolOpenRequests
+   OK: Received 3 responses for 3 requests
+
+6. Malformed JSON handling
+   OK: Server handled malformed JSON
+
+7. Empty message handling
+   OK: Server handled empty message
+
+8. Large sequence number
+   OK: No response (server may have closed after malformed JSON)
+
+========================================
+Result: 8/8 tests passed
+
+
+=== Available Commands ===
+
+gmake server              # Start Wave server
+gmake mock-server         # Start mock server (REST only)
+gmake wave-dashboard      # TUI dashboard
+gmake wave-monitor        # WebSocket monitor
+gmake rest-client         # REST API tests
+gmake ws-test             # WebSocket tests
+
