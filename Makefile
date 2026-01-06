@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -167,4 +167,10 @@ rest-client-mock: ## Run REST client tests against mock server
 
 rest-client-interactive: ## Interactive REST client REPL
 	python3 scripts/rest-client.py --interactive
+
+wave-dashboard: ## Run Wave TUI dashboard
+	python3 scripts/wave-dashboard.py
+
+wave-monitor: ## Monitor WebSocket updates in real-time
+	python3 scripts/wave-dashboard.py --ws
 
