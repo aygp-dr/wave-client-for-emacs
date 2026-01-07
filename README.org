@@ -2,11 +2,12 @@
 #+AUTHOR: Wave Client Contributors
 #+OPTIONS: toc:2
 
-[[https://www.python.org/downloads/][https://img.shields.io/badge/python-3.8+-blue.svg]]
+[[https://www.python.org/downloads/][https://img.shields.io/badge/python-3.11+-blue.svg]]
 [[https://fastapi.tiangolo.com/][https://img.shields.io/badge/FastAPI-0.116+-green.svg]]
 [[https://opensource.org/licenses/Apache-2.0][https://img.shields.io/badge/License-Apache%202.0-blue.svg]]
 [[./specs/wave-api.openapi.yaml][https://img.shields.io/badge/OpenAPI-3.0-green.svg]]
-[[https://www.gnu.org/software/emacs/][https://img.shields.io/badge/Emacs-24+-purple.svg]]
+[[https://www.gnu.org/software/emacs/][https://img.shields.io/badge/Emacs-30.1-purple.svg]]
+[[https://www.freebsd.org/][https://img.shields.io/badge/FreeBSD-14.3-red.svg]]
 
 This repository contains:
 1. *Original Wave Emacs Client* - An Emacs Lisp client for Google Wave (historical preservation)
