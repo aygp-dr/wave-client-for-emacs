@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -214,15 +214,44 @@ elisp-list-waves: ## List waves from server in batch mode (requires running serv
 			(setq wave-client-connection-method 'websocket) \
 			(setq wave-client-ws-url \"ws://localhost:9898/ws\") \
 			(setq wave-client-user \"batch@localhost\") \
+			(setq wave-debug t) \
+			(defvar batch-inbox-received nil) \
 			(wave-client-ws-connect wave-client-ws-url) \
-			(sit-for 2) \
+			(dotimes (_ 10) (accept-process-output nil 0.5)) \
 			(wave-ws-get-inbox \
 			  (lambda (inbox) \
+			    (setq batch-inbox-received t) \
+			    (message \"=== INBOX (%d waves) ===\" (length inbox)) \
 			    (dolist (wave inbox) \
-			      (message \"Wave: %s - %s\" \
+			      (message \"  %s: %s\" \
 			        (plist-get wave :id) \
-			        (plist-get wave :digest))))))"
+			        (plist-get wave :digest))))) \
+			(dotimes (_ 20) \
+			  (unless batch-inbox-received \
+			    (accept-process-output nil 0.5))) \
+			(unless batch-inbox-received \
+			  (message \"Timeout waiting for inbox response\")))"
 
 elisp-version: ## Show Emacs version being used
 	@$(EMACS) --version | head -1
+
+elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires server)
+	@echo "Fetching inbox via HTTP from localhost:9898..."
+	@$(EMACS_BATCH) \
+		--eval "(require 'url)" \
+		--eval "(require 'json)" \
+		--eval "(progn \
+			(defun fetch-inbox () \
+			  (with-current-buffer \
+			    (url-retrieve-synchronously \"http://localhost:9898/api/inbox\" t) \
+			    (goto-char (point-min)) \
+			    (re-search-forward \"^$$\" nil t) \
+			    (let* ((json-object-type 'plist) \
+			           (inbox (json-read))) \
+			      (message \"=== INBOX (%d waves) ===\" (length inbox)) \
+			      (dolist (wave (append inbox nil)) \
+			        (message \"  %s: %s\" \
+			          (plist-get wave :id) \
+			          (plist-get wave :digest)))))) \
+			(fetch-inbox))"
 
