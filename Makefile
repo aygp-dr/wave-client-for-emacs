@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -173,4 +173,56 @@ wave-dashboard: ## Run Wave TUI dashboard
 
 wave-monitor: ## Monitor WebSocket updates in real-time
 	python3 scripts/wave-dashboard.py --ws
+
+# Emacs batch mode targets
+EMACS ?= $(HOME)/opt/emacs-30-amd64-freebsd/bin/emacs
+EMACS_BATCH = $(EMACS) -Q --batch -L lisp
+
+elisp-check-syntax: ## Check elisp syntax by byte-compiling
+	@echo "Checking elisp syntax..."
+	@$(EMACS_BATCH) --eval "(setq byte-compile-error-on-warn t)" \
+		-f batch-byte-compile lisp/*.el 2>&1 | grep -E "^(lisp/|Error|Warning)" || true
+	@rm -f lisp/*.elc
+	@echo "Syntax check complete"
+
+elisp-load-test: ## Test that all elisp files load without errors
+	@echo "Testing elisp load..."
+	@$(EMACS_BATCH) \
+		--eval "(require 'cl)" \
+		-l wave-util \
+		-l wave-data \
+		-l websocket \
+		-l wave-client-websocket \
+		-l wave-client-browser-channel \
+		-l wave-client \
+		-l wave-update \
+		-l wave-display \
+		-l wave-edit \
+		-l wave-list \
+		--eval "(message \"All wave-client modules loaded successfully\")"
+
+elisp-list-waves: ## List waves from server in batch mode (requires running server)
+	@echo "Fetching waves from localhost:9898..."
+	@$(EMACS_BATCH) \
+		--eval "(require 'cl)" \
+		-l wave-util \
+		-l wave-data \
+		-l websocket \
+		-l wave-client-websocket \
+		-l wave-client \
+		--eval "(progn \
+			(setq wave-client-connection-method 'websocket) \
+			(setq wave-client-ws-url \"ws://localhost:9898/ws\") \
+			(setq wave-client-user \"batch@localhost\") \
+			(wave-client-ws-connect wave-client-ws-url) \
+			(sit-for 2) \
+			(wave-ws-get-inbox \
+			  (lambda (inbox) \
+			    (dolist (wave inbox) \
+			      (message \"Wave: %s - %s\" \
+			        (plist-get wave :id) \
+			        (plist-get wave :digest))))))"
+
+elisp-version: ## Show Emacs version being used
+	@$(EMACS) --version | head -1
 
