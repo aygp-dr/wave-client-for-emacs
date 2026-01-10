@@ -11,11 +11,105 @@ info:
 
 servers:
   - url: http://localhost:9898
-    description: Local development server
+    description: Local development server (no auth required)
   - url: ws://localhost:9898
     description: WebSocket endpoint
 
+tags:
+  - name: auth
+    description: Authentication endpoints (optional - only for multi-user deployments)
+  - name: waves
+    description: Wave and wavelet operations
+  - name: realtime
+    description: WebSocket real-time updates
+
 paths:
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Authenticate user and get JWT token
+      description: |
+        Exchange username/password for a JWT token.
+
+        **Note**: Authentication is OPTIONAL for local development.
+        Only required for multi-user production deployments.
+
+        The returned token should be included in subsequent requests
+        as `Authorization: Bearer <token>` header.
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              username: "alice@localhost"
+              password: "secret"
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              example:
+                token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                user: "alice@localhost"
+                expires_at: "2026-01-11T18:00:00Z"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "invalid_credentials"
+                message: "Invalid username or password"
+
+  /auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Refresh JWT token
+      description: Get a new token using a valid existing token
+      operationId: refreshToken
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Token expired or invalid
+
+  /auth/me:
+    get:
+      tags:
+        - auth
+      summary: Get current user info
+      description: Returns information about the authenticated user
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Current user information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+              example:
+                username: "alice@localhost"
+                display_name: "Alice"
+                created_at: "2026-01-01T00:00:00Z"
+        '401':
+          description: Not authenticated
+
   /api/inbox:
     get:
       summary: Get inbox waves
@@ -150,8 +244,82 @@ paths:
         '101':
           description: Switching Protocols
 
+security:
+  - {}  # No auth required by default (local dev)
+  - bearerAuth: []  # Optional JWT for multi-user deployments
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token obtained from /auth/login endpoint.
+
+        **Local Development**: Not required - all endpoints work without auth.
+
+        **Multi-User Production**: Include token in Authorization header:
+        `Authorization: Bearer <token>`
+
   schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Wave address (email format)
+          example: "alice@localhost"
+        password:
+          type: string
+          format: password
+          description: User password
+          example: "secret"
+
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - user
+        - expires_at
+      properties:
+        token:
+          type: string
+          description: JWT token for subsequent requests
+        user:
+          type: string
+          description: Authenticated wave address
+        expires_at:
+          type: string
+          format: date-time
+          description: Token expiration time
+
+    UserInfo:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Wave address
+        display_name:
+          type: string
+          description: Display name
+        created_at:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+
     InboxItem:
       type: object
       required:
