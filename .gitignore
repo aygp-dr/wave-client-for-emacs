@@ -72,4 +72,6 @@ deacon/
 spawn/
 
 # Gas Town worktrees
-wave/
+wave/*.db
+*.sqlite
+*.sqlite3
