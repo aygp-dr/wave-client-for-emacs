@@ -2,21 +2,16 @@
 
 ##@ Setup
 
-.PHONY: deps
-deps: ## Install dependencies
-	@echo "Installing dependencies..."
+.PHONY: deps setup clean
 
-.PHONY: setup
+deps: deps-check ## Install dependencies
+
 setup: deps ## Initial project setup
 	@echo "Setting up project..."
 
-.PHONY: clean
-clean: ## Clean build artifacts
-	@echo "Cleaning..."
-
 ##@ Development
 
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo screenshots gastown-sim gastown-sim-live
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -280,4 +275,10 @@ elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
 
 screenshots: ## Capture screenshots of Wave client (requires server, X11)
 	@./scripts/capture-screenshots.sh
+
+gastown-sim: ## Simulate gastown agent communication via Wave
+	@python3 scripts/gastown-wave-sim.py
+
+gastown-sim-live: ## Simulate gastown agents with live Wave server
+	@python3 scripts/gastown-wave-sim.py --live
 
