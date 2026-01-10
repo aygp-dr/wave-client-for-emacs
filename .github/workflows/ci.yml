@@ -140,3 +140,33 @@ jobs:
             echo "Warning: .env file contains values"
           fi
           echo "Credential check passed"
+
+  api-contract:
+    name: API Contract Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate OpenAPI spec
+        run: |
+          npx @redocly/cli lint specs/wave-api.openapi.yaml --skip-rule=no-unused-components
+
+      - name: Check for breaking changes (on PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          # Get the base branch spec
+          git show origin/${{ github.base_ref }}:specs/wave-api.openapi.yaml > /tmp/base-spec.yaml 2>/dev/null || echo "No base spec found"
+          if [ -f /tmp/base-spec.yaml ]; then
+            npx oasdiff breaking /tmp/base-spec.yaml specs/wave-api.openapi.yaml --fail-on ERR || {
+              echo "::warning::Breaking API changes detected! Review carefully."
+            }
+          fi
+
+      - name: Generate API diff summary
+        if: github.event_name == 'pull_request'
+        run: |
+          git show origin/${{ github.base_ref }}:specs/wave-api.openapi.yaml > /tmp/base-spec.yaml 2>/dev/null || exit 0
+          echo "## API Changes" >> $GITHUB_STEP_SUMMARY
+          npx oasdiff changelog /tmp/base-spec.yaml specs/wave-api.openapi.yaml --format markdown >> $GITHUB_STEP_SUMMARY 2>/dev/null || echo "No changes detected" >> $GITHUB_STEP_SUMMARY
