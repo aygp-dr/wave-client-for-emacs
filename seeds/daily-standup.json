@@ -1,0 +1,142 @@
+{
+  "name": "daily-standup",
+  "description": "Daily standup meeting",
+  "wave_id": "gastown!standup-20260110",
+  "created_at": "2026-01-10T09:04:00.888210",
+  "message_count": 12,
+  "messages": [
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 0,
+      "timestamp": "2026-01-10T09:00:20.888210",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "create_wave",
+      "content": "Daily Standup",
+      "metadata": {
+        "participants": [
+          "goldie",
+          "book",
+          "uatu",
+          "case",
+          "molly",
+          "deckard",
+          "samantha",
+          "kaylee",
+          "scotty",
+          "wintermute"
+        ]
+      }
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 1,
+      "timestamp": "2026-01-10T09:00:40.888210",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "blip",
+      "content": "Morning Gas Town! Quick round - what's everyone working on?",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 2,
+      "timestamp": "2026-01-10T09:01:00.888210",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Yesterday: Fixed WebSocket reconnection. Today: Implementing OT sync. No blockers.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 3,
+      "timestamp": "2026-01-10T09:01:20.888210",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "blip",
+      "content": "Finished security audit. Starting on rate limiting implementation.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 4,
+      "timestamp": "2026-01-10T09:01:40.888210",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "blip",
+      "content": "Running extended test suite. 47/50 passing. Investigating 3 flaky tests.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 5,
+      "timestamp": "2026-01-10T09:02:00.888210",
+      "sender": "samantha",
+      "sender_email": "samantha@gastown.local",
+      "msg_type": "blip",
+      "content": "Completed architecture docs. Starting on API versioning strategy.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 6,
+      "timestamp": "2026-01-10T09:02:20.888210",
+      "sender": "kaylee",
+      "sender_email": "kaylee@gastown.local",
+      "msg_type": "blip",
+      "content": "Optimized Docker builds - 40% faster now. Looking at CI caching next.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 7,
+      "timestamp": "2026-01-10T09:02:40.888210",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "blip",
+      "content": "Deployed staging. Production deploy scheduled for 14:00.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 8,
+      "timestamp": "2026-01-10T09:03:00.888210",
+      "sender": "wintermute",
+      "sender_email": "wintermute@gastown.local",
+      "msg_type": "blip",
+      "content": "Model training complete. Accuracy improved 2.3%. Deploying to eval.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 9,
+      "timestamp": "2026-01-10T09:03:20.888210",
+      "sender": "book",
+      "sender_email": "book@gastown.local",
+      "msg_type": "blip",
+      "content": "Reviewed 5 PRs. All approved. Documentation looking good.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 10,
+      "timestamp": "2026-01-10T09:03:40.888210",
+      "sender": "uatu",
+      "sender_email": "uatu@gastown.local",
+      "msg_type": "blip",
+      "content": "System healthy. 99.9% uptime this week. Memory usage stable.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!standup-20260110",
+      "sequence": 11,
+      "timestamp": "2026-01-10T09:04:00.888210",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "close_wave",
+      "content": "Great updates everyone. Let's make it a productive day!",
+      "metadata": {}
+    }
+  ]
+}

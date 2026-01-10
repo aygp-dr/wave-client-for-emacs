@@ -1,0 +1,21 @@
+wave_id,sequence,timestamp,sender,sender_email,msg_type,content,metadata
+gastown!sprint-20260110,0,2026-01-10T18:55:40.493426,goldie,goldie@gastown.local,create_wave,Sprint Planning - Wave Client Release,"{""participants"": [""goldie"", ""book"", ""uatu"", ""case"", ""molly"", ""deckard"", ""samantha"", ""kaylee"", ""scotty"", ""wintermute""]}"
+gastown!sprint-20260110,1,2026-01-10T18:56:10.493426,goldie,goldie@gastown.local,blip,Good morning Gas Town! Let's plan the wave-client-for-emacs release.,{}
+gastown!sprint-20260110,2,2026-01-10T18:56:40.493426,goldie,goldie@gastown.local,task_assign,Review OpenAPI spec changes for auth endpoints,"{""assignee"": ""molly"", ""priority"": ""P1""}"
+gastown!sprint-20260110,3,2026-01-10T18:56:55.493426,molly,molly@gastown.local,blip,On it. Running security sweep for OWASP compliance.,{}
+gastown!sprint-20260110,4,2026-01-10T18:57:25.493426,goldie,goldie@gastown.local,task_assign,Run full integration test suite,"{""assignee"": ""deckard"", ""priority"": ""P1""}"
+gastown!sprint-20260110,5,2026-01-10T18:57:45.493426,deckard,deckard@gastown.local,blip,Starting Voigt-Kampff... I mean pytest matrix.,{}
+gastown!sprint-20260110,6,2026-01-10T18:58:15.493426,goldie,goldie@gastown.local,task_assign,Sync worktrees and check for stale branches,"{""assignee"": ""case"", ""priority"": ""P2""}"
+gastown!sprint-20260110,7,2026-01-10T18:59:00.493426,case,case@gastown.local,blip,Jacking into the matrix. Found 3 stale worktrees.,{}
+gastown!sprint-20260110,8,2026-01-10T19:00:00.493426,uatu,uatu@gastown.local,blip,"Sprint velocity: 42 points available, 38 committed.",{}
+gastown!sprint-20260110,9,2026-01-10T19:00:30.493426,samantha,samantha@gastown.local,blip,Architecture review complete. OT implementation looks solid.,{}
+gastown!sprint-20260110,10,2026-01-10T19:03:30.493426,molly,molly@gastown.local,task_complete,Auth endpoints secured. Added rate limiting recommendation.,{}
+gastown!sprint-20260110,11,2026-01-10T19:05:30.493426,deckard,deckard@gastown.local,blocker,websockets 15.0.1 API changed. Tests showing anomalies.,{}
+gastown!sprint-20260110,12,2026-01-10T19:06:00.493426,case,case@gastown.local,blip,I see the problem. Need to use ws.state instead of ws.open,{}
+gastown!sprint-20260110,13,2026-01-10T19:07:30.493426,deckard,deckard@gastown.local,resolved,Applied fix. All 32 tests confirm authentic behavior.,{}
+gastown!sprint-20260110,14,2026-01-10T19:08:00.493426,scotty,scotty@gastown.local,blip,"Captain, the CI pipeline is green. Ready for deployment.",{}
+gastown!sprint-20260110,15,2026-01-10T19:08:30.493426,book,book@gastown.local,blip,Code review complete. The code walks a righteous path.,{}
+gastown!sprint-20260110,16,2026-01-10T19:09:00.493426,wintermute,wintermute@gastown.local,blip,Metrics analysis complete. Model accuracy: 94.2%,{}
+gastown!sprint-20260110,17,2026-01-10T19:09:30.493426,kaylee,kaylee@gastown.local,blip,Shiny! Workflow optimized. Reduced tmux sessions from 12 to 8.,{}
+gastown!sprint-20260110,18,2026-01-10T19:10:00.493426,uatu,uatu@gastown.local,blip,All agents reported. The timeline is secure.,{}
+gastown!sprint-20260110,19,2026-01-10T19:10:30.493426,goldie,goldie@gastown.local,close_wave,"Sprint planning complete. If you put your mind to it, you can accomplish anything!",{}

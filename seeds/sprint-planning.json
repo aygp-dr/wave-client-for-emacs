@@ -1,0 +1,231 @@
+{
+  "name": "sprint-planning",
+  "description": "Sprint planning session with full Gas Town crew",
+  "wave_id": "gastown!sprint-20260110",
+  "created_at": "2026-01-10T19:10:18.342073",
+  "message_count": 20,
+  "messages": [
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 0,
+      "timestamp": "2026-01-10T18:55:28.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "create_wave",
+      "content": "Sprint Planning - Wave Client Release",
+      "metadata": {
+        "participants": [
+          "goldie",
+          "book",
+          "uatu",
+          "case",
+          "molly",
+          "deckard",
+          "samantha",
+          "kaylee",
+          "scotty",
+          "wintermute"
+        ]
+      }
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 1,
+      "timestamp": "2026-01-10T18:55:58.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "blip",
+      "content": "Good morning Gas Town! Let's plan the wave-client-for-emacs release.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 2,
+      "timestamp": "2026-01-10T18:56:28.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "task_assign",
+      "content": "Review OpenAPI spec changes for auth endpoints",
+      "metadata": {
+        "assignee": "molly",
+        "priority": "P1"
+      }
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 3,
+      "timestamp": "2026-01-10T18:56:43.342073",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "blip",
+      "content": "On it. Running security sweep for OWASP compliance.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 4,
+      "timestamp": "2026-01-10T18:57:13.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "task_assign",
+      "content": "Run full integration test suite",
+      "metadata": {
+        "assignee": "deckard",
+        "priority": "P1"
+      }
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 5,
+      "timestamp": "2026-01-10T18:57:33.342073",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "blip",
+      "content": "Starting Voigt-Kampff... I mean pytest matrix.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 6,
+      "timestamp": "2026-01-10T18:58:03.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "task_assign",
+      "content": "Sync worktrees and check for stale branches",
+      "metadata": {
+        "assignee": "case",
+        "priority": "P2"
+      }
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 7,
+      "timestamp": "2026-01-10T18:58:48.342073",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Jacking into the matrix. Found 3 stale worktrees.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 8,
+      "timestamp": "2026-01-10T18:59:48.342073",
+      "sender": "uatu",
+      "sender_email": "uatu@gastown.local",
+      "msg_type": "blip",
+      "content": "Sprint velocity: 42 points available, 38 committed.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 9,
+      "timestamp": "2026-01-10T19:00:18.342073",
+      "sender": "samantha",
+      "sender_email": "samantha@gastown.local",
+      "msg_type": "blip",
+      "content": "Architecture review complete. OT implementation looks solid.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 10,
+      "timestamp": "2026-01-10T19:03:18.342073",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "task_complete",
+      "content": "Auth endpoints secured. Added rate limiting recommendation.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 11,
+      "timestamp": "2026-01-10T19:05:18.342073",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "blocker",
+      "content": "websockets 15.0.1 API changed. Tests showing anomalies.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 12,
+      "timestamp": "2026-01-10T19:05:48.342073",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "I see the problem. Need to use ws.state instead of ws.open",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 13,
+      "timestamp": "2026-01-10T19:07:18.342073",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "resolved",
+      "content": "Applied fix. All 32 tests confirm authentic behavior.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 14,
+      "timestamp": "2026-01-10T19:07:48.342073",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "blip",
+      "content": "Captain, the CI pipeline is green. Ready for deployment.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 15,
+      "timestamp": "2026-01-10T19:08:18.342073",
+      "sender": "book",
+      "sender_email": "book@gastown.local",
+      "msg_type": "blip",
+      "content": "Code review complete. The code walks a righteous path.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 16,
+      "timestamp": "2026-01-10T19:08:48.342073",
+      "sender": "wintermute",
+      "sender_email": "wintermute@gastown.local",
+      "msg_type": "blip",
+      "content": "Metrics analysis complete. Model accuracy: 94.2%",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 17,
+      "timestamp": "2026-01-10T19:09:18.342073",
+      "sender": "kaylee",
+      "sender_email": "kaylee@gastown.local",
+      "msg_type": "blip",
+      "content": "Shiny! Workflow optimized. Reduced tmux sessions from 12 to 8.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 18,
+      "timestamp": "2026-01-10T19:09:48.342073",
+      "sender": "uatu",
+      "sender_email": "uatu@gastown.local",
+      "msg_type": "blip",
+      "content": "All agents reported. The timeline is secure.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!sprint-20260110",
+      "sequence": 19,
+      "timestamp": "2026-01-10T19:10:18.342073",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "close_wave",
+      "content": "Sprint planning complete. If you put your mind to it, you can accomplish anything!",
+      "metadata": {}
+    }
+  ]
+}

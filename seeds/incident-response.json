@@ -1,0 +1,177 @@
+{
+  "name": "incident-response",
+  "description": "Production incident response",
+  "wave_id": "gastown!incident-1854",
+  "created_at": "2026-01-10T19:05:59.403144",
+  "message_count": 14,
+  "messages": [
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 0,
+      "timestamp": "2026-01-10T18:55:29.403144",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "create_wave",
+      "content": "INCIDENT: Production API returning 500 errors",
+      "metadata": {
+        "participants": [
+          "scotty",
+          "case",
+          "deckard",
+          "kaylee",
+          "goldie",
+          "uatu"
+        ],
+        "severity": "high"
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 1,
+      "timestamp": "2026-01-10T18:55:59.403144",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "blip",
+      "content": "Captain, error rate spiked to 15% at 14:32 UTC. GET /api/waves/{id} affected.",
+      "metadata": {
+        "error_rate": 15,
+        "endpoint": "/api/waves/{id}"
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 2,
+      "timestamp": "2026-01-10T18:56:29.403144",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "blip",
+      "content": "All hands! Case, jack in and check those logs!",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 3,
+      "timestamp": "2026-01-10T18:57:14.403144",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Pulling logs from the matrix. Seeing TypeError in get_wave endpoint.",
+      "metadata": {
+        "error_type": "TypeError"
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 4,
+      "timestamp": "2026-01-10T18:58:14.403144",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "blip",
+      "content": "Reproducing locally. Confirmed: doc_data is list, not dict.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 5,
+      "timestamp": "2026-01-10T18:58:44.403144",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Found the glitch! Line 367 in wave_server.py assumes dict but gets list.",
+      "metadata": {
+        "file": "wave_server.py",
+        "line": 367
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 6,
+      "timestamp": "2026-01-10T18:58:59.403144",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Fix: Add isinstance(doc_data, dict) type check.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 7,
+      "timestamp": "2026-01-10T18:59:29.403144",
+      "sender": "kaylee",
+      "sender_email": "kaylee@gastown.local",
+      "msg_type": "blip",
+      "content": "Got the old engine ready if we need to roll back. v0.1.9 is shiny.",
+      "metadata": {
+        "rollback_version": "v0.1.9"
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 8,
+      "timestamp": "2026-01-10T19:01:29.403144",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "task_complete",
+      "content": "Fix committed: c9fe9b5. Hotfix jacked into production.",
+      "metadata": {
+        "commit": "c9fe9b5"
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 9,
+      "timestamp": "2026-01-10T19:02:29.403144",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "blip",
+      "content": "She's holding together! Monitoring error rates.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 10,
+      "timestamp": "2026-01-10T19:04:29.403144",
+      "sender": "deckard",
+      "sender_email": "deckard@gastown.local",
+      "msg_type": "blip",
+      "content": "Error rate dropping: 15% -> 2% -> 0.1%. All clear.",
+      "metadata": {
+        "error_rate": 0.1
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 11,
+      "timestamp": "2026-01-10T19:04:59.403144",
+      "sender": "uatu",
+      "sender_email": "uatu@gastown.local",
+      "msg_type": "blip",
+      "content": "Incident timeline: Detection 14:32, Fix 14:41, Resolution 14:45. MTTR: 13 minutes.",
+      "metadata": {
+        "mttr_minutes": 13
+      }
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 12,
+      "timestamp": "2026-01-10T19:05:29.403144",
+      "sender": "goldie",
+      "sender_email": "goldie@gastown.local",
+      "msg_type": "blip",
+      "content": "Outstanding work, Gas Town!",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!incident-1854",
+      "sequence": 13,
+      "timestamp": "2026-01-10T19:05:59.403144",
+      "sender": "scotty",
+      "sender_email": "scotty@gastown.local",
+      "msg_type": "close_wave",
+      "content": "Incident resolved. Root cause: incomplete type handling.",
+      "metadata": {
+        "root_cause": "type_handling"
+      }
+    }
+  ]
+}

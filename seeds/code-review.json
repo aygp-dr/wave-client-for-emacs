@@ -1,0 +1,151 @@
+{
+  "name": "code-review",
+  "description": "Code review for PR #705",
+  "wave_id": "gastown!review-pr-705",
+  "created_at": "2026-01-10T19:07:44.961812",
+  "message_count": 13,
+  "messages": [
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 0,
+      "timestamp": "2026-01-10T18:55:29.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "create_wave",
+      "content": "PR #705: Add OAuth2 authentication endpoints",
+      "metadata": {
+        "participants": [
+          "case",
+          "book",
+          "molly",
+          "uatu"
+        ]
+      }
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 1,
+      "timestamp": "2026-01-10T18:55:59.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Ready for review: specs/wave-api.openapi.yaml (+169 lines)",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 2,
+      "timestamp": "2026-01-10T18:56:59.961812",
+      "sender": "book",
+      "sender_email": "book@gastown.local",
+      "msg_type": "blip",
+      "content": "Let me examine this. The API must serve all users fairly.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 3,
+      "timestamp": "2026-01-10T18:57:29.961812",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "blip",
+      "content": "Scanning auth endpoints for weaknesses.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 4,
+      "timestamp": "2026-01-10T18:59:29.961812",
+      "sender": "book",
+      "sender_email": "book@gastown.local",
+      "msg_type": "blip",
+      "content": "Line 295: Password example should be masked. 'secret' is a sin of exposure.",
+      "metadata": {
+        "line": 295,
+        "file": "specs/wave-api.openapi.yaml"
+      }
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 5,
+      "timestamp": "2026-01-10T19:00:14.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Good catch. Flipping bits to '********'.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 6,
+      "timestamp": "2026-01-10T19:01:44.961812",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "blocker",
+      "content": "/auth/refresh missing request body schema. That's a hole.",
+      "metadata": {
+        "endpoint": "/auth/refresh"
+      }
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 7,
+      "timestamp": "2026-01-10T19:02:44.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "blip",
+      "content": "Adding RefreshTokenRequest schema. Patching the ICE.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 8,
+      "timestamp": "2026-01-10T19:05:44.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "resolved",
+      "content": "Added proper OAuth2 standard fields: access_token, expires_in, token_type.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 9,
+      "timestamp": "2026-01-10T19:06:14.961812",
+      "sender": "book",
+      "sender_email": "book@gastown.local",
+      "msg_type": "task_complete",
+      "content": "The code has found its path. OAuth2 RFC 6749 compliant.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 10,
+      "timestamp": "2026-01-10T19:06:44.961812",
+      "sender": "molly",
+      "sender_email": "molly@gastown.local",
+      "msg_type": "task_complete",
+      "content": "Security sweep complete. No vulnerabilities. We're solid.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 11,
+      "timestamp": "2026-01-10T19:07:14.961812",
+      "sender": "uatu",
+      "sender_email": "uatu@gastown.local",
+      "msg_type": "blip",
+      "content": "Review observed: 2 issues found, 2 resolved. Ready to merge.",
+      "metadata": {}
+    },
+    {
+      "wave_id": "gastown!review-pr-705",
+      "sequence": 12,
+      "timestamp": "2026-01-10T19:07:44.961812",
+      "sender": "case",
+      "sender_email": "case@gastown.local",
+      "msg_type": "close_wave",
+      "content": "Merged to main. The matrix accepts our changes.",
+      "metadata": {}
+    }
+  ]
+}
