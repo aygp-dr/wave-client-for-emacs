@@ -255,20 +255,7 @@ elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires serv
 	@$(EMACS_BATCH) \
 		--eval "(require 'url)" \
 		--eval "(require 'json)" \
-		--eval "(progn \
-			(defun fetch-inbox () \
-			  (with-current-buffer \
-			    (url-retrieve-synchronously \"http://localhost:9898/api/inbox\" t) \
-			    (goto-char (point-min)) \
-			    (re-search-forward \"^$$\" nil t) \
-			    (let* ((json-object-type 'plist) \
-			           (inbox (json-read))) \
-			      (message \"=== INBOX (%d waves) ===\" (length inbox)) \
-			      (dolist (wave (append inbox nil)) \
-			        (message \"  %s: %s\" \
-			          (plist-get wave :id) \
-			          (plist-get wave :digest)))))) \
-			(fetch-inbox))"
+		--eval "(let* ((buf (url-retrieve-synchronously \"http://localhost:9898/api/inbox\" t)) (json-object-type 'plist) (json-array-type 'list)) (with-current-buffer buf (goto-char url-http-end-of-headers) (let ((inbox (json-read))) (message \"=== INBOX (%d waves) ===\" (length inbox)) (dolist (wave inbox) (message \"  %s: %s\" (plist-get wave :id) (plist-get wave :digest))))))"
 
 elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
 	@$(EMACS_BATCH) -l scripts/wave-batch-demo.el

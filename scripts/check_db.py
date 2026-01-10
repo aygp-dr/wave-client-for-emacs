@@ -67,7 +67,10 @@ def check_database(db_path="wave_server.db"):
             if data.get('docs'):
                 print(f"    Documents:")
                 for doc_id, doc in data['docs'].items():
-                    print(f"      - {doc_id}: {doc.get('content', [])[:50]}...")
+                    if isinstance(doc, dict):
+                        print(f"      - {doc_id}: {doc.get('content', [])[:50]}...")
+                    else:
+                        print(f"      - {doc_id}: {str(doc)[:50]}...")
         print()
     
     # Check wavelet_updates table
