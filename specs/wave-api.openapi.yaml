@@ -73,19 +73,38 @@ paths:
       tags:
         - auth
       summary: Refresh JWT token
-      description: Get a new token using a valid existing token
+      description: |
+        Exchange a valid refresh token for a new access token.
+
+        Use this endpoint when the access token is about to expire
+        but the refresh token is still valid.
       operationId: refreshToken
-      security:
-        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+            example:
+              refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
       responses:
         '200':
-          description: Token refreshed
+          description: Token refreshed successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/TokenResponse'
+              example:
+                access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                token_type: "Bearer"
+                expires_in: 3600
         '401':
-          description: Token expired or invalid
+          description: Refresh token expired or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /auth/me:
     get:
@@ -277,45 +296,77 @@ components:
           type: string
           format: password
           description: User password
-          example: "secret"
+          example: "********"
 
-    LoginResponse:
+    RefreshTokenRequest:
       type: object
       required:
-        - token
-        - user
-        - expires_at
+        - refresh_token
       properties:
-        token:
+        refresh_token:
           type: string
-          description: JWT token for subsequent requests
+          description: Refresh token from previous login/refresh
+
+    TokenResponse:
+      type: object
+      description: OAuth2-compliant token response
+      required:
+        - access_token
+        - token_type
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          description: JWT access token for API requests
+        refresh_token:
+          type: string
+          description: Token for refreshing access_token (optional, for rotation)
+        token_type:
+          type: string
+          enum: [Bearer]
+          default: Bearer
+          description: Token type (always Bearer)
+        expires_in:
+          type: integer
+          description: Access token lifetime in seconds
+          example: 3600
         user:
-          type: string
-          description: Authenticated wave address
-        expires_at:
-          type: string
-          format: date-time
-          description: Token expiration time
+          $ref: '#/components/schemas/UserInfo'
+
+    LoginResponse:
+      allOf:
+        - $ref: '#/components/schemas/TokenResponse'
+        - type: object
+          description: Login response extends TokenResponse with user info
 
     UserInfo:
       type: object
+      required:
+        - username
       properties:
+        id:
+          type: string
+          description: User unique identifier
         username:
           type: string
           description: Wave address
         display_name:
           type: string
           description: Display name
+          nullable: true
         created_at:
           type: string
           format: date-time
 
     ErrorResponse:
       type: object
+      required:
+        - error
+        - message
       properties:
         error:
           type: string
-          description: Error code
+          description: Error code (e.g., invalid_credentials, token_expired)
         message:
           type: string
           description: Human-readable error message
