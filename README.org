@@ -68,12 +68,25 @@ Add to your Emacs configuration:
 
 * API Endpoints
 
-| Method | Endpoint                       | Description         |
-|--------+--------------------------------+---------------------|
-| GET    | =/api/inbox=                   | List waves in inbox |
-| GET    | =/api/waves/{waveId}=          | Get wave details    |
-| POST   | =/api/waves/{waveId}/submit=   | Submit changes      |
-| WS     | =/ws=                          | WebSocket connection|
+| Method | Endpoint                       | Description              |
+|--------+--------------------------------+--------------------------|
+| GET    | =/health=                      | Health check             |
+| GET    | =/api/inbox=                   | List waves in inbox      |
+| GET    | =/api/waves/{waveId}=          | Get wave details         |
+| POST   | =/api/waves/{waveId}/submit=   | Submit changes           |
+| WS     | =/ws=                          | WebSocket connection     |
+
+** Authentication (Optional)
+
+For multi-user deployments, OAuth2-style auth endpoints are available:
+
+| Method | Endpoint         | Description              |
+|--------+------------------+--------------------------|
+| POST   | =/auth/login=    | Get JWT token            |
+| POST   | =/auth/refresh=  | Refresh token            |
+| GET    | =/auth/me=       | Current user info        |
+
+See [[file:specs/wave-api.openapi.yaml]] for full API specification.
 
 * Development
 
