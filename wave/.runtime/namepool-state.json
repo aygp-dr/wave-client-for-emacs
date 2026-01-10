@@ -1,0 +1,9 @@
+{
+  "rig_name": "wave",
+  "theme": "mad-max",
+  "in_use": {
+    "furiosa": true
+  },
+  "overflow_next": 51,
+  "max_size": 50
+}

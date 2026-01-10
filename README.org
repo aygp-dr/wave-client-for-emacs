@@ -137,7 +137,7 @@ wave-client-for-emacs/
 
 * Configuration
 
-See [[file:specs/HARDCODED_SERVERS.md]] for configuring the Emacs client to use different servers.
+See [[file:specs/HARDCODED_SERVERS.org]] for configuring the Emacs client to use different servers.
 
 ** Environment Variables
 
