@@ -1,4 +1,4 @@
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo screenshots
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -254,4 +254,10 @@ elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires serv
 			          (plist-get wave :id) \
 			          (plist-get wave :digest)))))) \
 			(fetch-inbox))"
+
+elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
+	@$(EMACS_BATCH) -l scripts/wave-batch-demo.el
+
+screenshots: ## Capture screenshots of Wave client (requires server, X11)
+	@./scripts/capture-screenshots.sh
 
