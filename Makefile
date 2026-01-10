@@ -1,3 +1,24 @@
+# Makefile - Standard project targets
+# See: https://github.com/aygp-dr/hydra-setup/docs/makefile-standards.md
+
+.DEFAULT_GOAL := help
+
+##@ Setup
+
+.PHONY: deps
+deps: ## Install dependencies
+	@echo "Installing dependencies..."
+
+.PHONY: setup
+setup: deps ## Initial project setup
+	@echo "Setting up project..."
+
+.PHONY: clean
+clean: ## Clean build artifacts
+	@echo "Cleaning..."
+
+##@ Development
+
 .PHONY: help deps-check install dev test test-python test-elisp lint lint-python format clean server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox
 
 help: ## Show this help message
