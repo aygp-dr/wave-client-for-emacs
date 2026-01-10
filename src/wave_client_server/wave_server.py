@@ -283,6 +283,12 @@ async def root():
     logger.debug("Root endpoint accessed")
     return {"message": "Wave Server API", "status": "running", "version": "0.2.0"}
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    logger.debug("Health check accessed")
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+
 @app.get("/api/inbox", response_model=List[InboxItem])
 async def get_inbox(db: Session = Depends(get_db)):
     logger.info("GET /api/inbox - Fetching inbox")
@@ -323,13 +329,22 @@ async def get_wave(wave_id: str, db: Session = Depends(get_db)):
         docs_dict = {}
         if wavelet.docs:
             for doc_id, doc_data in wavelet.docs.items():
-                docs_dict[doc_id] = Document(
-                    doc_id=doc_id,
-                    contributors=doc_data.get("contributors", []),
-                    last_modified_version=doc_data.get("lastModifiedVersion"),
-                    last_modified_time=doc_data.get("lastModifiedTime"),
-                    content=doc_data.get("content", [])
-                )
+                # Handle case where doc_data might not be a dict
+                if isinstance(doc_data, dict):
+                    docs_dict[doc_id] = Document(
+                        doc_id=doc_id,
+                        contributors=doc_data.get("contributors", []),
+                        last_modified_version=doc_data.get("lastModifiedVersion"),
+                        last_modified_time=doc_data.get("lastModifiedTime"),
+                        content=doc_data.get("content", [])
+                    )
+                else:
+                    # doc_data is a primitive or list, wrap it as content
+                    docs_dict[doc_id] = Document(
+                        doc_id=doc_id,
+                        contributors=[],
+                        content=[doc_data] if not isinstance(doc_data, list) else doc_data
+                    )
         
         responses.append(WaveletResponse(
             wavelet_name=WaveletName(wave_id=wavelet.wave_id, wavelet_id=wavelet.wavelet_id),
