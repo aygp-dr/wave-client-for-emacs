@@ -1,6 +1,3 @@
-# Makefile - Standard project targets
-# See: https://github.com/aygp-dr/hydra-setup/docs/makefile-standards.md
-
 .DEFAULT_GOAL := help
 
 ##@ Setup
@@ -24,6 +21,8 @@ clean: ## Clean build artifacts
 help: ## Show this help message
 	@echo "Available targets:"
 	@grep -E '^[a-zA-Z_-]+:.*## .*' Makefile | sort
+
+deps: deps-check
 
 deps-check: ## Check if required dependencies are installed
 	@echo "Checking dependencies..."
@@ -275,4 +274,10 @@ elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires serv
 			          (plist-get wave :id) \
 			          (plist-get wave :digest)))))) \
 			(fetch-inbox))"
+
+elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
+	@$(EMACS_BATCH) -l scripts/wave-batch-demo.el
+
+screenshots: ## Capture screenshots of Wave client (requires server, X11)
+	@./scripts/capture-screenshots.sh
 

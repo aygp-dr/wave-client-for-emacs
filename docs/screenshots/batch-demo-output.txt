@@ -1,0 +1,60 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                     Wave Client for Emacs - Batch Demo                       ║
+║                                                                              ║
+║  Connecting to server at localhost:9898                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🔌 API Information
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Server: Wave Server API
+  Status: running
+  Version: 0.2.0
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🏥 Health Check
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Status: healthy
+  Timestamp: 2026-01-10T21:39:26.265264
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📧 Wave Inbox
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Found 5 waves:
+
+  ○ Wave Server Index
+    └─ from: system@localhost
+       id: indexwave!indexwave
+
+  ○ Discussion: Wave protocol features
+    └─ from: alice@localhost
+       id: localhost!conv+root
+
+  ○ Emacs client testing
+    └─ from: bob@localhost
+       id: localhost!conv+root
+
+  ○ Architecture discussion with diagram
+    └─ from: alice@localhost
+       id: localhost!conv+root
+
+  ○ Charlie: Don't forget about the conflict resolution algorithms!
+    └─ from: charlie@localhost
+       id: localhost!b+reply1
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📝 Wave: indexwave!indexwave
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Wavelet: indexwave!indexwave
+  Creator: system@localhost
+  Version: 10
+  Participants: system@localhost
+
+  Documents:
+  Error: Wrong type argument: hash-table-p, (:main (:doc_id "main" :contributors ("system@localhost") :last_modified_version nil :last_modified_time nil :content ("Wave Server Index")) :inbox (:doc_id "inbox" :contributors nil :last_modified_version nil :last_modified_time nil :content ((:waveId "localhost!w+abc123" :title "Discussion: Wave protocol features" :snippet "Welcome to our discussion about Wave protocol!" :unread 2 :lastModified "2026-01-04 04:36:18") (:waveId "localhost!w+def456" :title "Emacs client testing" :snippet "Testing the new Emacs client" :unread 0 :lastModified "2026-01-06 04:36:18") (:waveId "localhost!w+ghi789" :title "Architecture discussion with diagram" :snippet "Check out this architecture diagram:" :unread 1 :lastModified "2026-01-07 22:36:18"))))
+──────────────────────────────────────────────────────────────────────────────
+  Demo complete.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+

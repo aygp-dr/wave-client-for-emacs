@@ -59,3 +59,17 @@ logs/
 
 # Generated files
 README.md
+
+# Coverage
+.coverage
+htmlcov/
+
+# Temporary/generated directories
+.events.jsonl
+.feed.jsonl
+daemon/
+deacon/
+spawn/
+
+# Gas Town worktrees
+wave/
