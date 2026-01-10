@@ -4,10 +4,16 @@ import pytest
 import asyncio
 import json
 import websockets
+from websockets.protocol import State
 from typing import Optional
 
 WS_URL = "ws://localhost:9898/ws"
 TIMEOUT = 5.0
+
+
+def is_connected(ws) -> bool:
+    """Check if websocket is connected (compatible with websockets 15+)."""
+    return ws.state == State.OPEN
 
 
 @pytest.fixture
@@ -39,13 +45,13 @@ class TestWebSocketConnection:
     async def test_connect_success(self):
         """Should successfully connect to WebSocket."""
         async with websockets.connect(WS_URL) as ws:
-            assert ws.open
+            assert is_connected(ws)
 
     @pytest.mark.asyncio
     async def test_connect_and_disconnect(self):
         """Should handle clean disconnect."""
         async with websockets.connect(WS_URL) as ws:
-            assert ws.open
+            assert is_connected(ws)
         # Connection should be closed after context exits
 
     @pytest.mark.asyncio
@@ -53,8 +59,8 @@ class TestWebSocketConnection:
         """Should handle multiple simultaneous connections."""
         async with websockets.connect(WS_URL) as ws1:
             async with websockets.connect(WS_URL) as ws2:
-                assert ws1.open
-                assert ws2.open
+                assert is_connected(ws1)
+                assert is_connected(ws2)
 
 
 class TestProtocolOpenRequest:
@@ -124,7 +130,8 @@ class TestMessageHandling:
             await ws.send("not valid json")
             # Should not crash connection
             await asyncio.sleep(0.5)
-            assert ws.open or not ws.open  # Either is acceptable
+            # Either connected or closed is acceptable
+            assert ws.state in (State.OPEN, State.CLOSED)
 
     @pytest.mark.asyncio
     async def test_empty_message(self):
@@ -207,7 +214,7 @@ class TestConcurrency:
 
             # Give server time to process
             await asyncio.sleep(1.0)
-            assert ws.open
+            assert is_connected(ws)
 
     @pytest.mark.asyncio
     async def test_interleaved_connections(self):
@@ -232,5 +239,5 @@ class TestConcurrency:
                 await ws2.send(json.dumps(msg2))
 
                 await asyncio.sleep(0.5)
-                assert ws1.open
-                assert ws2.open
+                assert is_connected(ws1)
+                assert is_connected(ws2)
