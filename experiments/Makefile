@@ -18,6 +18,10 @@ run: ## Run all experiments
 list: ## List available experiments
 	@echo "Available experiments:"
 	@echo "  exp-gastown-sim    - Multi-agent Wave communication simulation"
+	@echo "  exp-multi-agent    - Gas Town multi-agent demo (named characters)"
+	@echo "  exp-agent-lore     - Literary references guide for agents"
+	@echo "  exp-jwt-auth       - JWT authentication experiment"
+	@echo "  exp-security       - Security hardening experiment"
 	@echo "  exp-rest-client    - REST API client tests"
 	@echo "  exp-ws-test        - WebSocket protocol tests"
 	@echo "  exp-batch-demo     - Emacs batch mode demo"
@@ -29,6 +33,26 @@ list: ## List available experiments
 exp-gastown-sim: ## Run Gastown agent simulation
 	@echo ">>> Gastown Agent Simulation"
 	@cd .. && python3 scripts/gastown-wave-sim.py 2>&1 | head -40
+	@echo ""
+
+exp-multi-agent: ## Run Gas Town multi-agent demo with named characters
+	@echo ">>> Gas Town Multi-Agent Demo"
+	@cd .. && python3 scripts/multi-agent-demo.py --scenario sprint --speed 0.1
+	@echo ""
+
+exp-agent-lore: ## Show literary references for Gas Town agents
+	@echo ">>> Gas Town Agent Lore"
+	@cd .. && python3 experiments/007-gastown-agent-lore/experiment.py
+	@echo ""
+
+exp-jwt-auth: ## Run JWT authentication experiment
+	@echo ">>> JWT Authentication Experiment"
+	@cd .. && python3 experiments/005-jwt-authentication/experiment.py
+	@echo ""
+
+exp-security: ## Run security hardening experiment
+	@echo ">>> Security Hardening Experiment"
+	@cd .. && python3 experiments/006-security-hardening/experiment.py
 	@echo ""
 
 exp-rest-client: ## Run REST client against server
