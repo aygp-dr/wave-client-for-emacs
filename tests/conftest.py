@@ -1,19 +1,20 @@
 """Pytest configuration and fixtures."""
 
-import pytest
-import tempfile
 import os
-from pathlib import Path
 
 # Add src to Python path for imports
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+import tempfile
+
+import pytest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 
 @pytest.fixture
 def temp_db():
     """Provide a temporary database file."""
-    with tempfile.NamedTemporaryFile(suffix='.db', delete=False) as f:
+    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         temp_path = f.name
     yield temp_path
     # Cleanup
@@ -37,11 +38,11 @@ def mock_wave_data():
                     "main": {
                         "docId": "main",
                         "contributors": ["test@localhost"],
-                        "content": ["Hello, World!"]
+                        "content": ["Hello, World!"],
                     }
-                }
+                },
             }
-        ]
+        ],
     }
 
 
@@ -54,15 +55,15 @@ def mock_inbox_data():
             "title": "Test Wave 1",
             "snippet": "This is a test wave",
             "unread": 2,
-            "last_modified": "2024-01-01T12:00:00"
+            "last_modified": "2024-01-01T12:00:00",
         },
         {
-            "wave_id": "localhost!w+wave2", 
+            "wave_id": "localhost!w+wave2",
             "title": "Test Wave 2",
             "snippet": "Another test wave",
             "unread": 0,
-            "last_modified": "2024-01-01T11:00:00"
-        }
+            "last_modified": "2024-01-01T11:00:00",
+        },
     ]
 
 

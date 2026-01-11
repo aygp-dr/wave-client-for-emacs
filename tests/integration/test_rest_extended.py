@@ -1,8 +1,9 @@
 """Extended REST API integration tests for Wave server."""
 
-import pytest
+from collections.abc import Generator
+
 import httpx
-from typing import Generator
+import pytest
 
 BASE_URL = "http://localhost:9898"
 
@@ -91,15 +92,15 @@ class TestSubmitEndpoint:
             json={
                 "wavelet_name": {
                     "wave_id": "indexwave!indexwave",
-                    "wavelet_id": "indexwave!indexwave"
+                    "wavelet_id": "indexwave!indexwave",
                 },
                 "delta": {
                     "author": "testuser@localhost",
                     "operations": [
                         {"type": "addParticipant", "participant": "newuser@localhost"}
-                    ]
-                }
-            }
+                    ],
+                },
+            },
         )
         # Accept success or error (depends on server state)
         assert response.status_code in [200, 404, 500]
@@ -111,15 +112,18 @@ class TestSubmitEndpoint:
             json={
                 "wavelet_name": {
                     "wave_id": "indexwave!indexwave",
-                    "wavelet_id": "indexwave!indexwave"
+                    "wavelet_id": "indexwave!indexwave",
                 },
                 "delta": {
                     "author": "testuser@localhost",
                     "operations": [
-                        {"type": "removeParticipant", "participant": "newuser@localhost"}
-                    ]
-                }
-            }
+                        {
+                            "type": "removeParticipant",
+                            "participant": "newuser@localhost",
+                        }
+                    ],
+                },
+            },
         )
         assert response.status_code in [200, 404, 500]
 
@@ -130,13 +134,10 @@ class TestSubmitEndpoint:
             json={
                 "wavelet_name": {
                     "wave_id": "indexwave!indexwave",
-                    "wavelet_id": "indexwave!indexwave"
+                    "wavelet_id": "indexwave!indexwave",
                 },
-                "delta": {
-                    "author": "testuser@localhost",
-                    "operations": []
-                }
-            }
+                "delta": {"author": "testuser@localhost", "operations": []},
+            },
         )
         if response.status_code == 200:
             data = response.json()
@@ -150,13 +151,10 @@ class TestSubmitEndpoint:
             json={
                 "wavelet_name": {
                     "wave_id": "nonexistent!wave",
-                    "wavelet_id": "nonexistent!wavelet"
+                    "wavelet_id": "nonexistent!wavelet",
                 },
-                "delta": {
-                    "author": "testuser@localhost",
-                    "operations": []
-                }
-            }
+                "delta": {"author": "testuser@localhost", "operations": []},
+            },
         )
         # New wavelet will be created if wave exists, so expect 200 or 404
         assert response.status_code in [200, 404, 500]
@@ -185,7 +183,7 @@ class TestErrorHandling:
         response = client.post(
             "/api/waves/test/submit",
             content="not valid json",
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json"},
         )
         assert response.status_code == 422
 
@@ -193,7 +191,7 @@ class TestErrorHandling:
         """Missing required fields should return 422."""
         response = client.post(
             "/api/waves/test/submit",
-            json={}  # Missing wavelet_id and operations
+            json={},  # Missing wavelet_id and operations
         )
         assert response.status_code == 422
 

@@ -1,11 +1,11 @@
 """Extended WebSocket integration tests for Wave server."""
 
-import pytest
 import asyncio
 import json
+
+import pytest
 import websockets
 from websockets.protocol import State
-from typing import Optional
 
 WS_URL = "ws://localhost:9898/ws"
 TIMEOUT = 5.0
@@ -25,16 +25,14 @@ def event_loop():
 
 
 async def send_and_receive(
-    ws,
-    message: dict,
-    timeout: float = TIMEOUT
-) -> Optional[dict]:
+    ws, message: dict, timeout: float = TIMEOUT
+) -> dict | None:
     """Send message and wait for response."""
     await ws.send(json.dumps(message))
     try:
         response = await asyncio.wait_for(ws.recv(), timeout=timeout)
         return json.loads(response)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         return None
 
 
@@ -74,7 +72,7 @@ class TestProtocolOpenRequest:
                 "version": 0,
                 "sequenceNumber": 1,
                 "messageType": "ProtocolOpenRequest",
-                "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                "messageJson": json.dumps({"2": "indexwave!indexwave"}),
             }
             response = await send_and_receive(ws, message)
             if response:
@@ -88,7 +86,7 @@ class TestProtocolOpenRequest:
                 "version": 0,
                 "sequenceNumber": 1,
                 "messageType": "ProtocolOpenRequest",
-                "messageJson": json.dumps({"2": "nonexistent!wave"})
+                "messageJson": json.dumps({"2": "nonexistent!wave"}),
             }
             # Should not crash, may return nothing or error
             response = await send_and_receive(ws, message, timeout=2.0)
@@ -103,7 +101,7 @@ class TestProtocolOpenRequest:
                     "version": 0,
                     "sequenceNumber": i + 1,
                     "messageType": "ProtocolOpenRequest",
-                    "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                    "messageJson": json.dumps({"2": "indexwave!indexwave"}),
                 }
                 await ws.send(json.dumps(message))
 
@@ -113,7 +111,7 @@ class TestProtocolOpenRequest:
                 try:
                     response = await asyncio.wait_for(ws.recv(), timeout=2.0)
                     responses.append(json.loads(response))
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     break
 
             # Should receive at least some responses
@@ -149,7 +147,7 @@ class TestMessageHandling:
                 "version": 0,
                 "sequenceNumber": 1,
                 "messageType": "InvalidType",
-                "messageJson": "{}"
+                "messageJson": "{}",
             }
             await ws.send(json.dumps(message))
             await asyncio.sleep(0.5)
@@ -175,7 +173,7 @@ class TestSequenceNumbers:
                 "version": 0,
                 "sequenceNumber": 42,
                 "messageType": "ProtocolOpenRequest",
-                "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                "messageJson": json.dumps({"2": "indexwave!indexwave"}),
             }
             response = await send_and_receive(ws, message)
             if response:
@@ -189,7 +187,7 @@ class TestSequenceNumbers:
                 "version": 0,
                 "sequenceNumber": 999999,
                 "messageType": "ProtocolOpenRequest",
-                "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                "messageJson": json.dumps({"2": "indexwave!indexwave"}),
             }
             # Should not crash
             response = await send_and_receive(ws, message, timeout=2.0)
@@ -208,7 +206,7 @@ class TestConcurrency:
                     "version": 0,
                     "sequenceNumber": i,
                     "messageType": "ProtocolOpenRequest",
-                    "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                    "messageJson": json.dumps({"2": "indexwave!indexwave"}),
                 }
                 await ws.send(json.dumps(message))
 
@@ -226,13 +224,13 @@ class TestConcurrency:
                     "version": 0,
                     "sequenceNumber": 1,
                     "messageType": "ProtocolOpenRequest",
-                    "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                    "messageJson": json.dumps({"2": "indexwave!indexwave"}),
                 }
                 msg2 = {
                     "version": 0,
                     "sequenceNumber": 2,
                     "messageType": "ProtocolOpenRequest",
-                    "messageJson": json.dumps({"2": "indexwave!indexwave"})
+                    "messageJson": json.dumps({"2": "indexwave!indexwave"}),
                 }
 
                 await ws1.send(json.dumps(msg1))
