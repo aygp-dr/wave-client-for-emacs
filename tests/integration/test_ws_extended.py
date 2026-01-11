@@ -24,9 +24,7 @@ def event_loop():
     loop.close()
 
 
-async def send_and_receive(
-    ws, message: dict, timeout: float = TIMEOUT
-) -> dict | None:
+async def send_and_receive(ws, message: dict, timeout: float = TIMEOUT) -> dict | None:
     """Send message and wait for response."""
     await ws.send(json.dumps(message))
     try:
