@@ -263,9 +263,73 @@ elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
 screenshots: ## Capture screenshots of Wave client (requires server, X11)
 	@./scripts/capture-screenshots.sh
 
+##@ Gas Town Multi-Agent Demo
+
 gastown-sim: ## Simulate gastown agent communication via Wave
 	@python3 scripts/gastown-wave-sim.py
 
 gastown-sim-live: ## Simulate gastown agents with live Wave server
 	@python3 scripts/gastown-wave-sim.py --live
+
+gastown-demo: ## Run Gas Town multi-agent demo (all scenarios)
+	@python3 scripts/multi-agent-demo.py --scenario all --speed 0.15
+
+gastown-sprint: ## Run Gas Town sprint planning scenario
+	@python3 scripts/multi-agent-demo.py --scenario sprint --speed 0.2
+
+gastown-review: ## Run Gas Town code review scenario
+	@python3 scripts/multi-agent-demo.py --scenario review --speed 0.2
+
+gastown-incident: ## Run Gas Town incident response scenario
+	@python3 scripts/multi-agent-demo.py --scenario incident --speed 0.2
+
+gastown-lore: ## Show Gas Town agent literary references
+	@python3 experiments/007-gastown-agent-lore/experiment.py
+
+gastown-seed-list: ## List available seed scenarios
+	@python3 scripts/gastown-seed-generator.py list
+
+gastown-seed-generate: ## Generate all seed files
+	@python3 scripts/gastown-seed-generator.py generate --scenario sprint --output seeds/sprint-planning.json
+	@python3 scripts/gastown-seed-generator.py generate --scenario standup --output seeds/daily-standup.json
+	@python3 scripts/gastown-seed-generator.py generate --scenario incident --output seeds/incident-response.json
+	@python3 scripts/gastown-seed-generator.py generate --scenario review --output seeds/code-review.json
+
+gastown-seed-replay: ## Replay sprint planning seed to live server
+	@python3 scripts/gastown-seed-generator.py replay --input seeds/sprint-planning.json --speed 3
+
+##@ Recording & Documentation
+
+ASCIINEMA ?= asciinema
+
+demo-record: ## Record asciinema demo of Emacs client with live server
+	@command -v $(ASCIINEMA) >/dev/null 2>&1 || { echo "❌ asciinema not found. Install with: pip install asciinema"; exit 1; }
+	@mkdir -p docs
+	@echo "Recording demo session..."
+	@$(ASCIINEMA) rec --title "Wave Client for Emacs - Gas Town Demo" \
+		--command "./scripts/asciinema-demo.sh" \
+		docs/demo.cast
+
+demo-play: ## Play recorded asciinema demo
+	@if [ -f docs/demo.cast ]; then \
+		$(ASCIINEMA) play docs/demo.cast; \
+	else \
+		echo "No recording found. Run 'make demo-record' first."; \
+	fi
+
+demo-upload: ## Upload demo to asciinema.org
+	@if [ -f docs/demo.cast ]; then \
+		$(ASCIINEMA) upload docs/demo.cast; \
+	else \
+		echo "No recording found. Run 'make demo-record' first."; \
+	fi
+
+demo-gif: ## Convert demo to GIF (requires agg)
+	@command -v agg >/dev/null 2>&1 || { echo "❌ agg not found. Install with: cargo install --git https://github.com/asciinema/agg"; exit 1; }
+	@if [ -f docs/demo.cast ]; then \
+		agg docs/demo.cast docs/demo.gif; \
+		echo "Created docs/demo.gif"; \
+	else \
+		echo "No recording found. Run 'make demo-record' first."; \
+	fi
 
