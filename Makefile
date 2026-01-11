@@ -107,7 +107,7 @@ db-seed: ## Seed database with test data
 db-summary: ## Show database summary and statistics
 	@echo "=== Wave Server Database Summary ==="
 	@if [ -f wave_server.db ]; then \
-		python3 scripts/check_db.py; \
+		$(PYTHON) scripts/check_db.py; \
 	else \
 		echo "No database found. Run 'make server' first to create it."; \
 	fi
@@ -147,10 +147,10 @@ ws-open-wave: ## Send ProtocolOpenRequest for index wave
 	@python3 -c 'import json; print(json.dumps({"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":json.dumps({"2":"indexwave!indexwave"})}))' | websocat ws://localhost:9898/ws
 
 ws-test: ## Run WebSocket test client
-	python3 scripts/ws-test.py
+	$(PYTHON) scripts/ws-test.py
 
 ws-test-interactive: ## Interactive WebSocket client
-	python3 scripts/ws-test.py --interactive
+	$(PYTHON) scripts/ws-test.py --interactive
 
 # Mock Server targets
 mock-server: ## Run OpenAPI mock server using prism (port 4010)
@@ -179,19 +179,19 @@ test-api: ## Quick API smoke test with curl
 	@echo "API tests complete"
 
 rest-client: ## Run REST client tests against real server
-	python3 scripts/rest-client.py
+	$(PYTHON) scripts/rest-client.py
 
 rest-client-mock: ## Run REST client tests against mock server
-	python3 scripts/rest-client.py --mock
+	$(PYTHON) scripts/rest-client.py --mock
 
 rest-client-interactive: ## Interactive REST client REPL
-	python3 scripts/rest-client.py --interactive
+	$(PYTHON) scripts/rest-client.py --interactive
 
 wave-dashboard: ## Run Wave TUI dashboard
-	python3 scripts/wave-dashboard.py
+	$(PYTHON) scripts/wave-dashboard.py
 
 wave-monitor: ## Monitor WebSocket updates in real-time
-	python3 scripts/wave-dashboard.py --ws
+	$(PYTHON) scripts/wave-dashboard.py --ws
 
 # Emacs batch mode targets
 EMACS ?= $(HOME)/opt/emacs-30-amd64-freebsd/bin/emacs
