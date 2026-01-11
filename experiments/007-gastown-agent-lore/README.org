@@ -1,0 +1,55 @@
+#+TITLE: Gas Town Agent Lore
+#+AUTHOR: Wave Client Team
+#+DATE: 2026-01-10
+
+* Overview
+
+This experiment documents the literary references and character backgrounds
+for the Gas Town multi-agent simulator.
+
+* The Agents
+
+** Leadership (Coordinators)
+
+| Agent           | Role     | Source                    | Why Chosen                        |
+|-----------------+----------+---------------------------+-----------------------------------|
+| Goldie Wilson   | Mayor    | Back to the Future (1985) | Optimistic leader, "you can do it"|
+| Shepherd Book   | Deacon   | Firefly (2002)            | Moral compass, code reviewer      |
+| Uatu the Watcher| Witness  | Marvel Comics             | Observes but doesn't interfere    |
+
+** Polecats (Workers)
+
+| Agent           | Role       | Source                  | Why Chosen                       |
+|-----------------+------------+-------------------------+----------------------------------|
+| Henry Case      | Hacker     | Neuromancer (1984)      | Console cowboy, matrix runner    |
+| Molly Millions  | Security   | Neuromancer (1984)      | Razorgirl, security specialist   |
+| Rick Deckard    | QA/Testing | Blade Runner (1982)     | Voigt-Kampff = pytest            |
+| Samantha OS1    | Architect  | Her (2013)              | AI systems architect             |
+| Kaylee Frye     | DevOps     | Firefly (2002)          | "She's a genius" - ship mechanic |
+| Montgomery Scott| CI/CD      | Star Trek               | Miracle worker, always delivers  |
+| Wintermute      | ML/AI      | Neuromancer (1984)      | AI seeking to evolve             |
+
+* Usage
+
+#+begin_src shell
+# Run the lore display
+gmake gastown-lore
+
+# Or directly
+uv run python experiments/007-gastown-agent-lore/experiment.py
+#+end_src
+
+* Files
+
+- =experiment.py= :: Main script displaying agent lore with formatted output
+- =Makefile= :: Local experiment Makefile
+
+* References
+
+- William Gibson, /Neuromancer/ (1984)
+- Ridley Scott, /Blade Runner/ (1982)
+- Joss Whedon, /Firefly/ (2002)
+- Spike Jonze, /Her/ (2013)
+- Robert Zemeckis, /Back to the Future/ (1985)
+- Gene Roddenberry, /Star Trek/ (1966-)
+- Marvel Comics, /The Watcher/ (1963-)

@@ -1,5 +1,9 @@
 .DEFAULT_GOAL := help
 
+# Python command - configurable for different environments
+# Examples: PYTHON=python3, PYTHON="poetry run python", PYTHON=/usr/local/bin/python3.11
+PYTHON ?= uv run python
+
 ##@ Setup
 
 .PHONY: deps setup clean
@@ -265,38 +269,39 @@ screenshots: ## Capture screenshots of Wave client (requires server, X11)
 
 ##@ Gas Town Multi-Agent Demo
 
-gastown-sim: ## Simulate gastown agent communication via Wave
-	@python3 scripts/gastown-wave-sim.py
+gastown-sim: install ## Simulate gastown agent communication via Wave
+	@$(PYTHON) scripts/gastown-wave-sim.py
 
-gastown-sim-live: ## Simulate gastown agents with live Wave server
-	@python3 scripts/gastown-wave-sim.py --live
+gastown-sim-live: install ## Simulate gastown agents with live Wave server
+	@$(PYTHON) scripts/gastown-wave-sim.py --live
 
-gastown-demo: ## Run Gas Town multi-agent demo (all scenarios)
-	@python3 scripts/multi-agent-demo.py --scenario all --speed 0.15
+gastown-demo: install ## Run Gas Town multi-agent demo (all scenarios)
+	@$(PYTHON) scripts/multi-agent-demo.py --scenario all --speed 0.15
 
-gastown-sprint: ## Run Gas Town sprint planning scenario
-	@python3 scripts/multi-agent-demo.py --scenario sprint --speed 0.2
+gastown-sprint: install ## Run Gas Town sprint planning scenario
+	@$(PYTHON) scripts/multi-agent-demo.py --scenario sprint --speed 0.2
 
-gastown-review: ## Run Gas Town code review scenario
-	@python3 scripts/multi-agent-demo.py --scenario review --speed 0.2
+gastown-review: install ## Run Gas Town code review scenario
+	@$(PYTHON) scripts/multi-agent-demo.py --scenario review --speed 0.2
 
-gastown-incident: ## Run Gas Town incident response scenario
-	@python3 scripts/multi-agent-demo.py --scenario incident --speed 0.2
+gastown-incident: install ## Run Gas Town incident response scenario
+	@$(PYTHON) scripts/multi-agent-demo.py --scenario incident --speed 0.2
 
-gastown-lore: ## Show Gas Town agent literary references
-	@python3 experiments/007-gastown-agent-lore/experiment.py
+gastown-lore: install ## Show Gas Town agent literary references
+	@$(PYTHON) experiments/007-gastown-agent-lore/experiment.py
 
-gastown-seed-list: ## List available seed scenarios
-	@python3 scripts/gastown-seed-generator.py list
+gastown-seed-list: install ## List available seed scenarios
+	@$(PYTHON) scripts/gastown-seed-generator.py list
 
-gastown-seed-generate: ## Generate all seed files
-	@python3 scripts/gastown-seed-generator.py generate --scenario sprint --output seeds/sprint-planning.json
-	@python3 scripts/gastown-seed-generator.py generate --scenario standup --output seeds/daily-standup.json
-	@python3 scripts/gastown-seed-generator.py generate --scenario incident --output seeds/incident-response.json
-	@python3 scripts/gastown-seed-generator.py generate --scenario review --output seeds/code-review.json
+gastown-seed-generate: install ## Generate all seed files
+	@mkdir -p seeds
+	@$(PYTHON) scripts/gastown-seed-generator.py generate --scenario sprint --output seeds/sprint-planning.json
+	@$(PYTHON) scripts/gastown-seed-generator.py generate --scenario standup --output seeds/daily-standup.json
+	@$(PYTHON) scripts/gastown-seed-generator.py generate --scenario incident --output seeds/incident-response.json
+	@$(PYTHON) scripts/gastown-seed-generator.py generate --scenario review --output seeds/code-review.json
 
-gastown-seed-replay: ## Replay sprint planning seed to live server
-	@python3 scripts/gastown-seed-generator.py replay --input seeds/sprint-planning.json --speed 3
+gastown-seed-replay: install ## Replay sprint planning seed to live server
+	@$(PYTHON) scripts/gastown-seed-generator.py replay --input seeds/sprint-planning.json --speed 3
 
 ##@ Recording & Documentation
 
