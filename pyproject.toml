@@ -2,7 +2,7 @@
 name = "wave-client-server"
 version = "0.1.0"
 description = "Wave Client for Emacs - FastAPI server with WebSocket support"
-readme = {file = "README.org", content-type = "text/plain"}
+readme = "README.md"
 authors = [
     { name = "Aidan Pace", email = "apace@defrecord.com" }
 ]

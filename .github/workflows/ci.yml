@@ -23,6 +23,11 @@ jobs:
         with:
           version: "latest"
 
+      - name: Generate README.md from README.org
+        run: |
+          # Simple org to markdown conversion for CI
+          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
+
       - name: Install dependencies
         run: uv sync --extra dev
 
@@ -51,6 +56,10 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
+
+      - name: Generate README.md from README.org
+        run: |
+          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
 
       - name: Install dependencies
         run: uv sync --extra test
@@ -120,6 +129,10 @@ jobs:
         uses: astral-sh/setup-uv@v4
         with:
           version: "latest"
+
+      - name: Generate README.md from README.org
+        run: |
+          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
 
       - name: Install dependencies
         run: uv sync
