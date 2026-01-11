@@ -23,10 +23,13 @@ jobs:
         with:
           version: "latest"
 
+      - name: Set up Emacs
+        uses: purcell/setup-emacs@master
+        with:
+          version: '29.4'
+
       - name: Generate README.md from README.org
-        run: |
-          # Simple org to markdown conversion for CI
-          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
+        run: emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
 
       - name: Install dependencies
         run: uv sync --extra dev
@@ -57,9 +60,13 @@ jobs:
         with:
           version: "latest"
 
+      - name: Set up Emacs
+        uses: purcell/setup-emacs@master
+        with:
+          version: '29.4'
+
       - name: Generate README.md from README.org
-        run: |
-          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
+        run: emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
 
       - name: Install dependencies
         run: uv sync --extra test
@@ -130,9 +137,13 @@ jobs:
         with:
           version: "latest"
 
+      - name: Set up Emacs
+        uses: purcell/setup-emacs@master
+        with:
+          version: '29.4'
+
       - name: Generate README.md from README.org
-        run: |
-          sed 's/^\* /# /; s/^\*\* /## /; s/^\*\*\* /### /; s/^- /- /; s/=\([^=]*\)=/`\1`/g; s/\[\[file:\([^]]*\)\]\]/\1/g; s/\[\[\([^]]*\)\]\[\([^]]*\)\]\]/[\2](\1)/g' README.org > README.md
+        run: emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
 
       - name: Install dependencies
         run: uv sync
