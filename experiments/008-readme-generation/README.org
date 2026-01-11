@@ -1,0 +1,123 @@
+#+TITLE: Experiment 008: README.md Generation Workflow
+#+AUTHOR: Gas Town CI/CD Team (Kaylee, Scotty)
+#+DATE: 2026-01-10
+
+* Problem Statement
+
+When using =uv sync= with =hatchling= as the build backend, the build fails
+if =pyproject.toml= references a =README.md= that doesn't exist.
+
+#+begin_example
+OSError: Readme file does not exist: README.md
+#+end_example
+
+Or if pointing to =README.org=:
+
+#+begin_example
+TypeError: Unable to determine the content-type based on the extension
+of readme file: README.org
+#+end_example
+
+* Root Cause
+
+1. =pyproject.toml= declares =readme = "README.md"=
+2. =README.md= is gitignored (generated from =README.org=)
+3. CI clones the repo without =README.md=
+4. =hatchling= validates the readme file exists during =uv sync=
+
+* Why We Use README.org
+
+- Org-mode is the native Emacs documentation format
+- Better table support, code blocks, and cross-references
+- =README.md= is generated via =gmake README.md= target
+- Local development works because =README.md= exists after first build
+
+* Solution: Generate README.md in CI
+
+The CI workflow must generate =README.md= before running =uv sync=.
+
+** Option 1: Emacs (Correct)
+
+Uses Emacs with org-mode to properly export:
+
+#+begin_src yaml
+- name: Set up Emacs
+  uses: purcell/setup-emacs@master
+  with:
+    version: '29.4'
+
+- name: Generate README.md from README.org
+  run: |
+    emacs -Q -l org --batch \
+      --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
+#+end_src
+
+** Option 2: Pandoc
+
+Uses pandoc for conversion:
+
+#+begin_src yaml
+- name: Install pandoc
+  run: sudo apt-get install -y pandoc
+
+- name: Generate README.md
+  run: pandoc README.org -o README.md
+#+end_src
+
+** Option 3: Simple Copy (Hacky)
+
+Just copies the file (loses formatting):
+
+#+begin_src yaml
+- name: Generate README.md
+  run: cp README.org README.md
+#+end_src
+
+* Makefile Target
+
+The =README.md= target in the Makefile handles local generation:
+
+#+begin_src makefile
+README.md: README.org ## Generate README.md from README.org
+	@echo "Generating README.md from README.org..."
+	@emacs -Q -l org --batch --eval "(progn (find-file \"README.org\") (org-md-export-to-markdown))"
+	@echo "README.md generated successfully!"
+#+end_src
+
+This is a *non-phony target* because:
+1. It has a file dependency (=README.org=)
+2. Make can check if =README.md= is newer than =README.org=
+3. Regeneration only happens when =README.org= changes
+
+* Why Non-Phony Targets Matter
+
+#+begin_src makefile
+# WRONG: Always regenerates
+.PHONY: README.md
+README.md:
+	emacs ... README.org ...
+
+# CORRECT: Only regenerates when source changes
+README.md: README.org
+	emacs ... README.org ...
+#+end_src
+
+The non-phony approach:
+- Respects file timestamps
+- Avoids unnecessary regeneration
+- Follows standard Make semantics
+- Works correctly with =make -j= parallel builds
+
+* Historical Context
+
+- 2026-01-10: CI failing with "Readme file does not exist" error
+- Root cause: =hatchling= validates readme during editable install
+- Fix: Added Emacs step to generate =README.md= in all Python CI jobs
+- Reference: [[https://hatch.pypa.io/latest/config/metadata/#readme][Hatchling README documentation]]
+
+* Related Files
+
+- =.github/workflows/ci.yml= - CI workflow with README generation
+- =pyproject.toml= - Build configuration with =readme = "README.md"=
+- =Makefile= - Local =README.md= generation target
+- =.gitignore= - Ignores generated =README.md=
