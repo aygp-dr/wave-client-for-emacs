@@ -1,11 +1,10 @@
+from datetime import datetime
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
-from datetime import datetime
-from typing import List, Optional
-import os
+from sqlalchemy.orm import sessionmaker
 
 app = FastAPI(title="Wave Client Server", description="Mock server for Wave client integration testing")
 
@@ -16,7 +15,7 @@ Base = declarative_base()
 
 class WaveSession(Base):
     __tablename__ = "wave_sessions"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String, unique=True, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -24,7 +23,7 @@ class WaveSession(Base):
 
 class WaveMessage(Base):
     __tablename__ = "wave_messages"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String, index=True)
     content = Column(Text)
@@ -76,7 +75,7 @@ async def create_session(session: SessionCreate):
         existing_session = db.query(WaveSession).filter(WaveSession.session_id == session.session_id).first()
         if existing_session:
             raise HTTPException(status_code=400, detail="Session already exists")
-        
+
         db_session = WaveSession(session_id=session.session_id)
         db.add(db_session)
         db.commit()
@@ -85,7 +84,7 @@ async def create_session(session: SessionCreate):
     finally:
         db.close()
 
-@app.get("/sessions", response_model=List[SessionResponse])
+@app.get("/sessions", response_model=list[SessionResponse])
 async def list_sessions():
     db = SessionLocal()
     try:
@@ -112,7 +111,7 @@ async def create_message(message: MessageCreate):
         session = db.query(WaveSession).filter(WaveSession.session_id == message.session_id).first()
         if not session:
             raise HTTPException(status_code=404, detail="Session not found")
-        
+
         db_message = WaveMessage(
             session_id=message.session_id,
             content=message.content,
@@ -125,14 +124,14 @@ async def create_message(message: MessageCreate):
     finally:
         db.close()
 
-@app.get("/messages/{session_id}", response_model=List[MessageResponse])
+@app.get("/messages/{session_id}", response_model=list[MessageResponse])
 async def get_messages(session_id: str):
     db = SessionLocal()
     try:
         session = db.query(WaveSession).filter(WaveSession.session_id == session_id).first()
         if not session:
             raise HTTPException(status_code=404, detail="Session not found")
-        
+
         messages = db.query(WaveMessage).filter(WaveMessage.session_id == session_id).all()
         return messages
     finally:
