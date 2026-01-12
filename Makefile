@@ -144,7 +144,7 @@ ws-listen: ## Listen to WebSocket messages from Wave server (port 9898)
 
 ws-open-wave: ## Send ProtocolOpenRequest for index wave
 	@command -v websocat >/dev/null 2>&1 || { echo "❌ websocat not found."; exit 1; }
-	@python3 -c 'import json; print(json.dumps({"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":json.dumps({"2":"indexwave!indexwave"})}))' | websocat ws://localhost:9898/ws
+	@$(PYTHON) -c 'import json; print(json.dumps({"version":0,"sequenceNumber":1,"messageType":"ProtocolOpenRequest","messageJson":json.dumps({"2":"indexwave!indexwave"})}))' | websocat ws://localhost:9898/ws
 
 ws-test: ## Run WebSocket test client
 	$(PYTHON) scripts/ws-test.py

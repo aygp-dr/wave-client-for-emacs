@@ -72,8 +72,7 @@ jobs:
         run: uv sync --extra test
 
       - name: Run unit tests
-        run: uv run pytest tests/unit -v --ignore=tests/unit/test_wave_server.py || true
-        # Note: test_wave_server.py skipped - tests expect WaveServer class that needs implementation
+        run: uv run pytest tests/unit -v
 
       - name: Start server for integration tests
         run: |
@@ -81,8 +80,8 @@ jobs:
           sleep 5
 
       - name: Run integration tests
-        run: uv run pytest tests/integration -v --ignore=tests/integration/test_websocket.py || true
-        # Note: test_websocket.py skipped - imports 'server' that doesn't exist in current wave_server
+        run: uv run pytest tests/integration -v
+        # Note: Broken tests moved to tests/broken/ - see beads-izl for tracking
 
   elisp-lint:
     name: Elisp Lint
