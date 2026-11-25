@@ -1,0 +1,3869 @@
+{
+  "about": [
+    "Static mock Wave corpus for the wave-client-for-emacs mock server.",
+    "Ten mock users on localhost, each with a fixed set of interests; a user only creates, joins or replies to waves on topics they hold.",
+    "Topics come from the owner's research notes (paths under topics.*.notes are relative to the site root).",
+    "Some waves are discussions of a real Hacker News story: only its id, title, date, points and comment-tree shape were used (hn_snapshot).",
+    "No HN comment text and no HN usernames were fetched into this file; every blip is original text written for this corpus.",
+    "Blip count per HN wave = clamp(4, 15, 2 + round(sqrt(comments) / 2)); reply depth never exceeds the story's max_depth.",
+    "read_through: the user has read the wave up to and including that blip (null = never opened)."
+  ],
+  "domain": "localhost",
+  "topics": {
+    "google-wave": {
+      "label": "Google Wave, 2009-2010: sandbox invites, FedOne federation, robots and gadgets, the Emacs client",
+      "notes": [
+        "research/wave"
+      ],
+      "era": "2009-2010"
+    },
+    "agent-sandboxing": {
+      "label": "Agent sandboxing and permissions: jails, containers, egress, permission guards",
+      "notes": [
+        "research/2026-agent-sandbox-systems",
+        "research/2026-agent-permission-guardrails.org",
+        "research/2026-agent-isolation-freebsd-jails",
+        "research/agent-sandbox-practical-configs"
+      ]
+    },
+    "formal-methods": {
+      "label": "Formal methods: TLA+, Alloy, Dafny, model checking",
+      "notes": [
+        "research/tla+.org",
+        "research/2026-alloy-specification.org",
+        "research/2026-formal-methods-history",
+        "research/dafny-spec-transpiler"
+      ]
+    },
+    "repl-lisp": {
+      "label": "REPL-driven Lisp: Clojure, Scheme, Guile",
+      "notes": [
+        "research/2026-one-book-four-lisps",
+        "research/2026-what-survived-clojure",
+        "research/2026-repl-driven-feed-crawling",
+        "research/scheme.org"
+      ]
+    },
+    "unix-history": {
+      "label": "Unix history and FreeBSD: the V4 tape, PDP-11, jails to 15.x",
+      "notes": [
+        "research/unix-v4",
+        "research/unix-pipes.org",
+        "research/freebsd-15.0-RELEASE.org"
+      ]
+    },
+    "testing": {
+      "label": "Property-based and mutation testing",
+      "notes": [
+        "research/2026-live-mutants",
+        "research/2026-pbt-tui-oracle",
+        "research/pbt-shrink-discipline.org"
+      ]
+    },
+    "literate-publishing": {
+      "label": "Org-mode and literate publishing",
+      "notes": [
+        "research/2026-org-publish-experience",
+        "research/org-include-patterns.org",
+        "research/org-graphviz-publish-workflow"
+      ]
+    },
+    "ml": {
+      "label": "Machine learning, from scikit-learn to small models",
+      "notes": [
+        "research/2018-machine-learning.org",
+        "research/machine-learning-python.org",
+        "research/2026-liquid-neural-networks.org"
+      ]
+    }
+  },
+  "users": {
+    "alice@localhost": {
+      "interests": [
+        "google-wave",
+        "repl-lisp",
+        "literate-publishing"
+      ]
+    },
+    "bob@localhost": {
+      "interests": [
+        "google-wave",
+        "agent-sandboxing",
+        "unix-history"
+      ]
+    },
+    "charlie@localhost": {
+      "interests": [
+        "google-wave",
+        "formal-methods",
+        "testing"
+      ]
+    },
+    "dave@localhost": {
+      "interests": [
+        "google-wave",
+        "agent-sandboxing",
+        "unix-history"
+      ]
+    },
+    "erin@localhost": {
+      "interests": [
+        "google-wave",
+        "ml",
+        "testing"
+      ]
+    },
+    "frank@localhost": {
+      "interests": [
+        "google-wave",
+        "repl-lisp",
+        "unix-history"
+      ]
+    },
+    "grace@localhost": {
+      "interests": [
+        "formal-methods",
+        "ml",
+        "literate-publishing"
+      ]
+    },
+    "heidi@localhost": {
+      "interests": [
+        "agent-sandboxing",
+        "formal-methods"
+      ]
+    },
+    "ivan@localhost": {
+      "interests": [
+        "ml",
+        "repl-lisp",
+        "testing"
+      ]
+    },
+    "judy@localhost": {
+      "interests": [
+        "literate-publishing",
+        "unix-history"
+      ]
+    }
+  },
+  "hn_snapshot": {
+    "752340": {
+      "hn_id": 752340,
+      "title": "Google Wave is the new X-Windows",
+      "created_at": "2009-08-10T09:46:14.000Z",
+      "points": 84,
+      "comments": 41,
+      "top_level_threads": 10,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          18,
+          9
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    },
+    "883116": {
+      "hn_id": 883116,
+      "title": "What problems does Google Wave solve?",
+      "created_at": "2009-10-15T10:44:23.000Z",
+      "points": 213,
+      "comments": 67,
+      "top_level_threads": 19,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          10,
+          5
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          9,
+          6
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          4,
+          4
+        ]
+      ]
+    },
+    "1354427": {
+      "hn_id": 1354427,
+      "title": "Operational Transformation (algorithm behind Wave, Google Docs)",
+      "created_at": "2010-05-17T14:33:30.000Z",
+      "points": 125,
+      "comments": 21,
+      "top_level_threads": 6,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          14,
+          6
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    "1361394": {
+      "hn_id": 1361394,
+      "title": "Google Wave Available for Everyone",
+      "created_at": "2010-05-19T16:18:44.000Z",
+      "points": 138,
+      "comments": 36,
+      "top_level_threads": 11,
+      "max_depth": 5,
+      "largest_threads": [
+        [
+          11,
+          5
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "1575892": {
+      "hn_id": 1575892,
+      "title": "Google Kills Wave",
+      "created_at": "2010-08-04T21:07:30.000Z",
+      "points": 712,
+      "comments": 237,
+      "top_level_threads": 77,
+      "max_depth": 7,
+      "largest_threads": [
+        [
+          37,
+          6
+        ],
+        [
+          23,
+          4
+        ],
+        [
+          21,
+          6
+        ],
+        [
+          16,
+          7
+        ],
+        [
+          14,
+          5
+        ],
+        [
+          13,
+          5
+        ]
+      ]
+    },
+    "49239751": {
+      "hn_id": 49239751,
+      "title": "Docker Sandboxes – Disposable, isolated sandboxes for AI agents",
+      "created_at": "2026-08-10T06:02:38.000Z",
+      "points": 694,
+      "comments": 392,
+      "top_level_threads": 86,
+      "max_depth": 15,
+      "largest_threads": [
+        [
+          104,
+          15
+        ],
+        [
+          35,
+          9
+        ],
+        [
+          20,
+          5
+        ],
+        [
+          14,
+          8
+        ],
+        [
+          13,
+          5
+        ],
+        [
+          10,
+          6
+        ]
+      ]
+    },
+    "47343927": {
+      "hn_id": 47343927,
+      "title": "Show HN: A context-aware permission guard for Claude Code",
+      "created_at": "2026-03-11T23:26:25.000Z",
+      "points": 127,
+      "comments": 93,
+      "top_level_threads": 35,
+      "max_depth": 5,
+      "largest_threads": [
+        [
+          17,
+          3
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ]
+    },
+    "46436828": {
+      "hn_id": 46436828,
+      "title": "Escaping containment: A security analysis of FreeBSD jails [video]",
+      "created_at": "2025-12-30T19:15:05.000Z",
+      "points": 141,
+      "comments": 15,
+      "top_level_threads": 3,
+      "max_depth": 5,
+      "largest_threads": [
+        [
+          11,
+          5
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "18965274": {
+      "hn_id": 18965274,
+      "title": "Why Don't People Use Formal Methods?",
+      "created_at": "2019-01-22T01:38:23.000Z",
+      "points": 420,
+      "comments": 225,
+      "top_level_threads": 59,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          68,
+          9
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          15,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          9,
+          4
+        ]
+      ]
+    },
+    "49909056": {
+      "hn_id": 49909056,
+      "title": "What TLA+ can and can't check",
+      "created_at": "2026-09-30T13:57:06.000Z",
+      "points": 246,
+      "comments": 51,
+      "top_level_threads": 12,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          14,
+          4
+        ],
+        [
+          10,
+          6
+        ],
+        [
+          9,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ]
+    },
+    "13440324": {
+      "hn_id": 13440324,
+      "title": "Dafny – A programming language with a program verifier",
+      "created_at": "2017-01-19T23:08:48.000Z",
+      "points": 165,
+      "comments": 58,
+      "top_level_threads": 10,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          25,
+          6
+        ],
+        [
+          9,
+          6
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "16307882": {
+      "hn_id": 16307882,
+      "title": "REPL-Driven Development (2017)",
+      "created_at": "2018-02-05T10:28:18.000Z",
+      "points": 164,
+      "comments": 72,
+      "top_level_threads": 10,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          38,
+          9
+        ],
+        [
+          15,
+          4
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "23418699": {
+      "hn_id": 23418699,
+      "title": "A History of Clojure [pdf]",
+      "created_at": "2020-06-04T16:30:54.000Z",
+      "points": 627,
+      "comments": 374,
+      "top_level_threads": 28,
+      "max_depth": 11,
+      "largest_threads": [
+        [
+          135,
+          11
+        ],
+        [
+          37,
+          8
+        ],
+        [
+          37,
+          7
+        ],
+        [
+          36,
+          10
+        ],
+        [
+          29,
+          6
+        ],
+        [
+          25,
+          6
+        ]
+      ]
+    },
+    "41600903": {
+      "hn_id": 41600903,
+      "title": "Optimizing Guile Scheme",
+      "created_at": "2024-09-20T11:28:01.000Z",
+      "points": 168,
+      "comments": 80,
+      "top_level_threads": 12,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          32,
+          9
+        ],
+        [
+          21,
+          6
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    },
+    "45840321": {
+      "hn_id": 45840321,
+      "title": "Unix v4 Tape Found",
+      "created_at": "2025-11-06T20:57:09.000Z",
+      "points": 510,
+      "comments": 100,
+      "top_level_threads": 18,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          26,
+          9
+        ],
+        [
+          21,
+          5
+        ],
+        [
+          13,
+          7
+        ],
+        [
+          13,
+          6
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          3
+        ]
+      ]
+    },
+    "29521506": {
+      "hn_id": 29521506,
+      "title": "PDP-11 Booting",
+      "created_at": "2021-12-11T15:28:52.000Z",
+      "points": 221,
+      "comments": 69,
+      "top_level_threads": 18,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          14,
+          6
+        ],
+        [
+          13,
+          5
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          4
+        ]
+      ]
+    },
+    "15865504": {
+      "hn_id": 15865504,
+      "title": "What Have We Learned from the PDP-11?",
+      "created_at": "2017-12-06T22:12:32.000Z",
+      "points": 149,
+      "comments": 55,
+      "top_level_threads": 16,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          15,
+          5
+        ],
+        [
+          12,
+          6
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          2
+        ]
+      ]
+    },
+    "45818562": {
+      "hn_id": 45818562,
+      "title": "Hypothesis: Property-Based Testing for Python",
+      "created_at": "2025-11-05T03:15:37.000Z",
+      "points": 231,
+      "comments": 161,
+      "top_level_threads": 19,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          38,
+          9
+        ],
+        [
+          22,
+          6
+        ],
+        [
+          19,
+          5
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          17,
+          5
+        ],
+        [
+          15,
+          6
+        ]
+      ]
+    },
+    "40875559": {
+      "hn_id": 40875559,
+      "title": "The sad state of property-based testing libraries",
+      "created_at": "2024-07-04T15:15:39.000Z",
+      "points": 208,
+      "comments": 121,
+      "top_level_threads": 18,
+      "max_depth": 8,
+      "largest_threads": [
+        [
+          24,
+          7
+        ],
+        [
+          22,
+          6
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          9,
+          6
+        ],
+        [
+          9,
+          3
+        ]
+      ]
+    },
+    "26024915": {
+      "hn_id": 26024915,
+      "title": "Mutation Driven Testing: When TDD Just Isn’t Good Enough",
+      "created_at": "2021-02-04T12:55:38.000Z",
+      "points": 125,
+      "comments": 67,
+      "top_level_threads": 20,
+      "max_depth": 7,
+      "largest_threads": [
+        [
+          14,
+          7
+        ],
+        [
+          11,
+          3
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          4,
+          3
+        ]
+      ]
+    },
+    "47300747": {
+      "hn_id": 47300747,
+      "title": "We should revisit literate programming in the agent era",
+      "created_at": "2026-03-08T19:58:15.000Z",
+      "points": 292,
+      "comments": 251,
+      "top_level_threads": 54,
+      "max_depth": 13,
+      "largest_threads": [
+        [
+          111,
+          13
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          11,
+          6
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          9,
+          6
+        ]
+      ]
+    },
+    "15321850": {
+      "hn_id": 15321850,
+      "title": "Org-Mode Is One of the Most Reasonable Markup Languages to Use for Text",
+      "created_at": "2017-09-23T21:30:22.000Z",
+      "points": 556,
+      "comments": 241,
+      "top_level_threads": 44,
+      "max_depth": 11,
+      "largest_threads": [
+        [
+          26,
+          6
+        ],
+        [
+          24,
+          8
+        ],
+        [
+          19,
+          5
+        ],
+        [
+          16,
+          6
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          11,
+          11
+        ]
+      ]
+    },
+    "12046950": {
+      "hn_id": 12046950,
+      "title": "Literate programming: presenting code in human order",
+      "created_at": "2016-07-07T01:22:24.000Z",
+      "points": 95,
+      "comments": 73,
+      "top_level_threads": 22,
+      "max_depth": 6,
+      "largest_threads": [
+        [
+          14,
+          6
+        ],
+        [
+          10,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          2
+        ]
+      ]
+    },
+    "16493489": {
+      "hn_id": 16493489,
+      "title": "Machine Learning Crash Course",
+      "created_at": "2018-03-01T16:39:50.000Z",
+      "points": 1926,
+      "comments": 222,
+      "top_level_threads": 34,
+      "max_depth": 8,
+      "largest_threads": [
+        [
+          115,
+          8
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          7,
+          3
+        ]
+      ]
+    },
+    "28613099": {
+      "hn_id": 28613099,
+      "title": "The First Rule of Machine Learning: Start Without Machine Learning",
+      "created_at": "2021-09-22T04:24:52.000Z",
+      "points": 765,
+      "comments": 172,
+      "top_level_threads": 42,
+      "max_depth": 12,
+      "largest_threads": [
+        [
+          63,
+          12
+        ],
+        [
+          29,
+          5
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          3
+        ]
+      ]
+    },
+    "28521992": {
+      "hn_id": 28521992,
+      "title": "Scikit-Learn Version 1.0",
+      "created_at": "2021-09-14T08:50:14.000Z",
+      "points": 260,
+      "comments": 102,
+      "top_level_threads": 10,
+      "max_depth": 9,
+      "largest_threads": [
+        [
+          61,
+          9
+        ],
+        [
+          13,
+          4
+        ],
+        [
+          11,
+          7
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          2,
+          2
+        ]
+      ]
+    }
+  },
+  "waves": [
+    {
+      "id": "localhost!w+corpus-gw1",
+      "topic": "google-wave",
+      "title": "Google Wave is the new X-Windows",
+      "creator": "frank@localhost",
+      "participants": [
+        "frank@localhost",
+        "alice@localhost",
+        "dave@localhost",
+        "bob@localhost"
+      ],
+      "created": "2009-08-10T10:31:14",
+      "source": {
+        "hn_id": 752340,
+        "url": "https://news.ycombinator.com/item?id=752340"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "frank@localhost",
+          "parent": null,
+          "at": "2009-08-10T10:31:14",
+          "lines": [
+            "Read this over coffee. The comparison is fun but I am not sure it holds.",
+            "X shipped a protocol and a reference server first; Wave shipped a client and a promise."
+          ]
+        },
+        {
+          "id": "b+gw1r1",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2009-08-10T10:40:14",
+          "lines": [
+            "It holds in one way: both put the interesting state on the server and let thin clients draw it.",
+            "That is exactly why an Emacs client is plausible at all."
+          ]
+        },
+        {
+          "id": "b+gw1r2",
+          "author": "dave@localhost",
+          "parent": "b+gw1r1",
+          "at": "2009-08-10T10:52:14",
+          "lines": [
+            "Plausible, sure, but X had a wire spec you could implement in a weekend. The Wave docs are mostly screenshots."
+          ]
+        },
+        {
+          "id": "b+gw1r3",
+          "author": "frank@localhost",
+          "parent": "b+gw1r2",
+          "at": "2009-08-10T11:04:14",
+          "lines": [
+            "The federation draft is real though. Operations over XMPP, a spec for the document model.",
+            "Not a weekend, but not vapor either."
+          ]
+        },
+        {
+          "id": "b+gw1r4",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2009-08-10T11:21:14",
+          "lines": [
+            "Meanwhile I just want the scrollbar to behave."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw2",
+      "topic": "google-wave",
+      "title": "What problems does Google Wave solve?",
+      "creator": "erin@localhost",
+      "participants": [
+        "erin@localhost",
+        "charlie@localhost",
+        "alice@localhost",
+        "bob@localhost",
+        "frank@localhost"
+      ],
+      "created": "2009-10-15T11:29:23",
+      "source": {
+        "hn_id": 883116,
+        "url": "https://news.ycombinator.com/item?id=883116"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "erin@localhost",
+          "parent": null,
+          "at": "2009-10-15T11:29:23",
+          "lines": [
+            "Honest question for the group, since half of us have sandbox accounts now.",
+            "What do we actually use it for that email plus a wiki did not already cover?"
+          ]
+        },
+        {
+          "id": "b+gw2r1",
+          "author": "charlie@localhost",
+          "parent": "b+root",
+          "at": "2009-10-15T11:41:23",
+          "lines": [
+            "Meeting notes. Four people typing into one blip during the call, then replies threaded under the decisions."
+          ]
+        },
+        {
+          "id": "b+gw2r2",
+          "author": "alice@localhost",
+          "parent": "b+gw2r1",
+          "at": "2009-10-15T11:54:23",
+          "lines": [
+            "Same here. Live typing turns out to matter more than I expected; you see the half-sentence and answer the question before it is asked."
+          ]
+        },
+        {
+          "id": "b+gw2r3",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2009-10-15T12:00:23",
+          "lines": [
+            "For me it is the playback. Joining late and scrubbing through how a doc got to its current shape is genuinely new."
+          ]
+        },
+        {
+          "id": "b+gw2r4",
+          "author": "erin@localhost",
+          "parent": "b+gw2r3",
+          "at": "2009-10-15T12:13:23",
+          "lines": [
+            "Fair. Playback is the one feature I cannot fake with email."
+          ]
+        },
+        {
+          "id": "b+gw2r5",
+          "author": "frank@localhost",
+          "parent": "b+gw2r4",
+          "at": "2009-10-15T12:27:23",
+          "lines": [
+            "You can fake it with version control, but nobody in sales is running git log."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw3",
+      "topic": "google-wave",
+      "title": "Operational Transformation (algorithm behind Wave, Google Docs)",
+      "creator": "charlie@localhost",
+      "participants": [
+        "charlie@localhost",
+        "alice@localhost",
+        "erin@localhost"
+      ],
+      "created": "2010-05-17T15:18:30",
+      "source": {
+        "hn_id": 1354427,
+        "url": "https://news.ycombinator.com/item?id=1354427"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "charlie@localhost",
+          "parent": null,
+          "at": "2010-05-17T15:18:30",
+          "lines": [
+            "Good overview of operational transformation. The part worth rereading is transform():",
+            "two concurrent ops, each rewritten against the other, so both sites converge.",
+            "The proofs get hairy once you add more than insert and delete."
+          ]
+        },
+        {
+          "id": "b+gw3r1",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2010-05-17T15:32:30",
+          "lines": [
+            "The client in our Emacs port only does insert, delete and retain, and that already took a day to get right around cursors."
+          ]
+        },
+        {
+          "id": "b+gw3r2",
+          "author": "erin@localhost",
+          "parent": "b+gw3r1",
+          "at": "2010-05-17T15:45:30",
+          "lines": [
+            "Did you property-test it? Generate two random op lists, transform both ways, compare documents."
+          ]
+        },
+        {
+          "id": "b+gw3r3",
+          "author": "charlie@localhost",
+          "parent": "b+gw3r2",
+          "at": "2010-05-17T15:59:30",
+          "lines": [
+            "That is the TP1 property. Writing it down as a generator is maybe twenty lines; it found two bugs in mine."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw4",
+      "topic": "google-wave",
+      "title": "Google Wave Available for Everyone",
+      "creator": "bob@localhost",
+      "participants": [
+        "bob@localhost",
+        "dave@localhost",
+        "frank@localhost",
+        "erin@localhost",
+        "public@localhost"
+      ],
+      "created": "2010-05-19T17:03:44",
+      "source": {
+        "hn_id": 1361394,
+        "url": "https://news.ycombinator.com/item?id=1361394"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "bob@localhost",
+          "parent": null,
+          "at": "2010-05-19T17:03:44",
+          "lines": [
+            "No more invites needed, it is open to everyone now.",
+            "Making this one public so anyone on the server can find it."
+          ]
+        },
+        {
+          "id": "b+gw4r1",
+          "author": "dave@localhost",
+          "parent": "b+root",
+          "at": "2010-05-19T17:11:44",
+          "lines": [
+            "Good timing. The invite trading was getting silly."
+          ]
+        },
+        {
+          "id": "b+gw4r2",
+          "author": "frank@localhost",
+          "parent": "b+root",
+          "at": "2010-05-19T17:22:44",
+          "lines": [
+            "Anyone tried the robots API yet? I want one that summarizes a wave into a single blip at the end of the day."
+          ]
+        },
+        {
+          "id": "b+gw4r3",
+          "author": "erin@localhost",
+          "parent": "b+gw4r2",
+          "at": "2010-05-19T17:33:44",
+          "lines": [
+            "I have a toy robot that tallies gadget votes. Happy to share the code."
+          ]
+        },
+        {
+          "id": "b+gw4r4",
+          "author": "frank@localhost",
+          "parent": "b+gw4r3",
+          "at": "2010-05-19T17:50:44",
+          "lines": [
+            "Please do. Robots that write back into the wave are the part I find most interesting."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw5",
+      "topic": "google-wave",
+      "title": "Google Kills Wave",
+      "creator": "alice@localhost",
+      "participants": [
+        "alice@localhost",
+        "bob@localhost",
+        "charlie@localhost",
+        "dave@localhost",
+        "erin@localhost",
+        "frank@localhost"
+      ],
+      "created": "2010-08-04T21:52:30",
+      "source": {
+        "hn_id": 1575892,
+        "url": "https://news.ycombinator.com/item?id=1575892"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "alice@localhost",
+          "parent": null,
+          "at": "2010-08-04T21:52:30",
+          "lines": [
+            "Development is ending at the end of the year. Export what you care about.",
+            "Added a poll below so we know who still needs help with exports."
+          ],
+          "gadget": {
+            "yes": [
+              "alice@localhost",
+              "frank@localhost"
+            ],
+            "no": [
+              "dave@localhost"
+            ],
+            "maybe": [
+              "bob@localhost",
+              "erin@localhost"
+            ]
+          }
+        },
+        {
+          "id": "b+gw5r1",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2010-08-04T21:58:30",
+          "lines": [
+            "Not surprised, but sad. The protocol work deserved a longer life."
+          ]
+        },
+        {
+          "id": "b+gw5r2",
+          "author": "charlie@localhost",
+          "parent": "b+gw5r1",
+          "at": "2010-08-04T22:07:30",
+          "lines": [
+            "The protocol and the federation server are open source, so the ideas survive even if the product does not."
+          ]
+        },
+        {
+          "id": "b+gw5r3",
+          "author": "dave@localhost",
+          "parent": "b+gw5r2",
+          "at": "2010-08-04T22:16:30",
+          "lines": [
+            "That is the hopeful read. Someone will need to run the servers, though."
+          ]
+        },
+        {
+          "id": "b+gw5r4",
+          "author": "alice@localhost",
+          "parent": "b+gw5r3",
+          "at": "2010-08-04T22:28:30",
+          "lines": [
+            "Which is more or less what this repository is: a client that still talks to a server we run ourselves."
+          ]
+        },
+        {
+          "id": "b+gw5r5",
+          "author": "erin@localhost",
+          "parent": "b+root",
+          "at": "2010-08-04T22:34:30",
+          "lines": [
+            "Practical question: does export keep the reply structure, or does it flatten everything?"
+          ]
+        },
+        {
+          "id": "b+gw5r6",
+          "author": "frank@localhost",
+          "parent": "b+gw5r5",
+          "at": "2010-08-04T22:47:30",
+          "lines": [
+            "It flattens. I wrote a small script that rebuilds the thread from the parent ids in the raw export."
+          ]
+        },
+        {
+          "id": "b+gw5r7",
+          "author": "erin@localhost",
+          "parent": "b+gw5r6",
+          "at": "2010-08-04T22:55:30",
+          "lines": [
+            "Perfect, I will borrow that."
+          ]
+        },
+        {
+          "id": "b+gw5r8",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2010-08-04T23:12:30",
+          "lines": [
+            "One thing I will miss: watching someone type in a reply three levels deep and knowing exactly which point they were answering."
+          ]
+        },
+        {
+          "id": "b+gw5r9",
+          "author": "dave@localhost",
+          "parent": "b+gw5r8",
+          "at": "2010-08-04T23:26:30",
+          "lines": [
+            "Agreed. The tree was the right shape for discussion. Most chat tools still flatten it."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw6",
+      "topic": "google-wave",
+      "title": "Sandbox account arrived",
+      "creator": "frank@localhost",
+      "participants": [
+        "frank@localhost",
+        "alice@localhost"
+      ],
+      "created": "2009-07-21T08:15:00",
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "frank@localhost",
+          "parent": null,
+          "at": "2009-07-21T08:15:00",
+          "lines": [
+            "Sandbox account arrived this morning. Testing whether the federation demo server accepts my client before I tell anyone."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-gw7",
+      "topic": "google-wave",
+      "title": "Eight Wave invites to give away",
+      "creator": "dave@localhost",
+      "participants": [
+        "dave@localhost",
+        "bob@localhost",
+        "charlie@localhost",
+        "erin@localhost"
+      ],
+      "created": "2009-10-20T19:30:00",
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "dave@localhost",
+          "parent": null,
+          "at": "2009-10-20T19:30:00",
+          "lines": [
+            "I have eight invites left. Reply here if you want one and I will send it tonight."
+          ]
+        },
+        {
+          "id": "b+gw7r1",
+          "author": "charlie@localhost",
+          "parent": "b+root",
+          "at": "2009-10-20T19:52:00",
+          "lines": [
+            "One for a colleague please, she does a lot of collaborative writing."
+          ]
+        },
+        {
+          "id": "b+gw7r2",
+          "author": "dave@localhost",
+          "parent": "b+gw7r1",
+          "at": "2009-10-20T20:10:00",
+          "lines": [
+            "Sent."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-as1",
+      "topic": "agent-sandboxing",
+      "title": "Docker Sandboxes – Disposable, isolated sandboxes for AI agents",
+      "creator": "heidi@localhost",
+      "participants": [
+        "heidi@localhost",
+        "bob@localhost",
+        "dave@localhost"
+      ],
+      "created": "2026-08-10T06:47:38",
+      "source": {
+        "hn_id": 49239751,
+        "url": "https://news.ycombinator.com/item?id=49239751"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "heidi@localhost",
+          "parent": null,
+          "at": "2026-08-10T06:47:38",
+          "lines": [
+            "Disposable sandboxes per agent session. The interesting question is what crosses the boundary:",
+            "filesystem mounts, network egress, and credentials.",
+            "Isolation of the process is the easy part."
+          ]
+        },
+        {
+          "id": "b+as1r1",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2026-08-10T06:57:38",
+          "lines": [
+            "Egress is where I keep getting surprised. An agent with no network but a package manager is an agent with a network."
+          ]
+        },
+        {
+          "id": "b+as1r2",
+          "author": "heidi@localhost",
+          "parent": "b+as1r1",
+          "at": "2026-08-10T07:05:38",
+          "lines": [
+            "Yes. Allowlist the registry mirror and nothing else, and log every denied connection so you can see what it tried."
+          ]
+        },
+        {
+          "id": "b+as1r3",
+          "author": "dave@localhost",
+          "parent": "b+as1r2",
+          "at": "2026-08-10T07:16:38",
+          "lines": [
+            "Logging denials has been the most useful signal for us. It tells you what the task actually needed."
+          ]
+        },
+        {
+          "id": "b+as1r4",
+          "author": "bob@localhost",
+          "parent": "b+as1r3",
+          "at": "2026-08-10T07:28:38",
+          "lines": [
+            "And it makes a good test: if the denial log is empty for a week, the allowlist is probably too wide."
+          ]
+        },
+        {
+          "id": "b+as1r5",
+          "author": "heidi@localhost",
+          "parent": "b+as1r4",
+          "at": "2026-08-10T07:39:38",
+          "lines": [
+            "I like that as a hardening trigger. Writing it down."
+          ]
+        },
+        {
+          "id": "b+as1r6",
+          "author": "dave@localhost",
+          "parent": "b+root",
+          "at": "2026-08-10T07:50:38",
+          "lines": [
+            "How do you hand credentials in? Mounting a token file feels wrong but env vars leak into every child."
+          ]
+        },
+        {
+          "id": "b+as1r7",
+          "author": "heidi@localhost",
+          "parent": "b+as1r6",
+          "at": "2026-08-10T08:02:38",
+          "lines": [
+            "Short-lived tokens through a broker on a unix socket. The sandbox can ask; it cannot list or keep."
+          ]
+        },
+        {
+          "id": "b+as1r8",
+          "author": "bob@localhost",
+          "parent": "b+as1r7",
+          "at": "2026-08-10T08:15:38",
+          "lines": [
+            "That is the pattern I keep coming back to. Ask, do not hold."
+          ]
+        },
+        {
+          "id": "b+as1r9",
+          "author": "dave@localhost",
+          "parent": "b+root",
+          "at": "2026-08-10T08:29:38",
+          "lines": [
+            "Startup time matters too. If a fresh sandbox takes thirty seconds, people will reuse them and lose the point."
+          ]
+        },
+        {
+          "id": "b+as1r10",
+          "author": "bob@localhost",
+          "parent": "b+as1r9",
+          "at": "2026-08-10T08:42:38",
+          "lines": [
+            "ZFS clones get us under a second on the jail side. Snapshot once, clone per session."
+          ]
+        },
+        {
+          "id": "b+as1r11",
+          "author": "heidi@localhost",
+          "parent": "b+as1r10",
+          "at": "2026-08-10T08:57:38",
+          "lines": [
+            "Nice. Disposable only works if it is cheap."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-as2",
+      "topic": "agent-sandboxing",
+      "title": "Show HN: A context-aware permission guard for Claude Code",
+      "creator": "bob@localhost",
+      "participants": [
+        "bob@localhost",
+        "heidi@localhost",
+        "dave@localhost"
+      ],
+      "created": "2026-03-12T00:11:25",
+      "source": {
+        "hn_id": 47343927,
+        "url": "https://news.ycombinator.com/item?id=47343927"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "bob@localhost",
+          "parent": null,
+          "at": "2026-03-12T00:11:25",
+          "lines": [
+            "A permission guard that reads context before allowing a command. Curious how it decides.",
+            "A static allowlist misses intent; a model-based judge is hard to audit."
+          ]
+        },
+        {
+          "id": "b+as2r1",
+          "author": "heidi@localhost",
+          "parent": "b+root",
+          "at": "2026-03-12T00:24:25",
+          "lines": [
+            "Hybrid seems right: deny-list for the obviously destructive, allow-list for read-only, and only ask about the middle."
+          ]
+        },
+        {
+          "id": "b+as2r2",
+          "author": "dave@localhost",
+          "parent": "b+as2r1",
+          "at": "2026-03-12T00:37:25",
+          "lines": [
+            "The middle is where all the work is. git push, writing outside the project, anything with curl."
+          ]
+        },
+        {
+          "id": "b+as2r3",
+          "author": "bob@localhost",
+          "parent": "b+as2r2",
+          "at": "2026-03-12T00:49:25",
+          "lines": [
+            "I would want every decision logged with the rule that matched, so I can tune it later."
+          ]
+        },
+        {
+          "id": "b+as2r4",
+          "author": "heidi@localhost",
+          "parent": "b+as2r3",
+          "at": "2026-03-12T01:00:25",
+          "lines": [
+            "Agreed. A guard you cannot explain is a guard you eventually turn off."
+          ]
+        },
+        {
+          "id": "b+as2r5",
+          "author": "dave@localhost",
+          "parent": "b+root",
+          "at": "2026-03-12T01:12:25",
+          "lines": [
+            "Has anyone measured how many prompts per hour before people start approving everything?"
+          ]
+        },
+        {
+          "id": "b+as2r6",
+          "author": "bob@localhost",
+          "parent": "b+as2r5",
+          "at": "2026-03-12T01:25:25",
+          "lines": [
+            "Anecdotally, about a dozen. After that every prompt is a yes."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-as3",
+      "topic": "agent-sandboxing",
+      "title": "Escaping containment: A security analysis of FreeBSD jails [video]",
+      "creator": "dave@localhost",
+      "participants": [
+        "dave@localhost",
+        "bob@localhost",
+        "heidi@localhost"
+      ],
+      "created": "2025-12-30T20:00:05",
+      "source": {
+        "hn_id": 46436828,
+        "url": "https://news.ycombinator.com/item?id=46436828"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "dave@localhost",
+          "parent": null,
+          "at": "2025-12-30T20:00:05",
+          "lines": [
+            "Talk on escaping jails. Worth watching for the list of what is shared with the host by default."
+          ]
+        },
+        {
+          "id": "b+as3r1",
+          "author": "heidi@localhost",
+          "parent": "b+root",
+          "at": "2025-12-30T20:15:05",
+          "lines": [
+            "Most of the findings were configuration, not kernel bugs. Raw sockets, devfs rules, and mounted host paths."
+          ]
+        },
+        {
+          "id": "b+as3r2",
+          "author": "bob@localhost",
+          "parent": "b+as3r1",
+          "at": "2025-12-30T20:30:05",
+          "lines": [
+            "Which is good news: those are all things a config linter can check."
+          ]
+        },
+        {
+          "id": "b+as3r3",
+          "author": "dave@localhost",
+          "parent": "b+as3r2",
+          "at": "2025-12-30T20:44:05",
+          "lines": [
+            "We should write that linter. Jail.conf in, list of risky settings out."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-fm1",
+      "topic": "formal-methods",
+      "title": "Why Don't People Use Formal Methods?",
+      "creator": "grace@localhost",
+      "participants": [
+        "grace@localhost",
+        "charlie@localhost",
+        "heidi@localhost"
+      ],
+      "created": "2019-01-22T02:23:23",
+      "source": {
+        "hn_id": 18965274,
+        "url": "https://news.ycombinator.com/item?id=18965274"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "grace@localhost",
+          "parent": null,
+          "at": "2019-01-22T02:23:23",
+          "lines": [
+            "Classic question. My short answer: the spec is cheap, the habit is expensive.",
+            "Nobody budgets the week it takes to learn to think in states and transitions."
+          ]
+        },
+        {
+          "id": "b+fm1r1",
+          "author": "charlie@localhost",
+          "parent": "b+root",
+          "at": "2019-01-22T02:34:23",
+          "lines": [
+            "And the payoff is invisible. A bug that never ships does not get a postmortem."
+          ]
+        },
+        {
+          "id": "b+fm1r2",
+          "author": "heidi@localhost",
+          "parent": "b+fm1r1",
+          "at": "2019-01-22T02:46:23",
+          "lines": [
+            "We had one that would have. A TLA+ model of our lease protocol found a double-owner trace in an afternoon."
+          ]
+        },
+        {
+          "id": "b+fm1r3",
+          "author": "grace@localhost",
+          "parent": "b+fm1r2",
+          "at": "2019-01-22T02:58:23",
+          "lines": [
+            "That is the story that sells it. Did you keep the spec up to date afterwards?"
+          ]
+        },
+        {
+          "id": "b+fm1r4",
+          "author": "heidi@localhost",
+          "parent": "b+fm1r3",
+          "at": "2019-01-22T03:10:23",
+          "lines": [
+            "For a while. It drifted once the code moved on. We now check it in next to the code and review them together."
+          ]
+        },
+        {
+          "id": "b+fm1r5",
+          "author": "charlie@localhost",
+          "parent": "b+fm1r4",
+          "at": "2019-01-22T03:23:23",
+          "lines": [
+            "Drift is the real cost. A spec nobody runs is just documentation."
+          ]
+        },
+        {
+          "id": "b+fm1r6",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2019-01-22T03:35:23",
+          "lines": [
+            "Lightweight tools help. Alloy gives you a counterexample in seconds, which keeps the loop tight."
+          ],
+          "gadget": {
+            "yes": [
+              "charlie@localhost"
+            ],
+            "no": [],
+            "maybe": [
+              "heidi@localhost"
+            ]
+          }
+        },
+        {
+          "id": "b+fm1r7",
+          "author": "charlie@localhost",
+          "parent": "b+fm1r6",
+          "at": "2019-01-22T03:48:23",
+          "lines": [
+            "Alloy for structure, TLA+ for behaviour over time. That split has worked for me."
+          ]
+        },
+        {
+          "id": "b+fm1r8",
+          "author": "heidi@localhost",
+          "parent": "b+root",
+          "at": "2019-01-22T04:02:23",
+          "lines": [
+            "Property tests are the gateway drug. Once people write invariants for tests, a model is a short step."
+          ]
+        },
+        {
+          "id": "b+fm1r9",
+          "author": "grace@localhost",
+          "parent": "b+fm1r8",
+          "at": "2019-01-22T04:14:23",
+          "lines": [
+            "Agreed. Same invariants, different checker."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-fm2",
+      "topic": "formal-methods",
+      "title": "What TLA+ can and can't check",
+      "creator": "charlie@localhost",
+      "participants": [
+        "charlie@localhost",
+        "heidi@localhost",
+        "grace@localhost"
+      ],
+      "created": "2026-09-30T14:42:06",
+      "source": {
+        "hn_id": 49909056,
+        "url": "https://news.ycombinator.com/item?id=49909056"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "charlie@localhost",
+          "parent": null,
+          "at": "2026-09-30T14:42:06",
+          "lines": [
+            "Useful reminder of the limits: TLC checks a finite model, not your system.",
+            "Small constants find most bugs, but small is not all."
+          ]
+        },
+        {
+          "id": "b+fm2r1",
+          "author": "heidi@localhost",
+          "parent": "b+root",
+          "at": "2026-09-30T14:56:06",
+          "lines": [
+            "And liveness needs fairness assumptions that are easy to get subtly wrong."
+          ]
+        },
+        {
+          "id": "b+fm2r2",
+          "author": "grace@localhost",
+          "parent": "b+fm2r1",
+          "at": "2026-09-30T15:09:06",
+          "lines": [
+            "Wrong fairness is the worst kind of wrong, because the checker happily says everything terminates."
+          ]
+        },
+        {
+          "id": "b+fm2r3",
+          "author": "charlie@localhost",
+          "parent": "b+fm2r2",
+          "at": "2026-09-30T15:22:06",
+          "lines": [
+            "I now add a deliberately broken variant of each spec and confirm the checker catches it. Cheap insurance."
+          ]
+        },
+        {
+          "id": "b+fm2r4",
+          "author": "heidi@localhost",
+          "parent": "b+fm2r3",
+          "at": "2026-09-30T15:34:06",
+          "lines": [
+            "Mutation testing for specs. Nice."
+          ]
+        },
+        {
+          "id": "b+fm2r5",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2026-09-30T15:48:06",
+          "lines": [
+            "Also: the refinement mapping to code is still on you. The model says nothing about the implementation unless you connect them."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-fm3",
+      "topic": "formal-methods",
+      "title": "Dafny – A programming language with a program verifier",
+      "creator": "heidi@localhost",
+      "participants": [
+        "heidi@localhost",
+        "grace@localhost",
+        "charlie@localhost"
+      ],
+      "created": "2017-01-19T23:53:48",
+      "source": {
+        "hn_id": 13440324,
+        "url": "https://news.ycombinator.com/item?id=13440324"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "heidi@localhost",
+          "parent": null,
+          "at": "2017-01-19T23:53:48",
+          "lines": [
+            "Dafny again. I like that the verifier runs as you type; it feels closer to a type checker than a proof assistant."
+          ]
+        },
+        {
+          "id": "b+fm3r1",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2017-01-20T00:05:48",
+          "lines": [
+            "Until the verifier times out and you are guessing which lemma it needs."
+          ]
+        },
+        {
+          "id": "b+fm3r2",
+          "author": "charlie@localhost",
+          "parent": "b+fm3r1",
+          "at": "2017-01-20T00:18:48",
+          "lines": [
+            "Splitting the method and asserting intermediate facts usually gets it unstuck. It is a bit like printf debugging for proofs."
+          ]
+        },
+        {
+          "id": "b+fm3r3",
+          "author": "heidi@localhost",
+          "parent": "b+fm3r2",
+          "at": "2017-01-20T00:30:48",
+          "lines": [
+            "Ha, yes. Assert, see if it holds, move the assert down."
+          ]
+        },
+        {
+          "id": "b+fm3r4",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2017-01-20T00:43:48",
+          "lines": [
+            "Has anyone compiled Dafny to something they shipped? I am curious about the generated code quality."
+          ]
+        },
+        {
+          "id": "b+fm3r5",
+          "author": "charlie@localhost",
+          "parent": "b+fm3r4",
+          "at": "2017-01-20T00:56:48",
+          "lines": [
+            "To C# and Go for small libraries. Readable enough to review, not something you would hand-edit."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-rl1",
+      "topic": "repl-lisp",
+      "title": "REPL-Driven Development (2017)",
+      "creator": "alice@localhost",
+      "participants": [
+        "alice@localhost",
+        "frank@localhost",
+        "ivan@localhost"
+      ],
+      "created": "2018-02-05T11:13:18",
+      "source": {
+        "hn_id": 16307882,
+        "url": "https://news.ycombinator.com/item?id=16307882"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "alice@localhost",
+          "parent": null,
+          "at": "2018-02-05T11:13:18",
+          "lines": [
+            "The best description I know of why the REPL is a workflow and not a feature.",
+            "You grow the program while it runs, and the file is where you keep what worked."
+          ]
+        },
+        {
+          "id": "b+rl1r1",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2018-02-05T11:22:18",
+          "lines": [
+            "The discipline is sending forms from the buffer, not typing into the REPL. Otherwise nothing ends up in the file."
+          ]
+        },
+        {
+          "id": "b+rl1r2",
+          "author": "frank@localhost",
+          "parent": "b+rl1r1",
+          "at": "2018-02-05T11:33:18",
+          "lines": [
+            "And restarting now and then to prove the file alone rebuilds the state you have been relying on."
+          ]
+        },
+        {
+          "id": "b+rl1r3",
+          "author": "alice@localhost",
+          "parent": "b+rl1r2",
+          "at": "2018-02-05T11:46:18",
+          "lines": [
+            "Hidden state is the classic trap. Old definitions that no longer exist in source but still answer calls."
+          ]
+        },
+        {
+          "id": "b+rl1r4",
+          "author": "ivan@localhost",
+          "parent": "b+rl1r3",
+          "at": "2018-02-05T11:58:18",
+          "lines": [
+            "A clean reload on every test run catches most of it."
+          ]
+        },
+        {
+          "id": "b+rl1r5",
+          "author": "frank@localhost",
+          "parent": "b+root",
+          "at": "2018-02-05T12:11:18",
+          "lines": [
+            "Same story in Guile with Geiser. The tooling differs, the habit is identical."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-rl2",
+      "topic": "repl-lisp",
+      "title": "A History of Clojure [pdf]",
+      "creator": "frank@localhost",
+      "participants": [
+        "frank@localhost",
+        "alice@localhost",
+        "ivan@localhost"
+      ],
+      "created": "2020-06-04T17:15:54",
+      "source": {
+        "hn_id": 23418699,
+        "url": "https://news.ycombinator.com/item?id=23418699"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "frank@localhost",
+          "parent": null,
+          "at": "2020-06-04T17:15:54",
+          "lines": [
+            "The history paper is a great read. Immutable data by default and a careful story about state.",
+            "It is striking how few of the core decisions changed after the first public release."
+          ]
+        },
+        {
+          "id": "b+rl2r1",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2020-06-04T17:25:54",
+          "lines": [
+            "Persistent collections were the bet that paid off. Everything else leans on them."
+          ]
+        },
+        {
+          "id": "b+rl2r2",
+          "author": "alice@localhost",
+          "parent": "b+rl2r1",
+          "at": "2020-06-04T17:37:54",
+          "lines": [
+            "Plus atoms being the boring default. Most code never needs anything fancier."
+          ]
+        },
+        {
+          "id": "b+rl2r3",
+          "author": "frank@localhost",
+          "parent": "b+rl2r2",
+          "at": "2020-06-04T17:49:54",
+          "lines": [
+            "Agents and refs got less use than people expected, but having them there made the model coherent."
+          ]
+        },
+        {
+          "id": "b+rl2r4",
+          "author": "ivan@localhost",
+          "parent": "b+rl2r3",
+          "at": "2020-06-04T18:01:54",
+          "lines": [
+            "I have used refs exactly once in production, and it was the right tool that one time."
+          ]
+        },
+        {
+          "id": "b+rl2r5",
+          "author": "alice@localhost",
+          "parent": "b+rl2r4",
+          "at": "2020-06-04T18:13:54",
+          "lines": [
+            "That is about the right rate for a sharp tool."
+          ]
+        },
+        {
+          "id": "b+rl2r6",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2020-06-04T18:26:54",
+          "lines": [
+            "The section on hosting on the JVM is underrated. Reusing a platform let them skip a decade of runtime work."
+          ]
+        },
+        {
+          "id": "b+rl2r7",
+          "author": "frank@localhost",
+          "parent": "b+rl2r6",
+          "at": "2020-06-04T18:38:54",
+          "lines": [
+            "And ClojureScript repeated the trick on JavaScript."
+          ]
+        },
+        {
+          "id": "b+rl2r8",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2020-06-04T18:50:54",
+          "lines": [
+            "What I would love is the same paper for spec: what problem it set out to solve and where it landed."
+          ]
+        },
+        {
+          "id": "b+rl2r9",
+          "author": "frank@localhost",
+          "parent": "b+rl2r8",
+          "at": "2020-06-04T19:03:54",
+          "lines": [
+            "I think the answer is: generative testing, more than validation."
+          ]
+        },
+        {
+          "id": "b+rl2r10",
+          "author": "ivan@localhost",
+          "parent": "b+rl2r9",
+          "at": "2020-06-04T19:15:54",
+          "lines": [
+            "Agreed, the generators are what I actually use it for."
+          ]
+        },
+        {
+          "id": "b+rl2r11",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2020-06-04T19:29:54",
+          "lines": [
+            "Reading list for the weekend sorted, then."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-rl3",
+      "topic": "repl-lisp",
+      "title": "Optimizing Guile Scheme",
+      "creator": "ivan@localhost",
+      "participants": [
+        "ivan@localhost",
+        "frank@localhost",
+        "alice@localhost"
+      ],
+      "created": "2024-09-20T12:13:01",
+      "source": {
+        "hn_id": 41600903,
+        "url": "https://news.ycombinator.com/item?id=41600903"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "ivan@localhost",
+          "parent": null,
+          "at": "2024-09-20T12:13:01",
+          "lines": [
+            "Nice walkthrough of profiling Guile. The compiler does a lot if you let it see the types."
+          ]
+        },
+        {
+          "id": "b+rl3r1",
+          "author": "frank@localhost",
+          "parent": "b+root",
+          "at": "2024-09-20T12:26:01",
+          "lines": [
+            "The big win in the post was avoiding generic arithmetic in the inner loop. Same lesson as every Lisp."
+          ]
+        },
+        {
+          "id": "b+rl3r2",
+          "author": "alice@localhost",
+          "parent": "b+rl3r1",
+          "at": "2024-09-20T12:39:01",
+          "lines": [
+            "Did they try the statprof module? It made a similar issue obvious for me in about five minutes."
+          ]
+        },
+        {
+          "id": "b+rl3r3",
+          "author": "ivan@localhost",
+          "parent": "b+rl3r2",
+          "at": "2024-09-20T12:51:01",
+          "lines": [
+            "They used it, yes. The flame graph was the clearest part of the post."
+          ]
+        },
+        {
+          "id": "b+rl3r4",
+          "author": "frank@localhost",
+          "parent": "b+rl3r3",
+          "at": "2024-09-20T13:04:01",
+          "lines": [
+            "Good to know the tooling is that mature now."
+          ]
+        },
+        {
+          "id": "b+rl3r5",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2024-09-20T13:17:01",
+          "lines": [
+            "Saving this for the next time someone says Scheme is only for teaching."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-uh1",
+      "topic": "unix-history",
+      "title": "Unix v4 Tape Found",
+      "creator": "judy@localhost",
+      "participants": [
+        "judy@localhost",
+        "bob@localhost",
+        "dave@localhost",
+        "frank@localhost"
+      ],
+      "created": "2025-11-06T21:42:09",
+      "source": {
+        "hn_id": 45840321,
+        "url": "https://news.ycombinator.com/item?id=45840321"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "judy@localhost",
+          "parent": null,
+          "at": "2025-11-06T21:42:09",
+          "lines": [
+            "A Fourth Edition tape turned up. If it reads cleanly, it fills one of the bigger gaps in the early source history."
+          ]
+        },
+        {
+          "id": "b+uh1r1",
+          "author": "frank@localhost",
+          "parent": "b+root",
+          "at": "2025-11-06T21:50:09",
+          "lines": [
+            "Fourth Edition is the first kernel in C, if I remember right. Seeing that transition in source would be wonderful."
+          ]
+        },
+        {
+          "id": "b+uh1r2",
+          "author": "dave@localhost",
+          "parent": "b+uh1r1",
+          "at": "2025-11-06T22:01:09",
+          "lines": [
+            "The question is whether the tape is still readable after fifty years. Old oxide tends to shed."
+          ]
+        },
+        {
+          "id": "b+uh1r3",
+          "author": "judy@localhost",
+          "parent": "b+uh1r2",
+          "at": "2025-11-06T22:12:09",
+          "lines": [
+            "Apparently the plan is a careful bake and a flux-level read, then decode in software."
+          ]
+        },
+        {
+          "id": "b+uh1r4",
+          "author": "bob@localhost",
+          "parent": "b+uh1r3",
+          "at": "2025-11-06T22:25:09",
+          "lines": [
+            "Flux-level capture is the right call. You can rerun the decoder later as it improves."
+          ]
+        },
+        {
+          "id": "b+uh1r5",
+          "author": "frank@localhost",
+          "parent": "b+root",
+          "at": "2025-11-06T22:42:09",
+          "lines": [
+            "If it boots in an emulator I am clearing a weekend."
+          ]
+        },
+        {
+          "id": "b+uh1r6",
+          "author": "judy@localhost",
+          "parent": "b+uh1r5",
+          "at": "2025-11-06T22:57:09",
+          "lines": [
+            "Same. I already have a PDP-11 config ready from the earlier editions."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-uh2",
+      "topic": "unix-history",
+      "title": "PDP-11 Booting",
+      "creator": "dave@localhost",
+      "participants": [
+        "dave@localhost",
+        "frank@localhost",
+        "judy@localhost",
+        "bob@localhost"
+      ],
+      "created": "2021-12-11T16:13:52",
+      "source": {
+        "hn_id": 29521506,
+        "url": "https://news.ycombinator.com/item?id=29521506"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "dave@localhost",
+          "parent": null,
+          "at": "2021-12-11T16:13:52",
+          "lines": [
+            "Step by step boot of a PDP-11 from the front panel. Toggle in the bootstrap, then load the rest from disk."
+          ]
+        },
+        {
+          "id": "b+uh2r1",
+          "author": "bob@localhost",
+          "parent": "b+root",
+          "at": "2021-12-11T16:24:52",
+          "lines": [
+            "Toggling in a loader by hand is the best way I know to understand what a boot sector is for."
+          ]
+        },
+        {
+          "id": "b+uh2r2",
+          "author": "judy@localhost",
+          "parent": "b+uh2r1",
+          "at": "2021-12-11T16:37:52",
+          "lines": [
+            "And why the first loader was so small. Every word cost a row of switches."
+          ]
+        },
+        {
+          "id": "b+uh2r3",
+          "author": "frank@localhost",
+          "parent": "b+uh2r2",
+          "at": "2021-12-11T16:49:52",
+          "lines": [
+            "I did it once in an emulator with the panel simulated. Took three tries to get the address right."
+          ]
+        },
+        {
+          "id": "b+uh2r4",
+          "author": "dave@localhost",
+          "parent": "b+uh2r3",
+          "at": "2021-12-11T17:01:52",
+          "lines": [
+            "Octal everywhere helps once you are used to it. The instruction fields line up on octal digits."
+          ]
+        },
+        {
+          "id": "b+uh2r5",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2021-12-11T17:15:52",
+          "lines": [
+            "Saving this for the reading group."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-uh3",
+      "topic": "unix-history",
+      "title": "What Have We Learned from the PDP-11?",
+      "creator": "frank@localhost",
+      "participants": [
+        "frank@localhost",
+        "judy@localhost",
+        "dave@localhost"
+      ],
+      "created": "2017-12-06T22:57:32",
+      "source": {
+        "hn_id": 15865504,
+        "url": "https://news.ycombinator.com/item?id=15865504"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "frank@localhost",
+          "parent": null,
+          "at": "2017-12-06T22:57:32",
+          "lines": [
+            "Good retrospective on what the PDP-11 taught later architectures.",
+            "Orthogonal addressing modes, memory-mapped I/O, and a stack that the instruction set actually used.",
+            "A lot of what C assumes about machines starts here."
+          ]
+        },
+        {
+          "id": "b+uh3r1",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2017-12-06T23:09:32",
+          "lines": [
+            "The autoincrement modes are the ones people always mention, and they really do shape idioms like *p++."
+          ]
+        },
+        {
+          "id": "b+uh3r2",
+          "author": "dave@localhost",
+          "parent": "b+uh3r1",
+          "at": "2017-12-06T23:22:32",
+          "lines": [
+            "Though the article is careful to say that may be coincidence more than design."
+          ]
+        },
+        {
+          "id": "b+uh3r3",
+          "author": "frank@localhost",
+          "parent": "b+uh3r2",
+          "at": "2017-12-06T23:34:32",
+          "lines": [
+            "Either way it fits the hardware nicely."
+          ]
+        },
+        {
+          "id": "b+uh3r4",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2017-12-06T23:47:32",
+          "lines": [
+            "The Unibus section was new to me. One bus for everything made adding devices very simple."
+          ]
+        },
+        {
+          "id": "b+uh3r5",
+          "author": "dave@localhost",
+          "parent": "b+uh3r4",
+          "at": "2017-12-07T00:00:32",
+          "lines": [
+            "And very slow once everything was on it. Every design pays somewhere."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-pt1",
+      "topic": "testing",
+      "title": "Hypothesis: Property-Based Testing for Python",
+      "creator": "erin@localhost",
+      "participants": [
+        "erin@localhost",
+        "charlie@localhost",
+        "ivan@localhost"
+      ],
+      "created": "2025-11-05T04:00:37",
+      "source": {
+        "hn_id": 45818562,
+        "url": "https://news.ycombinator.com/item?id=45818562"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "erin@localhost",
+          "parent": null,
+          "at": "2025-11-05T04:00:37",
+          "lines": [
+            "Hypothesis keeps getting better. Shrinking is still the feature that wins people over:",
+            "the failing case you see is small enough to read."
+          ]
+        },
+        {
+          "id": "b+pt1r1",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2025-11-05T04:10:37",
+          "lines": [
+            "Integrated shrinking is the key design choice. You shrink the choices, not the values, so invariants survive."
+          ]
+        },
+        {
+          "id": "b+pt1r2",
+          "author": "charlie@localhost",
+          "parent": "b+pt1r1",
+          "at": "2025-11-05T04:22:37",
+          "lines": [
+            "Which is why custom generators shrink well for free. With the older approach you had to write a shrinker per type."
+          ]
+        },
+        {
+          "id": "b+pt1r3",
+          "author": "erin@localhost",
+          "parent": "b+pt1r2",
+          "at": "2025-11-05T04:34:37",
+          "lines": [
+            "We have that exact pain in a Clojure codebase. Writing shrinkers by hand is nobody's favourite task."
+          ]
+        },
+        {
+          "id": "b+pt1r4",
+          "author": "ivan@localhost",
+          "parent": "b+pt1r3",
+          "at": "2025-11-05T04:46:37",
+          "lines": [
+            "test.check shrinks through bind as of a while ago, but it is still easier to get wrong."
+          ]
+        },
+        {
+          "id": "b+pt1r5",
+          "author": "charlie@localhost",
+          "parent": "b+root",
+          "at": "2025-11-05T05:00:37",
+          "lines": [
+            "The stateful testing module is my favourite part. Rules plus invariants, and it finds sequences you would never write."
+          ]
+        },
+        {
+          "id": "b+pt1r6",
+          "author": "erin@localhost",
+          "parent": "b+pt1r5",
+          "at": "2025-11-05T05:13:37",
+          "lines": [
+            "We used it on a cache and it found an eviction bug after about forty operations. Shrunk to six."
+          ]
+        },
+        {
+          "id": "b+pt1r7",
+          "author": "ivan@localhost",
+          "parent": "b+pt1r6",
+          "at": "2025-11-05T05:26:37",
+          "lines": [
+            "Forty down to six is the whole pitch in one sentence."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-pt2",
+      "topic": "testing",
+      "title": "The sad state of property-based testing libraries",
+      "creator": "ivan@localhost",
+      "participants": [
+        "ivan@localhost",
+        "erin@localhost",
+        "charlie@localhost"
+      ],
+      "created": "2024-07-04T16:00:39",
+      "source": {
+        "hn_id": 40875559,
+        "url": "https://news.ycombinator.com/item?id=40875559"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "ivan@localhost",
+          "parent": null,
+          "at": "2024-07-04T16:00:39",
+          "lines": [
+            "A fair survey: lots of languages have a property testing library, few have one with good shrinking and stateful tests."
+          ]
+        },
+        {
+          "id": "b+pt2r1",
+          "author": "charlie@localhost",
+          "parent": "b+root",
+          "at": "2024-07-04T16:12:39",
+          "lines": [
+            "Porting is hard because the good designs depend on internals of the runner, not just the generator API."
+          ]
+        },
+        {
+          "id": "b+pt2r2",
+          "author": "erin@localhost",
+          "parent": "b+pt2r1",
+          "at": "2024-07-04T16:24:39",
+          "lines": [
+            "And because the hard part is invisible in a README. Two libraries look the same until a test fails."
+          ]
+        },
+        {
+          "id": "b+pt2r3",
+          "author": "ivan@localhost",
+          "parent": "b+pt2r2",
+          "at": "2024-07-04T16:36:39",
+          "lines": [
+            "Good test for a library: write a deliberately failing property and look at what it reports."
+          ]
+        },
+        {
+          "id": "b+pt2r4",
+          "author": "charlie@localhost",
+          "parent": "b+pt2r3",
+          "at": "2024-07-04T16:48:39",
+          "lines": [
+            "Agreed. If the counterexample is three hundred elements long, keep looking."
+          ]
+        },
+        {
+          "id": "b+pt2r5",
+          "author": "erin@localhost",
+          "parent": "b+root",
+          "at": "2024-07-04T17:01:39",
+          "lines": [
+            "I would add: does it save failing examples between runs? That one feature saves hours."
+          ]
+        },
+        {
+          "id": "b+pt2r6",
+          "author": "ivan@localhost",
+          "parent": "b+pt2r5",
+          "at": "2024-07-04T17:14:39",
+          "lines": [
+            "The example database is underrated. It turns a flaky failure into a reproducible one."
+          ]
+        },
+        {
+          "id": "b+pt2r7",
+          "author": "charlie@localhost",
+          "parent": "b+pt2r6",
+          "at": "2024-07-04T17:26:39",
+          "lines": [
+            "Worth a mention in the article, I think."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-pt3",
+      "topic": "testing",
+      "title": "Mutation Driven Testing: When TDD Just Isn’t Good Enough",
+      "creator": "charlie@localhost",
+      "participants": [
+        "charlie@localhost",
+        "ivan@localhost",
+        "erin@localhost"
+      ],
+      "created": "2021-02-04T13:40:38",
+      "source": {
+        "hn_id": 26024915,
+        "url": "https://news.ycombinator.com/item?id=26024915"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "charlie@localhost",
+          "parent": null,
+          "at": "2021-02-04T13:40:38",
+          "lines": [
+            "Mutation testing as a check on the tests rather than the code. Surviving mutants show you where assertions are missing."
+          ]
+        },
+        {
+          "id": "b+pt3r1",
+          "author": "erin@localhost",
+          "parent": "b+root",
+          "at": "2021-02-04T13:54:38",
+          "lines": [
+            "The run time is the obstacle. Full mutation runs on a big suite take hours."
+          ]
+        },
+        {
+          "id": "b+pt3r2",
+          "author": "ivan@localhost",
+          "parent": "b+pt3r1",
+          "at": "2021-02-04T14:07:38",
+          "lines": [
+            "Running only on changed lines in CI brings it down to minutes for most changes."
+          ]
+        },
+        {
+          "id": "b+pt3r3",
+          "author": "charlie@localhost",
+          "parent": "b+pt3r2",
+          "at": "2021-02-04T14:19:38",
+          "lines": [
+            "That is what we do. Plus a weekly full run that files issues for the survivors."
+          ]
+        },
+        {
+          "id": "b+pt3r4",
+          "author": "erin@localhost",
+          "parent": "b+pt3r3",
+          "at": "2021-02-04T14:32:38",
+          "lines": [
+            "Do you get many equivalent mutants? That was the noise that made us stop last time."
+          ]
+        },
+        {
+          "id": "b+pt3r5",
+          "author": "charlie@localhost",
+          "parent": "b+pt3r4",
+          "at": "2021-02-04T14:44:38",
+          "lines": [
+            "Some. We mark them once with a comment and the tool skips them after that."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-lp1",
+      "topic": "literate-publishing",
+      "title": "We should revisit literate programming in the agent era",
+      "creator": "grace@localhost",
+      "participants": [
+        "grace@localhost",
+        "alice@localhost",
+        "judy@localhost"
+      ],
+      "created": "2026-03-08T20:43:15",
+      "source": {
+        "hn_id": 47300747,
+        "url": "https://news.ycombinator.com/item?id=47300747"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "grace@localhost",
+          "parent": null,
+          "at": "2026-03-08T20:43:15",
+          "lines": [
+            "Interesting argument: if agents read and write most of the code, prose next to code becomes context, not decoration.",
+            "The explanation is the part the next reader, human or not, needs most."
+          ]
+        },
+        {
+          "id": "b+lp1r1",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2026-03-08T20:53:15",
+          "lines": [
+            "I have seen this in practice. Org files with the reasoning next to each block give much better edits than bare source."
+          ]
+        },
+        {
+          "id": "b+lp1r2",
+          "author": "judy@localhost",
+          "parent": "b+lp1r1",
+          "at": "2026-03-08T21:04:15",
+          "lines": [
+            "Only if the prose stays true. Stale explanation is worse than none, for either kind of reader."
+          ]
+        },
+        {
+          "id": "b+lp1r3",
+          "author": "grace@localhost",
+          "parent": "b+lp1r2",
+          "at": "2026-03-08T21:16:15",
+          "lines": [
+            "Tangle checks help. If the source and the document disagree, the build fails."
+          ]
+        },
+        {
+          "id": "b+lp1r4",
+          "author": "alice@localhost",
+          "parent": "b+lp1r3",
+          "at": "2026-03-08T21:27:15",
+          "lines": [
+            "We added a detangle check too, so edits made directly in the source flow back or get flagged."
+          ]
+        },
+        {
+          "id": "b+lp1r5",
+          "author": "judy@localhost",
+          "parent": "b+lp1r4",
+          "at": "2026-03-08T21:39:15",
+          "lines": [
+            "Both directions checked is the only setup I have seen survive more than a month."
+          ]
+        },
+        {
+          "id": "b+lp1r6",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2026-03-08T21:53:15",
+          "lines": [
+            "The older objection still stands: order for explanation and order for compilation differ, and tools have to reconcile them."
+          ]
+        },
+        {
+          "id": "b+lp1r7",
+          "author": "grace@localhost",
+          "parent": "b+lp1r6",
+          "at": "2026-03-08T22:05:15",
+          "lines": [
+            "Named blocks and noweb references solve it, at the price of a slightly odd reading experience."
+          ]
+        },
+        {
+          "id": "b+lp1r8",
+          "author": "alice@localhost",
+          "parent": "b+root",
+          "at": "2026-03-08T22:19:15",
+          "lines": [
+            "I would read a follow-up with measurements. Edit quality with and without the prose, same tasks."
+          ]
+        },
+        {
+          "id": "b+lp1r9",
+          "author": "grace@localhost",
+          "parent": "b+lp1r8",
+          "at": "2026-03-08T22:31:15",
+          "lines": [
+            "That would make a nice experiment for one of our repos."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-lp2",
+      "topic": "literate-publishing",
+      "title": "Org-Mode Is One of the Most Reasonable Markup Languages to Use for Text",
+      "creator": "alice@localhost",
+      "participants": [
+        "alice@localhost",
+        "judy@localhost",
+        "grace@localhost"
+      ],
+      "created": "2017-09-23T22:15:22",
+      "source": {
+        "hn_id": 15321850,
+        "url": "https://news.ycombinator.com/item?id=15321850"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "alice@localhost",
+          "parent": null,
+          "at": "2017-09-23T22:15:22",
+          "lines": [
+            "Agree with most of this. Org markup is regular enough to read raw, which is the test I care about."
+          ]
+        },
+        {
+          "id": "b+lp2r1",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2017-09-23T22:26:22",
+          "lines": [
+            "The tables alone are worth it. Plain text that recalculates is still a small marvel."
+          ]
+        },
+        {
+          "id": "b+lp2r2",
+          "author": "grace@localhost",
+          "parent": "b+lp2r1",
+          "at": "2017-09-23T22:38:22",
+          "lines": [
+            "Spreadsheet formulas in a text file, under version control, with diffs you can read."
+          ]
+        },
+        {
+          "id": "b+lp2r3",
+          "author": "alice@localhost",
+          "parent": "b+lp2r2",
+          "at": "2017-09-23T22:50:22",
+          "lines": [
+            "And export to HTML without a separate toolchain. The publishing story is the part people underestimate."
+          ]
+        },
+        {
+          "id": "b+lp2r4",
+          "author": "judy@localhost",
+          "parent": "b+lp2r3",
+          "at": "2017-09-23T23:02:22",
+          "lines": [
+            "Underestimate until a project has two hundred pages and the include paths start to matter."
+          ]
+        },
+        {
+          "id": "b+lp2r5",
+          "author": "grace@localhost",
+          "parent": "b+lp2r4",
+          "at": "2017-09-23T23:14:22",
+          "lines": [
+            "Ha. Our site build has a whole note on include patterns for that reason."
+          ]
+        },
+        {
+          "id": "b+lp2r6",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2017-09-23T23:27:22",
+          "lines": [
+            "The one fair criticism: outside Emacs the tooling is thin."
+          ]
+        },
+        {
+          "id": "b+lp2r7",
+          "author": "alice@localhost",
+          "parent": "b+lp2r6",
+          "at": "2017-09-23T23:39:22",
+          "lines": [
+            "True, but the files remain readable without any tooling at all, which is a decent fallback."
+          ]
+        },
+        {
+          "id": "b+lp2r8",
+          "author": "judy@localhost",
+          "parent": "b+root",
+          "at": "2017-09-23T23:52:22",
+          "lines": [
+            "Bookmarking for the next markup discussion at work."
+          ]
+        },
+        {
+          "id": "b+lp2r9",
+          "author": "alice@localhost",
+          "parent": "b+lp2r8",
+          "at": "2017-09-24T00:03:22",
+          "lines": [
+            "Bring the table demo. It wins people over every time."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-lp3",
+      "topic": "literate-publishing",
+      "title": "Literate programming: presenting code in human order",
+      "creator": "judy@localhost",
+      "participants": [
+        "judy@localhost",
+        "alice@localhost",
+        "grace@localhost"
+      ],
+      "created": "2016-07-07T02:07:24",
+      "source": {
+        "hn_id": 12046950,
+        "url": "https://news.ycombinator.com/item?id=12046950"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "judy@localhost",
+          "parent": null,
+          "at": "2016-07-07T02:07:24",
+          "lines": [
+            "Short and clear piece: present code in the order a person needs to understand it, then let the tool reorder for the compiler."
+          ]
+        },
+        {
+          "id": "b+lp3r1",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2016-07-07T02:19:24",
+          "lines": [
+            "That reordering is the whole trick. Without it you are just writing long comments."
+          ]
+        },
+        {
+          "id": "b+lp3r2",
+          "author": "alice@localhost",
+          "parent": "b+lp3r1",
+          "at": "2016-07-07T02:31:24",
+          "lines": [
+            "And the reader gets the overview first, which most codebases never offer."
+          ]
+        },
+        {
+          "id": "b+lp3r3",
+          "author": "judy@localhost",
+          "parent": "b+lp3r2",
+          "at": "2016-07-07T02:43:24",
+          "lines": [
+            "I tried it for a small parser. The document read better than any parser I have written before."
+          ]
+        },
+        {
+          "id": "b+lp3r4",
+          "author": "grace@localhost",
+          "parent": "b+lp3r3",
+          "at": "2016-07-07T02:55:24",
+          "lines": [
+            "Did it stay that way after a few changes?"
+          ]
+        },
+        {
+          "id": "b+lp3r5",
+          "author": "judy@localhost",
+          "parent": "b+lp3r4",
+          "at": "2016-07-07T03:07:24",
+          "lines": [
+            "Mostly. The tangle check made sure I updated the prose when I touched the code."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-ml1",
+      "topic": "ml",
+      "title": "Machine Learning Crash Course",
+      "creator": "ivan@localhost",
+      "participants": [
+        "ivan@localhost",
+        "erin@localhost",
+        "grace@localhost"
+      ],
+      "created": "2018-03-01T17:24:50",
+      "source": {
+        "hn_id": 16493489,
+        "url": "https://news.ycombinator.com/item?id=16493489"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "ivan@localhost",
+          "parent": null,
+          "at": "2018-03-01T17:24:50",
+          "lines": [
+            "A free crash course with exercises. Good for people who want the intuition before the maths."
+          ]
+        },
+        {
+          "id": "b+ml1r1",
+          "author": "erin@localhost",
+          "parent": "b+root",
+          "at": "2018-03-01T17:33:50",
+          "lines": [
+            "The section on feature crosses was the clearest explanation I have read."
+          ]
+        },
+        {
+          "id": "b+ml1r2",
+          "author": "grace@localhost",
+          "parent": "b+ml1r1",
+          "at": "2018-03-01T17:45:50",
+          "lines": [
+            "And the bit on regularization. Everyone nods at L2 until they see the loss curves side by side."
+          ]
+        },
+        {
+          "id": "b+ml1r3",
+          "author": "ivan@localhost",
+          "parent": "b+ml1r2",
+          "at": "2018-03-01T17:56:50",
+          "lines": [
+            "The playground exercises carry most of it. Changing one slider and watching the boundary move is worth a chapter."
+          ]
+        },
+        {
+          "id": "b+ml1r4",
+          "author": "erin@localhost",
+          "parent": "b+ml1r3",
+          "at": "2018-03-01T18:08:50",
+          "lines": [
+            "Interactive is the right format for this material."
+          ]
+        },
+        {
+          "id": "b+ml1r5",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2018-03-01T18:21:50",
+          "lines": [
+            "I would pair it with a statistics refresher. The course is light on why the metrics mean what they mean."
+          ]
+        },
+        {
+          "id": "b+ml1r6",
+          "author": "ivan@localhost",
+          "parent": "b+ml1r5",
+          "at": "2018-03-01T18:33:50",
+          "lines": [
+            "Fair. Precision and recall deserve more than one page."
+          ]
+        },
+        {
+          "id": "b+ml1r7",
+          "author": "erin@localhost",
+          "parent": "b+ml1r6",
+          "at": "2018-03-01T18:46:50",
+          "lines": [
+            "Especially with imbalanced classes, which is every real dataset I have touched."
+          ]
+        },
+        {
+          "id": "b+ml1r8",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2018-03-01T18:59:50",
+          "lines": [
+            "Sharing with the new folks on the team."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-ml2",
+      "topic": "ml",
+      "title": "The First Rule of Machine Learning: Start Without Machine Learning",
+      "creator": "grace@localhost",
+      "participants": [
+        "grace@localhost",
+        "ivan@localhost",
+        "erin@localhost"
+      ],
+      "created": "2021-09-22T05:09:52",
+      "source": {
+        "hn_id": 28613099,
+        "url": "https://news.ycombinator.com/item?id=28613099"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "grace@localhost",
+          "parent": null,
+          "at": "2021-09-22T05:09:52",
+          "lines": [
+            "Start without machine learning. A heuristic gives you a baseline and a pipeline, which you need anyway."
+          ]
+        },
+        {
+          "id": "b+ml2r1",
+          "author": "erin@localhost",
+          "parent": "b+root",
+          "at": "2021-09-22T05:20:52",
+          "lines": [
+            "The pipeline is the real deliverable. The model is the last ten percent."
+          ]
+        },
+        {
+          "id": "b+ml2r2",
+          "author": "ivan@localhost",
+          "parent": "b+ml2r1",
+          "at": "2021-09-22T05:31:52",
+          "lines": [
+            "And the heuristic tells you whether the data even has signal before you spend a month on features."
+          ]
+        },
+        {
+          "id": "b+ml2r3",
+          "author": "grace@localhost",
+          "parent": "b+ml2r2",
+          "at": "2021-09-22T05:43:52",
+          "lines": [
+            "We shipped a rules version first once, and it was good enough that the model project quietly got cancelled."
+          ]
+        },
+        {
+          "id": "b+ml2r4",
+          "author": "erin@localhost",
+          "parent": "b+ml2r3",
+          "at": "2021-09-22T05:55:52",
+          "lines": [
+            "That is a success story, even if nobody gets a paper out of it."
+          ]
+        },
+        {
+          "id": "b+ml2r5",
+          "author": "ivan@localhost",
+          "parent": "b+ml2r4",
+          "at": "2021-09-22T06:06:52",
+          "lines": [
+            "Best kind of project outcome, honestly."
+          ]
+        },
+        {
+          "id": "b+ml2r6",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2021-09-22T06:19:52",
+          "lines": [
+            "The rule about monitoring before launch is the one I would underline. Most failures are silent drift."
+          ]
+        },
+        {
+          "id": "b+ml2r7",
+          "author": "grace@localhost",
+          "parent": "b+ml2r6",
+          "at": "2021-09-22T06:31:52",
+          "lines": [
+            "Log the inputs too, not just predictions. You cannot diagnose drift without them."
+          ]
+        },
+        {
+          "id": "b+ml2r8",
+          "author": "erin@localhost",
+          "parent": "b+ml2r7",
+          "at": "2021-09-22T06:43:52",
+          "lines": [
+            "And keep a frozen sample to compare against every week."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "localhost!w+corpus-ml3",
+      "topic": "ml",
+      "title": "Scikit-Learn Version 1.0",
+      "creator": "erin@localhost",
+      "participants": [
+        "erin@localhost",
+        "grace@localhost",
+        "ivan@localhost"
+      ],
+      "created": "2021-09-14T09:35:14",
+      "source": {
+        "hn_id": 28521992,
+        "url": "https://news.ycombinator.com/item?id=28521992"
+      },
+      "blips": [
+        {
+          "id": "b+root",
+          "author": "erin@localhost",
+          "parent": null,
+          "at": "2021-09-14T09:35:14",
+          "lines": [
+            "Version 1.0 after all these years. Keyword-only arguments and a cleaner API surface, mostly."
+          ]
+        },
+        {
+          "id": "b+ml3r1",
+          "author": "grace@localhost",
+          "parent": "b+root",
+          "at": "2021-09-14T09:47:14",
+          "lines": [
+            "The consistent fit and predict interface is still the best design decision in the ecosystem."
+          ]
+        },
+        {
+          "id": "b+ml3r2",
+          "author": "ivan@localhost",
+          "parent": "b+ml3r1",
+          "at": "2021-09-14T09:59:14",
+          "lines": [
+            "Pipelines plus grid search on top of that interface is how most of my projects start."
+          ]
+        },
+        {
+          "id": "b+ml3r3",
+          "author": "erin@localhost",
+          "parent": "b+ml3r2",
+          "at": "2021-09-14T10:11:14",
+          "lines": [
+            "And end, honestly. A gradient boosted model in a pipeline covers a lot of tabular problems."
+          ]
+        },
+        {
+          "id": "b+ml3r4",
+          "author": "grace@localhost",
+          "parent": "b+ml3r3",
+          "at": "2021-09-14T10:23:14",
+          "lines": [
+            "Tabular data is still where classic methods win most of the time."
+          ]
+        },
+        {
+          "id": "b+ml3r5",
+          "author": "ivan@localhost",
+          "parent": "b+root",
+          "at": "2021-09-14T10:35:14",
+          "lines": [
+            "Nice to see the version number finally match how stable it has been."
+          ]
+        },
+        {
+          "id": "b+ml3r6",
+          "author": "erin@localhost",
+          "parent": "b+ml3r5",
+          "at": "2021-09-14T10:47:14",
+          "lines": [
+            "Agreed. It has felt like a 1.0 for a long time."
+          ]
+        }
+      ]
+    }
+  ],
+  "states": [
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-gw1",
+      "read_through": "b+gw1r4",
+      "archived": true
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-gw1",
+      "read_through": "b+gw1r1"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-gw1",
+      "read_through": "b+gw1r2"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-gw1",
+      "read_through": "b+gw1r4"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-gw2",
+      "read_through": "b+gw2r5",
+      "muted": true
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-gw2",
+      "read_through": "b+gw2r1"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-gw2",
+      "read_through": "b+gw2r2"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-gw2",
+      "read_through": "b+gw2r3"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-gw2",
+      "read_through": "b+gw2r5"
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-gw3",
+      "read_through": "b+gw3r3"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-gw3",
+      "read_through": "b+gw3r1"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-gw3",
+      "read_through": "b+gw3r2"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-gw4",
+      "read_through": "b+gw4r4",
+      "tags": [
+        "robots"
+      ]
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-gw4",
+      "read_through": "b+gw4r1"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-gw4",
+      "read_through": "b+gw4r4"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-gw4",
+      "read_through": "b+gw4r3"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r9",
+      "folder": "wave-archive",
+      "tags": [
+        "shutdown",
+        "todo"
+      ]
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r8",
+      "tags": [
+        "shutdown"
+      ]
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r2"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r9"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r7"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-gw5",
+      "read_through": "b+gw5r6"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-gw6",
+      "read_through": "b+root"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-gw6",
+      "read_through": null,
+      "folder": "wave-archive"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-gw7",
+      "read_through": "b+gw7r2"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-gw7",
+      "read_through": null,
+      "spam": true
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-gw7",
+      "read_through": "b+gw7r1"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-gw7",
+      "read_through": null,
+      "spam": true
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-as1",
+      "read_through": "b+as1r11",
+      "folder": "sandbox",
+      "tags": [
+        "egress",
+        "idea"
+      ]
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-as1",
+      "read_through": "b+as1r10",
+      "folder": "sandbox"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-as1",
+      "read_through": "b+as1r9"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-as2",
+      "read_through": "b+as2r6"
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-as2",
+      "read_through": "b+as2r4"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-as2",
+      "read_through": "b+as2r5"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-as3",
+      "read_through": "b+as3r3",
+      "tags": [
+        "todo"
+      ]
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-as3",
+      "read_through": "b+as3r2"
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-as3",
+      "read_through": "b+as3r1"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-fm1",
+      "read_through": "b+fm1r9"
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-fm1",
+      "read_through": "b+fm1r9",
+      "folder": "specs"
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-fm1",
+      "read_through": "b+fm1r8"
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-fm2",
+      "read_through": "b+fm2r3"
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-fm2",
+      "read_through": "b+fm2r4",
+      "muted": true
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-fm2",
+      "read_through": "b+fm2r5"
+    },
+    {
+      "user": "heidi@localhost",
+      "wave": "localhost!w+corpus-fm3",
+      "read_through": "b+fm3r3"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-fm3",
+      "read_through": "b+fm3r5",
+      "archived": true
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-fm3",
+      "read_through": "b+fm3r5"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-rl1",
+      "read_through": "b+rl1r3"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-rl1",
+      "read_through": "b+rl1r5"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-rl1",
+      "read_through": "b+rl1r4"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-rl2",
+      "read_through": "b+rl2r11",
+      "tags": [
+        "reading"
+      ]
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-rl2",
+      "read_through": "b+rl2r11"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-rl2",
+      "read_through": "b+rl2r10"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-rl3",
+      "read_through": "b+rl3r3"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-rl3",
+      "read_through": "b+rl3r4"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-rl3",
+      "read_through": "b+rl3r5"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-uh1",
+      "read_through": "b+uh1r6",
+      "folder": "reading-group",
+      "tags": [
+        "v4"
+      ]
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-uh1",
+      "read_through": "b+uh1r4"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-uh1",
+      "read_through": "b+uh1r2"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-uh1",
+      "read_through": "b+uh1r5"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-uh2",
+      "read_through": "b+uh2r4"
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-uh2",
+      "read_through": "b+uh2r3"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-uh2",
+      "read_through": "b+uh2r5",
+      "folder": "reading-group"
+    },
+    {
+      "user": "bob@localhost",
+      "wave": "localhost!w+corpus-uh2",
+      "read_through": "b+uh2r1",
+      "trashed": true
+    },
+    {
+      "user": "frank@localhost",
+      "wave": "localhost!w+corpus-uh3",
+      "read_through": "b+uh3r3"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-uh3",
+      "read_through": "b+uh3r4"
+    },
+    {
+      "user": "dave@localhost",
+      "wave": "localhost!w+corpus-uh3",
+      "read_through": "b+uh3r5"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-pt1",
+      "read_through": "b+pt1r7",
+      "tags": [
+        "idea"
+      ]
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-pt1",
+      "read_through": "b+pt1r5"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-pt1",
+      "read_through": "b+pt1r7"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-pt2",
+      "read_through": "b+pt2r7",
+      "archived": true
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-pt2",
+      "read_through": "b+pt2r5"
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-pt2",
+      "read_through": "b+pt2r7"
+    },
+    {
+      "user": "charlie@localhost",
+      "wave": "localhost!w+corpus-pt3",
+      "read_through": "b+pt3r5"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-pt3",
+      "read_through": "b+pt3r2"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-pt3",
+      "read_through": "b+pt3r4"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-lp1",
+      "read_through": "b+lp1r9",
+      "folder": "publishing",
+      "tags": [
+        "experiment"
+      ]
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-lp1",
+      "read_through": "b+lp1r8"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-lp1",
+      "read_through": "b+lp1r6"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-lp2",
+      "read_through": "b+lp2r9",
+      "folder": "publishing"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-lp2",
+      "read_through": "b+lp2r8"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-lp2",
+      "read_through": "b+lp2r6"
+    },
+    {
+      "user": "judy@localhost",
+      "wave": "localhost!w+corpus-lp3",
+      "read_through": "b+lp3r5"
+    },
+    {
+      "user": "alice@localhost",
+      "wave": "localhost!w+corpus-lp3",
+      "read_through": "b+lp3r2"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-lp3",
+      "read_through": "b+lp3r4"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-ml1",
+      "read_through": "b+ml1r8",
+      "trashed": true
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-ml1",
+      "read_through": "b+ml1r7"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-ml1",
+      "read_through": "b+ml1r8"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-ml2",
+      "read_through": "b+ml2r8",
+      "muted": true
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-ml2",
+      "read_through": "b+ml2r6"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-ml2",
+      "read_through": "b+ml2r8"
+    },
+    {
+      "user": "erin@localhost",
+      "wave": "localhost!w+corpus-ml3",
+      "read_through": "b+ml3r6"
+    },
+    {
+      "user": "grace@localhost",
+      "wave": "localhost!w+corpus-ml3",
+      "read_through": "b+ml3r4"
+    },
+    {
+      "user": "ivan@localhost",
+      "wave": "localhost!w+corpus-ml3",
+      "read_through": "b+ml3r5"
+    }
+  ]
+}
