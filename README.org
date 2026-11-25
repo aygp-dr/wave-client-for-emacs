@@ -51,6 +51,18 @@ Add to your Emacs configuration:
 (wave-list-mode)
 #+end_src
 
+* Emacs UI
+
+=M-x wave= (=lisp/wave-ui.el=): folders, search, read/archive/mute/spam/trash,
+tags, replies, Yes/No/Maybe gadgets, playback, contacts. Keys are listed at
+the top of =lisp/wave-ui.el=.
+
+#+begin_src shell
+gmake server db-seed          # seeded demo data
+gmake elisp-ui-acceptance     # every UI state, on fresh synthetic data
+gmake db-synth server-synth   # or serve synthetic data yourself
+#+end_src
+
 * Screenshots
 
 The 2010 client, unmodified apart from its transport shim, against the local
@@ -89,10 +101,13 @@ server (=gmake server db-seed screenshots=):
 
 The spec is served at =/openapi.json= (and =/api/openapi.json=, used by
 =/docs=), with =servers= set and operationIds taken from handler names, so
-restish discovers it without =--spec=:
+restish discovers it without =--spec=. Per-user routes use HTTP Basic (mock
+users log in with their name as password; =admin:admin= for =/api/admin=):
 
 #+begin_src shell
-restish api connect wave http://localhost:9898
+restish api connect wave http://localhost:9898 \
+  'prompt.credentials.HTTPBasic.username: alice' 'prompt.credentials.HTTPBasic.password: alice'
+restish wave folders
 restish wave get-inbox
 restish wave get-wave 'localhost!w+abc123'
 #+end_src

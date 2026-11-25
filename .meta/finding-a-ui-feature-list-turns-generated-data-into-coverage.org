@@ -1,0 +1,20 @@
+#+TITLE: A UI feature list turns generated data into coverage
+
+* Incident
+Experiment 014. Property tests over Hypothesis-generated worlds passed, and
+the API agreed with an oracle; the Emacs UI still had four rendering bugs
+(flags and +N truncated, gadget table flattened, wrong depth assumption).
+They surfaced only when each named UI state was rendered and checked.
+
+* Shape
+Random valid data exercises the server; it does not say whether the client
+was ever shown a muted, public, deeply threaded, long-titled wave. A
+checklist of client states, used as the predicate for =hypothesis.find=,
+makes "enough data to drive the UI" a property. Asking the real API for one
+witness per state tells the UI test exactly where to look.
+
+* Do instead
+- Name the client states first (=UI_FEATURES=); generate until all hold.
+- Find witnesses through the API, not the generator's own model.
+- Render in the client without side effects (opening marks read), and test
+  the side effect separately, restoring state.

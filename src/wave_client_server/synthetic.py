@@ -229,7 +229,9 @@ UI_FEATURES: dict[str, Callable[[World], bool]] = {
     "trash": lambda w: any(s.trashed for s in w.states),
     "public wave": lambda w: any(PUBLIC in x.participants for x in w.waves),
     "gadget, all columns voted": lambda w: any(b.gadget and all(b.gadget.values()) for x in w.waves for b in x.blips),
-    "thread depth >= 3": lambda w: any(thread_depth(x) >= 3 for x in w.waves),
+    # Root replies render beside the root, so a chain of 4 blips (root and
+    # three nested replies) is what produces two visible indent levels.
+    "reply nested 2 deep": lambda w: any(thread_depth(x) >= 4 for x in w.waves),
     "single-blip wave": lambda w: any(len(x.blips) == 1 for x in w.waves),
     ">= 6 participants": lambda w: any(len(x.participants) >= 6 for x in w.waves),
     "title >= 60 chars": lambda w: any(len(x.title) >= 60 for x in w.waves),

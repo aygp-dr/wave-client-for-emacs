@@ -7,3 +7,5 @@ local server. This directory holds only what generalizes past this repo.
 |------+--------------|
 | finding-a-scripted-gui-emacs-fails-silently.org | Emacs.app's cwd and hook order turn script errors into idle frames |
 | finding-an-old-client-needs-the-old-wire-not-the-old-api.org | keep the API, replace the wire; the server speaks the client's protocol |
+| finding-a-ui-feature-list-turns-generated-data-into-coverage.org | name client states, generate until covered, witness via the API |
+| finding-a-mock-client-must-not-touch-real-credentials.org | auth-source and legacy backends reach real secrets and services |

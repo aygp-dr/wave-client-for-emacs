@@ -147,18 +147,24 @@ needs no secret, and a lookup can decrypt (and prompt for) a gpg store."
                  wave-ui--avatar-cache))))
 
 (defun wave-ui--participants (participants width)
-  "Avatars (or names) for PARTICIPANTS, padded to WIDTH columns."
+  "Avatars (or names) for PARTICIPANTS, padded to WIDTH columns.
+The +N overflow count is always kept; names are truncated instead."
   (let* ((shown (seq-take participants 3))
          (extra (- (length participants) (length shown)))
+         (suffix (if (> extra 0) (format " +%d" extra) ""))
          (images (and (display-images-p) (mapcar (lambda (p) (wave-ui--avatar (plist-get p :avatar))) shown))))
     (if (and images (cl-every #'identity images))
         (concat (mapconcat (lambda (image) (propertize "  " 'display image)) images " ")
-                (if (> extra 0) (format " +%d" extra) "")
-                (make-string (max 0 (- width (* 3 (length shown)) (if (> extra 0) 3 0))) ?\s))
-      (truncate-string-to-width
-       (concat (mapconcat (lambda (p) (plist-get p :name)) shown ",")
-               (if (> extra 0) (format " +%d" extra) ""))
-       width nil ?\s "…"))))
+                suffix
+                (make-string (max 0 (- width (* 3 (length shown)) (length suffix))) ?\s))
+      (concat (truncate-string-to-width (mapconcat (lambda (p) (plist-get p :name)) shown ",")
+                                        (- width (length suffix)) nil nil "…")
+              suffix
+              (make-string (max 0 (- width (string-width (truncate-string-to-width
+                                                          (mapconcat (lambda (p) (plist-get p :name)) shown ",")
+                                                          (- width (length suffix)) nil nil "…"))
+                                     (length suffix)))
+                           ?\s)))))
 
 ;;;; Time
 
@@ -262,13 +268,15 @@ needs no secret, and a lookup can decrypt (and prompt for) a gpg store."
          (who (wave-ui--participants (plist-get row :participants) 14))
          (meta (format " %6s %3d msg%s" (wave-ui--time (plist-get row :last_modified))
                        (plist-get row :blip_count) (if (= 1 (plist-get row :blip_count)) " " "s")))
-         (flags (concat (if (plist-get row :muted) " [muted]" "")
-                        (if (plist-get row :public) " [public]" "")
-                        (mapconcat (lambda (tag) (concat " #" tag)) (plist-get row :tags) "")))
+         ;; Flags go before the title so a long title cannot truncate them away.
+         (flags (concat (if (plist-get row :muted) "[muted] " "")
+                        (if (plist-get row :public) "[public] " "")
+                        (mapconcat (lambda (tag) (concat "#" tag " ")) (plist-get row :tags) "")))
          (title-width (- width 4 14 1 (string-width meta)))
          (title (propertize (plist-get row :title) 'face (if (> unread 0) 'wave-ui-unread 'default)))
          (text (truncate-string-to-width
-                (concat title (propertize (concat flags " — " (plist-get row :snippet)) 'face 'wave-ui-snippet))
+                (concat (propertize flags 'face 'wave-ui-meta) title
+                        (propertize (concat " — " (plist-get row :snippet)) 'face 'wave-ui-snippet))
                 title-width nil ?\s "…"))
          (start (point)))
     (insert badge who " " text (propertize meta 'face 'wave-ui-meta) "\n")

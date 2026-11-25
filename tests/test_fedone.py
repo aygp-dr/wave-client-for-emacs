@@ -77,3 +77,73 @@ def test_blip_is_balanced_body_with_leading_line():
 
 def test_unknown_wave_yields_no_updates():
     assert fedone.updates_for_open_request("localhost!w+none", SEED, 1) == []
+
+
+# ---------------------------------------------------------------- round trip
+from hypothesis import given  # noqa: E402
+from hypothesis import strategies as st  # noqa: E402
+
+TEXT = st.text(st.characters(blacklist_categories=("Cs", "Cc")), min_size=1, max_size=20)
+ITEMS = st.one_of(
+    TEXT,
+    st.just({"type": "line"}),
+    st.builds(lambda gid: {"type": "gadget", "attributes": {"id": gid}}, st.sampled_from(["g1", "g2"])),
+    st.builds(lambda w: {"type": "image", "attributes": {"width": w}}, st.integers(1, 999)),
+)
+VOTES = st.fixed_dictionaries({gid: st.fixed_dictionaries(
+    {c: st.lists(st.sampled_from(["a@x", "b@x", "c@x"]), unique=True) for c in ("yes", "no", "maybe")})
+    for gid in ("g1", "g2")})
+
+
+def replay(components):
+    """What the client's wave-apply-doc-op builds from an insert-only op:
+    strings, (type, attrs) for element starts, 'end' for element ends."""
+    document = []
+    for component in components:
+        if "2" in component:
+            document.append(component["2"])
+        elif "3" in component:
+            element = component["3"]
+            document.append((element["1"], {kv["1"]: kv["2"] for kv in element.get("2", [])}))
+        else:
+            assert component == {"4": True}
+            document.append("end")
+    return document
+
+
+@given(content=st.lists(ITEMS, max_size=12), votes=VOTES)
+def test_snapshot_round_trips_through_client_replay(content, votes):
+    document = replay(fedone.blip_components(content, votes))
+    assert document[0] == ("body", {}) and document[-1] == "end"
+    inner = document[1:-1]
+    leads_with_line = bool(content) and content[0] == {"type": "line"}
+    if not leads_with_line:
+        assert inner[:2] == [("line", {}), "end"]
+        inner = inner[2:]
+    expected = []
+    for item in content:
+        if isinstance(item, str):
+            expected.append(item)
+        else:
+            attributes = {k: str(v) for k, v in item.get("attributes", {}).items()}
+            if item["type"] == "gadget":
+                tally = votes.get(attributes["id"], {})
+                attributes.update({c: ",".join(tally.get(c, [])) for c in ("yes", "no", "maybe")})
+            expected += [(item["type"], attributes), "end"]
+    assert inner == expected
+
+
+@given(content=st.lists(ITEMS, max_size=8))
+def test_gadgets_without_votes_carry_no_tally_attributes(content):
+    for element in replay(fedone.snapshot_to_components(content)):
+        if isinstance(element, tuple) and element[0] == "gadget":
+            assert set(element[1]) == {"id"}
+
+
+def test_plain_text_and_ids():
+    assert fedone.plain_text(["a", {"type": "line"}, "b"]) == "a b"
+    assert fedone.local_part("localhost!conv+root") == "conv+root"
+    assert fedone.local_part("conv+root") == "conv+root"
+    assert fedone.wavelet_url("localhost!w+1", "localhost!conv+root") == "wave://localhost/localhost!w+1/conv+root"
+    assert fedone.element_start("x") == {"3": {"1": "x"}}
+    assert fedone.element_start("x", {"k": "v"}) == {"3": {"1": "x", "2": [{"1": "k", "2": "v"}]}}
