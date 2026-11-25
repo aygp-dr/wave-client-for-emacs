@@ -7,6 +7,7 @@ from enum import Enum
 from typing import Any
 
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.routing import APIRoute
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sqlalchemy import (
@@ -23,6 +24,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
 from wave_client_server import fedone
+from wave_client_server._version import __version__
 
 # Create logs directory
 os.makedirs("logs", exist_ok=True)
@@ -51,13 +53,28 @@ console_handler.setFormatter(console_formatter)
 logging.basicConfig(level=logging.DEBUG, handlers=[file_handler, console_handler])
 logger = logging.getLogger(__name__)
 
+def operation_id_from_route_name(route: APIRoute) -> str:
+    """Use the handler name (get_inbox) rather than FastAPI's default
+    (get_inbox_api_inbox_get); restish turns operationIds into commands."""
+    return route.name
+
+
 app = FastAPI(
     title="Wave Server API",
     description="Wave Server API for Emacs client integration",
-    version="0.2.0",
+    version=__version__,
     openapi_url="/api/openapi.json",
     docs_url="/docs",
+    servers=[{"url": os.getenv("WAVE_SERVER_URL", "http://localhost:9898")}],
+    generate_unique_id_function=operation_id_from_route_name,
 )
+
+
+@app.get("/openapi.json", include_in_schema=False)
+async def openapi_at_root() -> dict[str, Any]:
+    """The spec where restish (and most tooling) looks for it: <base>/openapi.json.
+    /api/openapi.json stays, since /docs is wired to it."""
+    return app.openapi()
 
 # CORS configuration - restrict origins in production
 # Set ALLOWED_ORIGINS environment variable for production deployments
@@ -324,7 +341,7 @@ async def log_requests(request, call_next):
 @app.get("/")
 async def root():
     logger.debug("Root endpoint accessed")
-    return {"message": "Wave Server API", "status": "running", "version": "0.2.0"}
+    return {"message": "Wave Server API", "status": "running", "version": __version__}
 
 
 @app.get("/health")

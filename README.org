@@ -85,6 +85,20 @@ server (=gmake server db-seed screenshots=):
 | POST   | =/api/waves/{waveId}/submit=   | Submit changes           |
 | WS     | =/ws=                          | WebSocket connection     |
 
+** From the shell with restish
+
+The spec is served at =/openapi.json= (and =/api/openapi.json=, used by
+=/docs=), with =servers= set and operationIds taken from handler names, so
+restish discovers it without =--spec=:
+
+#+begin_src shell
+restish api connect wave http://localhost:9898
+restish wave get-inbox
+restish wave get-wave 'localhost!w+abc123'
+#+end_src
+
+Set =WAVE_SERVER_URL= when the server is reachable at another address.
+
 ** Authentication (Optional)
 
 For multi-user deployments, OAuth2-style auth endpoints are available:
