@@ -7,6 +7,11 @@ import sys
 import tempfile
 
 import pytest
+from hypothesis import settings
+
+settings.register_profile("default", max_examples=60)
+settings.register_profile("mutation", max_examples=8)
+settings.load_profile(os.getenv("HYPOTHESIS_PROFILE", "default"))
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 

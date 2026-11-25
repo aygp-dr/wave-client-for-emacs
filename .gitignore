@@ -81,3 +81,9 @@ docs/screenshots/*.log
 
 # local reference material (screenshots etc.), not redistributed
 reference/
+
+# synthetic databases (gmake db-synth)
+synthetic*.db
+# mutation testing workspace
+mutants/
+.hypothesis/
