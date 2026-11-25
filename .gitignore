@@ -78,3 +78,6 @@ wave/*.db
 
 # screenshot run logs
 docs/screenshots/*.log
+
+# local reference material (screenshots etc.), not redistributed
+reference/
