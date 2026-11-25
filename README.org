@@ -65,12 +65,19 @@ gmake db-synth server-synth   # or serve synthetic data yourself
 
 * Screenshots
 
-The 2010 client, unmodified apart from its transport shim, against the local
-server (=gmake server db-seed screenshots=):
+=M-x wave= against the local server (=gmake server db-seed screenshots=):
+the 2010 client's FedOne websocket rendering, with folders, search and
+actions from the REST API.
 
 [[file:docs/screenshots/wave-inbox.png]]
 
 [[file:docs/screenshots/wave-detail.png]]
+
+[[file:docs/screenshots/wave-gadget.png]]
+
+[[file:docs/screenshots/wave-playback.png]]
+
+[[file:docs/screenshots/wave-contacts.png]]
 
 * Features
 

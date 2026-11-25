@@ -12,10 +12,12 @@
 (require 'wave-client-websocket)
 (require 'wave-list)
 (require 'wave-display)
+(require 'wave-ui)
 
 (setq wave-client-connection-method 'websocket
       wave-client-ws-url "ws://localhost:9898/ws"
       wave-client-user "alice@localhost"
+      wave-ui-server "http://localhost:9898"
       wave-client-domain "localhost"
       inhibit-startup-screen t
       ring-bell-function #'ignore)
@@ -46,28 +48,43 @@
                   (file-attribute-size (file-attributes file)))
           capture-log)))
 
+(defun capture-open (title-fragment)
+  "Open the row in *Wave* whose text contains TITLE-FRAGMENT."
+  (switch-to-buffer "*Wave*")
+  (wave-ui-refresh)
+  (goto-char (point-min))
+  (search-forward title-fragment)
+  (wave-ui-open)
+  (goto-char (point-min)))
+
 (defun capture-run ()
   (make-directory capture-dir t)
   (tool-bar-mode -1)
   (set-frame-font "Menlo 14" nil t)
   (load-theme 'modus-operandi t)
-  (set-frame-size nil 110 30)
+  (set-frame-size nil 118 34)
   (set-frame-position nil 80 60)
   (raise-frame)
   (select-frame-set-input-focus (selected-frame))
   (capture-step "frame ready")
-  (wave-client-ws-connect wave-client-ws-url)
-  (capture-step "connected")
+  (setq auth-sources nil)
   (delete-other-windows)
-  (switch-to-buffer (get-buffer-create wave-list-buffer-name))
-  (wave-list)
+  (wave)
   (goto-char (point-min))
-  (capture-step (format "inbox rendered: %d lines" (count-lines (point-min) (point-max))))
+  (capture-step (format "inbox rendered: %d rows" (length wave-ui-rows)))
   (capture-frame "wave-inbox")
-  (switch-to-buffer (wave-display "Discussion: Wave protocol features"
-                                  (or (getenv "WAVE_ID") "localhost!w+abc123")))
-  (goto-char (point-min))
+  (capture-open "Google I/O")
   (capture-frame "wave-detail")
+  (capture-open "New to Wave")
+  (capture-frame "wave-gadget")
+  (wave-ui-playback)
+  (delete-other-windows)
+  (wave-ui-playback-next) (wave-ui-playback-next) (wave-ui-playback-next)
+  (capture-frame "wave-playback")
+  (switch-to-buffer "*Wave*")
+  (wave-ui-contacts)
+  (delete-other-windows)
+  (capture-frame "wave-contacts")
   (with-temp-file (expand-file-name "capture.log" capture-dir)
     (insert (mapconcat #'identity (nreverse capture-log) "\n") "\n"))
   (kill-emacs 0))
