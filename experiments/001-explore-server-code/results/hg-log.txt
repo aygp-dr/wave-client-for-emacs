@@ -1,0 +1,101 @@
+100:3d4dea4be580 2012-05-06 10:36 -0400 default ahyatt | Change the license stanzas in the elisp files to standard Apache 2.0 license stanza
+99:d1d2798e95db 2010-08-02 13:53 +1000 default Christian Ohler | Fixed typo in `wave-bc-remove-participant-to-proto'.
+98:778039fc39a6 2010-07-22 03:18 -0700 default Christian Ohler | wave-display: Display attachment thumbnails.  This only works for PNGs thumbnails for now.
+97:d2b1b27e3f39 2010-06-21 21:56 -0400 default Andrew Hyatt | Added bold, underline, italic, and color styling.
+96:a414d9b8d1cc 2010-06-10 21:48 -0400 default Andrew Hyatt | Delete old browser channel buffers after reseting the browser channel.
+95:2da6e8b80e3b 2010-05-30 00:34 -0400 default Andrew Hyatt | Refresh on marking blip read
+94:8c1ce9a0777c 2010-05-30 00:02 -0400 default Andrew Hyatt | Improved the browser channel's reliability, and made the back channel
+93:c6146c364379 2010-05-21 21:41 -0400 default Andrew Hyatt | Update README, update require statements
+92:742c8e5864a9 2010-05-19 00:31 -0400 default Andrew Hyatt | Fix duplicate contributor issue
+91:7a004a1a0de0 2010-05-19 00:10 -0400 default Andrew Hyatt | Made updates handle federation better
+90:04267e7879dd 2010-05-18 00:15 -0400 default Andrew Hyatt | Convert (quickly) to proto bufs
+89:387ff390dd7a 2010-05-17 16:33 -0400 default Andrew Hyatt | Handle initial HTTP output
+88:d3484643bced 2010-05-17 14:52 -0400 default Andrew Hyatt | Modified websocket to handle large packets, plus tests
+87:917bd968b765 2010-05-04 16:25 -0400 default Andrew Hyatt | Split websocket code off, make it support v76.
+86:971a1709b429 2010-04-30 18:14 +1000 default Andrew Hyatt | Merge with HEAD
+85:d958db8f3297 2010-04-30 18:07 +1000 default Andrew Hyatt | Deal with line breaks in edit correctly
+84:067d194ff2d1 2010-04-30 15:04 +1000 default Andrew Hyatt | Making callbacks more efficient, plus various fixes
+83:42ff3435a05e 2010-04-30 13:19 +1000 default Christian Ohler | A few tests.
+82:9cd0cbd956f7 2010-04-30 13:32 +1000 default Andrew Hyatt | Callbacks on new data instead of periodic refreshes.  Currently slow.
+81:6fb148e71e43 2010-04-30 12:09 +1000 default Christian Ohler | Merge from HEAD.
+80:6ade70f97917 2010-04-30 11:13 +1000 default Andrew Hyatt | Automatic refresh of list, plus tweaks to display refresh
+79:113a5531fb5b 2010-04-30 10:34 +1000 default Andrew Hyatt | Add automatic refreshing to display
+78:c312740127de 2010-04-30 12:08 +1000 default Christian Ohler | Fixed some typos.
+77:bd6317d2b91b 2010-04-30 00:59 +1000 default Andrew Hyatt | Re-add the ability to insert blips, including in websocket protocol
+76:456e1e62da73 2010-04-29 23:19 +1000 default Andrew Hyatt | Enable modifications for websocket protocol
+75:913ab7065db1 2010-04-29 10:48 +1000 default Andrew Hyatt | Ignore first HTTP message
+74:72d23662da57 2010-04-29 10:47 +1000 default Andrew Hyatt | Dont show unread if there is no user data wavelet
+73:8e36df4bbb8a 2010-04-29 10:12 +1000 default Andrew Hyatt | Tightening up the dependencies
+72:b87b8ecad3c4 2010-04-28 18:54 +1000 default Andrew Hyatt | Merge with HEAD, plus updates for new format
+71:431ada0be8a4 2010-04-28 18:16 +1000 default Christian Ohler | Merge from HEAD.
+70:e6c2b0f2317f 2010-04-28 18:34 +1000 default Andrew Hyatt | Standardize updates on wave-data structs
+69:aef003479346 2010-04-28 10:46 +1000 default Andrew Hyatt | Support for adding a blip + appending text
+68:ba91a6e755c8 2010-04-27 13:14 +1000 default Andrew Hyatt | Merged with HEAD
+67:b9619eaac268 2010-04-28 17:49 +1000 default Christian Ohler | Make wave display work with websocket.
+66:15339306086d 2010-04-27 12:33 +1000 default Andrew Hyatt | Start of inserting & editing a new blip.
+65:9f638feb9a2a 2010-04-24 00:18 +1000 default Christian Ohler | Implemented wave list over websocket.  Added basic data structures for ops.
+64:0d9cff97228d 2010-04-23 15:21 +1000 default Andrew Hyatt | Added wave utility class.
+63:9ae2dfdc7beb 2010-04-23 14:55 +1000 default Andrew Hyatt | Merge with head
+62:a8c5e4c9c456 2010-04-23 13:45 +1000 default Christian Ohler | Implemented "add participant".
+61:9c1fe65ea52d 2010-04-23 12:26 +1000 default Christian Ohler | wave-list: Added wave-list-refresh command.
+60:816cae69fd97 2010-04-23 14:52 +1000 default Andrew Hyatt | Add beginnings of websocket-based client.
+59:34436bb01e8f 2010-04-23 10:19 +1000 default Andrew Hyatt | Acceptor for browser channel, plus minor fixes.
+58:175f0cd2b1b4 2010-04-22 21:06 +1000 default Andrew Hyatt | Marking blips read in more cases, plus browser channel fixes and better debugging info.  More browser channel fixes are needed.
+57:944390e7954b 2010-04-21 20:18 +1000 default Andrew Hyatt | Add ability to mark blips read.  Not yet hooked in.
+56:fb8245ed13e2 2010-04-20 15:13 +1000 default Andrew Hyatt | Add functions, notably a defproto to help with updating.  Several
+55:69a443750794 2010-03-22 22:21 -0400 default Andrew Hyatt | Add method to post data to the browser channel
+54:eeb7d211070d 2010-03-10 11:59 -0500 default Andrew Hyatt | "q" in Wave display window now kills the buffer and brings you back to
+53:8c1ad6c4a36c 2010-02-20 20:14 +1100 default Christian Ohler | Mark unread blips, and some minor improvements.
+52:0eb8f672d080 2010-02-20 17:48 +1100 default Christian Ohler | Switched wave-display to ewoc.  Added raw wavelet display for debugging.
+51:2e653d27240c 2010-02-20 14:09 +1100 default Christian Ohler | Minor cleanup.
+50:a345a657fb97 2010-02-19 23:35 +1100 default Christian Ohler | Use conversation manifest rather than obsolete blip hierarchy.
+49:f5a91edba297 2010-02-13 22:20 -0500 default Andrew Hyatt | Fix typo causing wrong variable to be populated on browser channel init.
+48:3729b71fb3fd 2010-02-12 18:00 -0500 default Andrew Hyatt | Merge with upstream
+47:59d379d138a3 2010-02-09 22:36 -0500 default Andrew Hyatt | Merged with repository
+46:11d6d2d1f4fb 2010-02-12 17:58 -0500 default Andrew Hyatt | Fix for unreadable long waves
+45:af7b5c28818f 2010-02-06 22:26 -0500 default Andrew Hyatt | Removed plaintext storing of passwords, which wasn't needed.
+44:1e6b0adc408c 2010-02-05 14:48 -0800 default raman | wave-client-get-auth-cookie
+43:725519a83349 2010-02-05 14:25 -0800 default raman | Updated  wave-client-get-auth-cookie to display the userid/domain
+42:6ac897872ab2 2010-02-05 14:15 -0800 default raman | Added autoload cookie to defcustom lines.
+41:051556e3e363 2010-02-05 14:10 -0800 default raman | Updated defcustom defintions, added defgroup declaration.
+40:69a1d658f939 2010-02-09 22:34 -0500 default Andrew Hyatt | Refactored json fetching code
+39:27670c0617e7 2010-01-29 18:15 -0500 default Andrew Hyatt | Add some methods to help connect to Wave's browser channels.
+38:519b1ac16de7 2010-01-15 15:33 -0500 default Andrew Hyatt | Merge with direct-connect branch.
+37:207fd6401a03 2010-01-15 14:25 -0500 direct-connect Andrew Hyatt | Add disclaimer
+36:635e8b4ca71b 2010-01-08 18:03 -0500 direct-connect Andrew Hyatt | Change :author to :creator for the wave-list
+35:32595bbb2724 2010-01-03 13:34 -0600 direct-connect Andrew Hyatt | Deleted no-longer necessary FedOne files
+34:a669d143bd86 2009-12-30 18:32 -0500 direct-connect Andrew Hyatt | Switch in wave-client from using assoc lists to plists and hashtables.
+33:6205f7e156fe 2009-12-29 10:54 -0500 direct-connect Andrew Hyatt | Highlight the current blip.
+32:0687dcf00808 2009-12-28 15:50 -0500 direct-connect Andrew Hyatt | Add faces for title & authors in the wave display.
+31:ee1446d1a98f 2009-12-28 14:38 -0500 direct-connect Andrew Hyatt | Fix up JSON errors for the /wfe output.
+30:99e737aff14c 2009-12-28 14:23 -0500 direct-connect Andrew Hyatt | Alter the readme for the direct-connect branch
+29:adeb16e91dd8 2009-12-28 11:28 -0500 direct-connect Andrew Hyatt | Add commands for opening up a wave, and navigating through the wave using
+28:d744075c756a 2009-12-24 21:18 -0500 direct-connect Andrew Hyatt | Add wave-display, for now a primitive method of displaying waves.  Not
+27:7cc2921f2dc9 2009-12-23 19:33 -0500 direct-connect Andrew Hyatt | First version of wave contents retrieval.  This should give us enough
+26:12c21009de23 2009-12-23 10:53 -0500 direct-connect Andrew Hyatt | Fix parse error in the last commit, plus fix an issue where those with
+25:5b6ca3731a2c 2009-12-22 22:19 -0500 direct-connect Andrew Hyatt | Made the curl interaction more friendly against bad passwords and other
+24:6f147c65ad5a 2009-12-22 18:40 -0500 direct-connect Andrew Hyatt | Add faces to the wave list display.
+23:07d4a37bc4a1 2009-12-22 17:59 -0500 direct-connect Andrew Hyatt | Show the unread count, plus improving author display
+22:642f8c5fdbf9 2009-12-22 17:59 -0500 direct-connect Andrew Hyatt | Fix url creation bug that broke the default wave instance.
+21:3035e5b12ff8 2009-12-22 11:39 -0500 direct-connect Andrew Hyatt | Support hosted domains, such as wavesandbox.
+20:1c770f82fbc7 2009-12-22 10:41 -0500 direct-connect Andrew Hyatt | Fixes to the wave list UI:
+19:c413d18ed5fd 2009-12-21 19:03 -0500 direct-connect Andrew Hyatt | Various fixes that cause wave-list not to work on a clean version of
+18:ef5e97c6a054 2009-12-21 17:16 -0500 direct-connect Andrew Hyatt | Add TODO to add domain code back in
+17:38d4acd535f5 2009-12-21 17:14 -0500 direct-connect Andrew Hyatt | Change the method for asserting a connection
+16:a7601b03f217 2009-12-21 14:38 -0500 direct-connect Andrew Hyatt | Support the basic auth and connection to wave.google.com, through it's
+15:69b08ce77c03 2009-12-15 14:52 -0500 direct-connect Andrew Hyatt | Start direct connect branch
+14:6b0eaef247b9 2009-12-10 14:23 -0500 default Andrew Hyatt | Add method to get the data of a wave in the Clojure REPL.
+13:4a456c35ecd1 2009-11-14 19:52 -0500 default andy | Patch from Noorul Islam:
+12:17743ff5e61f 2009-11-01 19:32 -0500 default andy | Fixes various bugs that were in the first version of wave-list.
+11:5633ef0fe667 2009-11-01 19:32 -0500 default andy | Various improvements in debugging, as well as a disconnect method.
+10:1882c5f11254 2009-11-01 11:25 -0500 default andy | Adding the .hgignore file for the project
+9:86d582a8fa77 2009-11-01 11:25 -0500 default andy | Create a wave-list mode for displaying a list of Waves.
+8:6c332ddc1194 2009-10-26 23:13 -0400 default andy | Switch to transformations to alist in clojure.
+7:556ad65f9e30 2009-10-24 22:49 -0400 default andy | Make matching in the dict-to-alist function more robust.  We still could
+6:dfa576ace533 2009-10-24 22:42 -0400 default andy | Stray nils were throwing off our process output.  Got rid of them by
+5:7890e295e19d 2009-10-24 14:01 -0400 default andy | Added participant info to wave list
+4:c36f0eebc08b 2009-10-12 23:04 -0400 default andy | Create the emacs connection layer that uses the FedOne REPL.
+3:5104b4eb0249 2009-10-01 13:33 -0400 default brown | Fix small glitches.
+2:b7116e027f45 2009-09-11 11:11 -0400 default ahyatt | Added google-collect and fedone-server jar files.
+1:d6e4e6e01b80 2009-09-04 14:30 -0400 default ahyatt | Adding protobuf library, which the fedone-api depends on.
+0:6a3c3dccbe7a 2009-09-01 17:23 -0400 default Andrew Hyatt | Added basic ant build file and the wave-protocol's fedone-api-0.2.jar.
