@@ -31,6 +31,10 @@
 (require 'url-http)
 (require 'json)
 (require 'auth-source)
+;; Loaded now, not autoloaded by `hl-line-mode': loading runs the
+;; `hl-line-face' defcustom setter, which would overwrite the list's
+;; buffer-local face.
+(require 'hl-line)
 (require 'wave-client)
 (require 'wave-client-websocket)
 (require 'wave-display)
@@ -63,12 +67,29 @@ needs no secret, and a lookup can decrypt (and prompt for) a gpg store."
   "Saved searches offered by `wave-ui-folder' as (NAME . QUERY)."
   :type '(alist :key-type string :value-type string))
 
+(defcustom wave-ui-list-style 'classic
+  "How the wave list draws a row.
+`classic' is the 2010 client's *Wave List*: unread count, title (bold
+while unread), creator in a green right-hand column, the current row
+highlighted, and RET opening the wave in a window below the list.
+`rich' follows the 2009 web inbox: avatars, snippet, time and message
+count, and RET replacing the list."
+  :type '(choice (const :tag "2010 *Wave List*" classic) (const :tag "Web inbox" rich)))
+
 (defconst wave-ui-folders '("inbox" "active" "all" "by-me" "history" "spam" "trash"))
 
 (defface wave-ui-unread '((t :inherit bold)) "Unread row title.")
 (defface wave-ui-badge '((t :inherit success :weight bold)) "Unread count.")
 (defface wave-ui-snippet '((t :inherit shadow)) "Snippet after the title.")
 (defface wave-ui-meta '((t :inherit shadow)) "Time and message count.")
+(defface wave-ui-author '((((class color) (background light)) :foreground "green4")
+                          (((class color)) :foreground "green")
+                          (t :italic t))
+  "Creator column of the classic list.")
+(defface wave-ui-current-row '((((class color) (background light)) :background "#b8f0b8" :extend t)
+                               (((class color)) :background "#1e4d1e" :extend t)
+                               (t :inherit highlight))
+  "Current row of the classic list.")
 (defface wave-ui-tab '((t :inherit header-line)) "Folder tab.")
 (defface wave-ui-tab-current '((t :inherit (bold header-line) :underline t)) "Current folder tab.")
 (defface wave-ui-banner '((t :inherit warning)) "Access banner in an open wave.")
@@ -211,6 +232,8 @@ The +N overflow count is always kept; names are truncated instead."
   "Wave folders and search.  \\{wave-ui-list-mode-map}"
   (setq truncate-lines t)
   (setq-local revert-buffer-function (lambda (&rest _) (wave-ui-refresh)))
+  (when (eq wave-ui-list-style 'classic)
+    (setq-local hl-line-face 'wave-ui-current-row))
   (hl-line-mode 1))
 
 ;;;###autoload
@@ -259,19 +282,50 @@ The +N overflow count is always kept; names are truncated instead."
                             'face 'wave-ui-snippet))
       (dolist (row wave-ui-rows) (wave-ui--insert-row row)))
     (goto-char (point-min))
-    (forward-line (1- (min line (max 1 (length wave-ui-rows)))))))
+    (forward-line (1- (min line (max 1 (length wave-ui-rows)))))
+    ;; hl-line draws from post-command-hook; a refresh run from Lisp (or
+    ;; the first render) would otherwise show no current row.
+    (when (bound-and-true-p hl-line-mode) (hl-line-highlight))))
+
+(defun wave-ui--flags (row)
+  "Muted, public and tag markers.  They go before the title so a long
+title cannot truncate them away."
+  (concat (if (plist-get row :muted) "[muted] " "")
+          (if (plist-get row :public) "[public] " "")
+          (mapconcat (lambda (tag) (concat "#" tag " ")) (plist-get row :tags) "")))
 
 (defun wave-ui--insert-row (row)
+  (if (eq wave-ui-list-style 'classic)
+      (wave-ui--insert-classic-row row)
+    (wave-ui--insert-rich-row row)))
+
+(defun wave-ui--insert-classic-row (row)
+  "One row as the 2010 *Wave List* drew it (lisp/wave-list.el):
+unread count, title, creator in a 15-column right-hand field."
+  (let* ((unread (plist-get row :unread_count))
+         (width (max 40 (1- (window-width))))
+         (author-width 15)
+         (count (if (> unread 0) (number-to-string unread) ""))
+         (creator (truncate-string-to-width
+                   (replace-regexp-in-string "@.*" "" (plist-get row :creator)) author-width))
+         (title-width (- width 6 1 author-width))
+         (title (truncate-string-to-width
+                 (concat (propertize (wave-ui--flags row) 'face 'wave-ui-meta)
+                         (propertize (plist-get row :title) 'face (if (> unread 0) 'wave-ui-unread 'default)))
+                 title-width nil ?\s "…"))
+         (start (point)))
+    (insert (format "%-5s " count) title " "
+            (propertize (format "%-15s" creator) 'face 'wave-ui-author) "\n")
+    (put-text-property start (point) 'wave-ui-row row)))
+
+(defun wave-ui--insert-rich-row (row)
   (let* ((unread (plist-get row :unread_count))
          (width (max 60 (1- (window-width))))
          (badge (if (> unread 0) (propertize (format "%3d " unread) 'face 'wave-ui-badge) "    "))
          (who (wave-ui--participants (plist-get row :participants) 14))
          (meta (format " %6s %3d msg%s" (wave-ui--time (plist-get row :last_modified))
                        (plist-get row :blip_count) (if (= 1 (plist-get row :blip_count)) " " "s")))
-         ;; Flags go before the title so a long title cannot truncate them away.
-         (flags (concat (if (plist-get row :muted) "[muted] " "")
-                        (if (plist-get row :public) "[public] " "")
-                        (mapconcat (lambda (tag) (concat "#" tag " ")) (plist-get row :tags) "")))
+         (flags (wave-ui--flags row))
          (title-width (- width 4 14 1 (string-width meta)))
          (title (propertize (plist-get row :title) 'face (if (> unread 0) 'wave-ui-unread 'default)))
          (text (truncate-string-to-width
@@ -368,7 +422,17 @@ with:NAME by:NAME tag:TAG; other words match title and text."
     (let ((buffer (wave-display (plist-get row :title) wave-id)))
       ;; wave-display already rendered (and decorated, via the hook).
       (with-current-buffer buffer (setq wave-ui-wave-id wave-id))
-      (switch-to-buffer buffer))))
+      (if (eq wave-ui-list-style 'classic)
+          (wave-ui--show-below-list buffer)
+        (switch-to-buffer buffer)))))
+
+(defun wave-ui--show-below-list (buffer)
+  "Show BUFFER in the window under the list, splitting once if needed, and
+select it.  The list keeps the top 40%, as in the 2010 client."
+  (let ((below (or (window-in-direction 'below)
+                   (split-window-below (max window-min-height (floor (* 0.4 (window-total-height))))))))
+    (set-window-buffer below buffer)
+    (select-window below)))
 
 ;;;; Compose and contacts
 

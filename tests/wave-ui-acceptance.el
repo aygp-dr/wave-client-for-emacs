@@ -118,10 +118,44 @@ and would change what later tests see."
   (should (string-match-p "^    [^ \n]" (wave-acceptance--open "reply nested 2 deep"))))
 
 (wave-acceptance-deftest wave-ui-single-blip "single-blip wave"
-  (should (string-match-p "  1 msg " (cdr (wave-acceptance--row "single-blip wave")))))
+  (let ((wave-ui-list-style 'rich))
+    (should (string-match-p "  1 msg " (cdr (wave-acceptance--row "single-blip wave"))))))
 
 (wave-acceptance-deftest wave-ui-collapses-many-participants ">= 6 participants"
-  (should (string-match-p "+[0-9]+" (cdr (wave-acceptance--row ">= 6 participants")))))
+  (let ((wave-ui-list-style 'rich))
+    (should (string-match-p "+[0-9]+" (cdr (wave-acceptance--row ">= 6 participants"))))))
+
+;; The classic row is the 2010 *Wave List* (reference screenshot): count,
+;; title bold while unread, creator's name in the right-hand column.
+(wave-acceptance-deftest wave-ui-classic-row-shape "unread wave"
+  (let ((wave-ui-list-style 'classic))
+    (pcase-let* ((`(,witness . ,text) (wave-acceptance--row "unread wave"))
+                 (row (get-text-property (point) 'wave-ui-row))
+                 (creator (replace-regexp-in-string "@.*" "" (plist-get row :creator))))
+      (ignore witness)
+      (should (string-match-p (concat "\\`[1-9][0-9]* +.* " (regexp-quote creator) " *\\'") text))
+      (should (eq (get-text-property (+ (line-beginning-position) 6) 'face) 'wave-ui-unread))
+      (should (eq (get-text-property (- (line-end-position) 15) 'face) 'wave-ui-author)))))
+
+(wave-acceptance-deftest wave-ui-classic-read-row-is-plain "fully read wave"
+  (let ((wave-ui-list-style 'classic))
+    (let ((text (cdr (wave-acceptance--row "fully read wave"))))
+      (should (string-prefix-p "      " text))
+      (should-not (eq (get-text-property (+ (line-beginning-position) 6) 'face) 'wave-ui-unread)))))
+
+(wave-acceptance-deftest wave-ui-classic-opens-below-list "single-blip wave"
+  (let ((wave-ui-list-style 'classic))
+    (delete-other-windows)
+    (wave-acceptance--row "single-blip wave")
+    (let ((list-window (selected-window))
+          (was-unread (> (plist-get (get-text-property (point) 'wave-ui-row) :unread_count) 0)))
+      (wave-ui-open)
+      (should (eq (window-in-direction 'above) list-window))
+      (should (equal (buffer-name (window-buffer list-window)) "*Wave*"))
+      ;; opening marked it read; restore its state for other tests
+      (select-window list-window)
+      (when was-unread (wave-ui-mark-unread))
+      (delete-other-windows))))
 
 (wave-acceptance-deftest wave-ui-truncates-long-title "title >= 60 chars"
   (should (string-match-p "…" (cdr (wave-acceptance--row "title >= 60 chars")))))
