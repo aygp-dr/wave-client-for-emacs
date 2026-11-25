@@ -84,6 +84,8 @@ reference/
 
 # synthetic databases (gmake db-synth)
 synthetic*.db
+# static corpus database (gmake db-corpus)
+corpus.db
 # mutation testing workspace
 mutants/
 .hypothesis/

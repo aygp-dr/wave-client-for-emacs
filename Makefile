@@ -15,7 +15,7 @@ setup: deps ## Initial project setup
 
 ##@ Development
 
-.PHONY: db-synth server-synth help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo avatars screenshots screenshots-macos gastown-sim gastown-sim-live
+.PHONY: db-synth server-synth db-corpus server-corpus help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo avatars screenshots screenshots-macos gastown-sim gastown-sim-live
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -104,6 +104,12 @@ db-synth: ## Generate synthetic.db covering every UI state (SEED=1, EDGY=1 for u
 
 server-synth: db-synth ## Run the server on synthetic.db
 	WAVE_DATABASE_URL=sqlite:///./synthetic.db uv run uvicorn wave_client_server.wave_server:app --host 127.0.0.1 --port 9898
+
+db-corpus: ## Load the static mock corpus (resources/corpus/waves.json) into corpus.db
+	uv run --extra test python scripts/load-corpus.py --db corpus.db
+
+server-corpus: db-corpus ## Run the server on corpus.db
+	WAVE_DATABASE_URL=sqlite:///./corpus.db uv run uvicorn wave_client_server.wave_server:app --host 127.0.0.1 --port 9898
 
 db-seed: ## Seed database with test data
 	@echo "Seeding database with test data..."

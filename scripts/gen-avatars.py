@@ -25,7 +25,7 @@ import re
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SEED_SOURCES = ["scripts/seed.sql", "seeds/*.json", "scripts/*.py", "src/wave_client_server/*.py"]
+SEED_SOURCES = ["scripts/seed.sql", "seeds/*.json", "resources/corpus/*.json", "scripts/*.py", "src/wave_client_server/*.py"]
 ADDRESS_PATTERN = re.compile(r"\b([a-z0-9][a-z0-9._+-]*@(?:localhost|[a-z0-9-]+\.local))\b")
 FIXED_ADDRESSES = ["admin@localhost"]
 PUBLIC_ADDRESS = "public@localhost"
