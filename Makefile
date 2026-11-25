@@ -230,6 +230,9 @@ elisp-list-waves: ## List waves through the real websocket client (requires runn
 	@echo "Fetching waves from localhost:9898..."
 	@$(EMACS_BATCH) -l scripts/wave-ws-inbox.el
 
+elisp-ui-demo: ## Drive M-x wave in batch and print each screen (requires seeded server)
+	@$(EMACS_BATCH) -l scripts/wave-ui-demo.el 2>&1 | grep -v -e Warning -e lexical -e deprecated -e 'Unknown type'
+
 elisp-version: ## Show Emacs version being used
 	@$(EMACS) --version | head -1
 

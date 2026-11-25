@@ -356,6 +356,14 @@
        "Don't know how to handle end-boundary of type %s"
        key))))
 
+(defvar wave-display-element-renderers nil
+  "Alist of (ELEMENT-TYPE . FUNCTION) for elements inside a blip.
+FUNCTION gets the element's attribute plist and the blip's indentation
+level and returns a string to insert.  Added in 2026 for gadgets.")
+
+(defvar wave-display-after-render-hook nil
+  "Hook run in the display buffer after each (re-)render.  Added in 2026.")
+
 (defun wave-display-blip (node)
   (let* ((blip (wave-display-blip-raw-blip node))
          (blip-id (wave-doc-doc-id blip))
@@ -441,7 +449,15 @@
                                         :type png
                                         :margin 2
                                         :data ,thumbnail))
-                                     "\n"))))))))
+                                     "\n"))))))
+                 (t
+                  ;; Extension point (2026): elements such as gadget render
+                  ;; through `wave-display-element-renderers'.
+                  (let ((renderer (cdr (assq (first op) wave-display-element-renderers))))
+                    (when renderer
+                      (insert (funcall renderer (second op) level))
+                      ;; Keep the closing body's fill off the rendered text.
+                      (setq current-paragraph-start (point)))))))
               (t (message "Don't know how to deal with op: %s" op)))))
     (insert "\n")))
 
@@ -790,7 +806,8 @@ Returns the new buffer."
         ;; Finally, add all raw wavelets, for debugging.
         (dolist (wavelet wavelets)
           (wave-display-add-raw-wavelet ewoc wavelet))
-        (goto-char prev-point)))))
+        (run-hooks 'wave-display-after-render-hook)
+        (goto-char (min prev-point (point-max)))))))
 
 (defun wave-display-refresh ()
   (interactive)
