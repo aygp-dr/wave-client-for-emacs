@@ -260,10 +260,11 @@ else
 endif
 
 EMACS_APP ?= /Applications/Emacs.app/Contents/MacOS/Emacs
+SHOT_PORT ?= 9898
 
 screenshots-macos: ## Screenshot the real client in Emacs.app (requires server, Screen Recording permission)
-	@curl -sf http://localhost:9898/health >/dev/null || { echo "Wave server not running: gmake server"; exit 1; }
-	@WAVE_SHOT_DIR=$(CURDIR)/docs/screenshots $(EMACS_APP) -Q -l $(CURDIR)/experiments/011-macos-gui-screenshots/capture.el
+	@curl -sf http://localhost:$(SHOT_PORT)/health >/dev/null || { echo "Wave server not running on $(SHOT_PORT): gmake server"; exit 1; }
+	@WAVE_SHOT_PORT=$(SHOT_PORT) WAVE_SHOT_DIR=$(CURDIR)/docs/screenshots $(EMACS_APP) -Q -l $(CURDIR)/experiments/011-macos-gui-screenshots/capture.el
 	@cat docs/screenshots/capture.log
 
 ##@ Gas Town Multi-Agent Demo

@@ -1,6 +1,6 @@
 ;;; capture.el --- Screenshot the real Wave client in a GUI frame (macOS) -*- lexical-binding: nil -*-
 ;; Usage: Emacs.app -Q -l /abs/path/experiments/011-macos-gui-screenshots/capture.el
-;; Env: WAVE_SHOT_DIR (default docs/screenshots), WAVE_ID (default localhost!w+abc123)
+;; Env: WAVE_SHOT_DIR (default docs/screenshots), WAVE_SHOT_PORT (default 9898)
 
 (require 'cl)
 ;; Emacs.app starts in ~, not the shell's cwd: anchor on this file instead.
@@ -14,16 +14,26 @@
 (require 'wave-display)
 (require 'wave-ui)
 
+(defvar capture-port (or (getenv "WAVE_SHOT_PORT") "9898"))
 (setq wave-client-connection-method 'websocket
-      wave-client-ws-url "ws://localhost:9898/ws"
+      wave-client-ws-url (format "ws://localhost:%s/ws" capture-port)
       wave-client-user "alice@localhost"
-      wave-ui-server "http://localhost:9898"
+      wave-ui-server (format "http://localhost:%s" capture-port)
       wave-client-domain "localhost"
       inhibit-startup-screen t
       ring-bell-function #'ignore)
 
 (defvar capture-dir (expand-file-name (or (getenv "WAVE_SHOT_DIR") "docs/screenshots")))
 (defvar capture-log nil)
+(defvar capture-window-id nil "CoreGraphics number of this Emacs frame's window.")
+
+(defun capture-find-window-id ()
+  (let ((ids (split-string (shell-command-to-string
+                            (format "osascript -l JavaScript %s %d"
+                                    (shell-quote-argument
+                                     (expand-file-name "experiments/011-macos-gui-screenshots/window-id.js" capture-root))
+                                    (emacs-pid))))))
+    (and ids (car (last ids)))))
 
 (defun capture-step (what)
   "Append WHAT to capture-steps.log, so a hang shows where it stopped."
@@ -37,25 +47,32 @@
   (redisplay t)
   (sit-for 0.8)
   (redisplay t)
-  (let* ((edges (frame-edges nil 'outer-edges))
-         (region (format "%d,%d,%d,%d" (nth 0 edges) (nth 1 edges)
-                         (- (nth 2 edges) (nth 0 edges))
-                         (- (nth 3 edges) (nth 1 edges))))
+  ;; Capture the Emacs window by its window number, never a screen region:
+  ;; a region grabs whatever is on top, and once that was someone's terminal.
+  (unless capture-window-id
+    (error "No Emacs window number; refusing a region capture"))
+  (let* ((region capture-window-id)
          (file (expand-file-name (concat name ".png") capture-dir))
-         (_ (capture-step (format "screencapture %s %s" name region)))
-         (status (call-process "screencapture" nil nil nil "-x" "-o" "-R" region file)))
+         (_ (capture-step (format "screencapture %s window %s" name region)))
+         (status (call-process "screencapture" nil nil nil "-x" "-o" "-l" region file)))
     (push (format "%s region=%s status=%s size=%s" name region status
                   (file-attribute-size (file-attributes file)))
           capture-log)))
 
 (defun capture-open (title-fragment)
-  "Open the row in *Wave* whose text contains TITLE-FRAGMENT."
+  "Open the row in *Wave* whose text contains TITLE-FRAGMENT.
+The classic list opens waves in the window below, so go back to the
+list's own window first."
+  (select-window (or (get-buffer-window "*Wave*") (selected-window)))
   (switch-to-buffer "*Wave*")
   (wave-ui-refresh)
   (goto-char (point-min))
   (search-forward title-fragment)
+  (hl-line-highlight)                   ; no command ran, so move the highlight by hand
   (wave-ui-open)
-  (goto-char (point-min)))
+  (goto-char (point-min))
+  (capture-step (format "opened %s; windows %S" title-fragment
+                        (mapcar (lambda (w) (buffer-name (window-buffer w))) (window-list)))))
 
 (defun capture-run ()
   (make-directory capture-dir t)
@@ -66,13 +83,18 @@
   (set-frame-position nil 80 60)
   (raise-frame)
   (select-frame-set-input-focus (selected-frame))
-  (capture-step "frame ready")
+  (setq capture-window-id (capture-find-window-id))
+  (capture-step (format "frame ready, window %s" capture-window-id))
   (setq auth-sources nil)
   (delete-other-windows)
   (wave)
   (goto-char (point-min))
   (capture-step (format "inbox rendered: %d rows" (length wave-ui-rows)))
   (capture-frame "wave-inbox")
+  (let ((wave-ui-list-style 'rich))
+    (wave-ui-refresh)
+    (capture-frame "wave-inbox-rich"))
+  (wave-ui-refresh)
   (capture-open "Google I/O")
   (capture-frame "wave-detail")
   (capture-open "New to Wave")
