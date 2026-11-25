@@ -1,6 +1,8 @@
 ;;; capture.el --- Screenshot the real Wave client in a GUI frame (macOS) -*- lexical-binding: nil -*-
 ;; Usage: Emacs.app -Q -l /abs/path/experiments/011-macos-gui-screenshots/capture.el
-;; Env: WAVE_SHOT_DIR (default docs/screenshots), WAVE_SHOT_PORT (default 9898)
+;; Env: WAVE_SHOT_DIR (default docs/screenshots), WAVE_SHOT_PORT (default 9898),
+;;      WAVE_SHOT_USER (default alice), WAVE_SHOT_SCENE (tour, the default; inbox; or bus:
+;;      the user's inbox and the "Agent bus" wave from scripts/agent-bus.py)
 
 (require 'cl)
 ;; Emacs.app starts in ~, not the shell's cwd: anchor on this file instead.
@@ -17,7 +19,8 @@
 (defvar capture-port (or (getenv "WAVE_SHOT_PORT") "9898"))
 (setq wave-client-connection-method 'websocket
       wave-client-ws-url (format "ws://localhost:%s/ws" capture-port)
-      wave-client-user "alice@localhost"
+      wave-client-user (concat (or (getenv "WAVE_SHOT_USER") "alice") "@localhost")
+      wave-ui-user (or (getenv "WAVE_SHOT_USER") "alice")
       wave-ui-server (format "http://localhost:%s" capture-port)
       wave-client-domain "localhost"
       inhibit-startup-screen t
@@ -90,6 +93,12 @@ list's own window first."
   (wave)
   (goto-char (point-min))
   (capture-step (format "inbox rendered: %d rows" (length wave-ui-rows)))
+  (when (equal (getenv "WAVE_SHOT_SCENE") "inbox")
+    (capture-frame "inbox")
+    (capture-finish))
+  (when (equal (getenv "WAVE_SHOT_SCENE") "bus")
+    (capture-bus)
+    (capture-finish))
   (capture-frame "wave-inbox")
   (let ((wave-ui-list-style 'rich))
     (wave-ui-refresh)
@@ -107,9 +116,18 @@ list's own window first."
   (wave-ui-contacts)
   (delete-other-windows)
   (capture-frame "wave-contacts")
+  (capture-finish))
+
+(defun capture-finish ()
   (with-temp-file (expand-file-name "capture.log" capture-dir)
     (insert (mapconcat #'identity (nreverse capture-log) "\n") "\n"))
   (kill-emacs 0))
+
+(defun capture-bus ()
+  "Inbox of WAVE_SHOT_USER, then the Agent bus thread below it."
+  (capture-frame "bus-inbox")
+  (capture-open "Agent bus")
+  (capture-frame "bus-thread"))
 
 (defun capture-run-safely ()
   (condition-case err
