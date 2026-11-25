@@ -15,7 +15,7 @@ setup: deps ## Initial project setup
 
 ##@ Development
 
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo screenshots gastown-sim gastown-sim-live
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo screenshots screenshots-macos gastown-sim gastown-sim-live
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -237,8 +237,19 @@ elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires serv
 elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
 	@$(EMACS_BATCH) -l scripts/wave-batch-demo.el
 
-screenshots: ## Capture screenshots of Wave client (requires server, X11)
+screenshots: ## Capture screenshots of Wave client (requires server; X11, or Emacs.app on macOS)
+ifeq ($(shell uname -s),Darwin)
+	@$(MAKE) --no-print-directory screenshots-macos
+else
 	@./scripts/capture-screenshots.sh
+endif
+
+EMACS_APP ?= /Applications/Emacs.app/Contents/MacOS/Emacs
+
+screenshots-macos: ## Screenshot the real client in Emacs.app (requires server, Screen Recording permission)
+	@curl -sf http://localhost:9898/health >/dev/null || { echo "Wave server not running: gmake server"; exit 1; }
+	@WAVE_SHOT_DIR=$(CURDIR)/docs/screenshots $(EMACS_APP) -Q -l $(CURDIR)/experiments/011-macos-gui-screenshots/capture.el
+	@cat docs/screenshots/capture.log
 
 ##@ Gas Town Multi-Agent Demo
 

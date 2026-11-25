@@ -75,3 +75,6 @@ spawn/
 wave/*.db
 *.sqlite
 *.sqlite3
+
+# screenshot run logs
+docs/screenshots/*.log

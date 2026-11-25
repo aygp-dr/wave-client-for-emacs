@@ -1,0 +1,21 @@
+#+TITLE: An old client needs the old wire, not the old API
+
+* Incident
+2010 Wave client vs a 2026 FastAPI server. Two mismatches, found in order:
+1. transport: vendored websocket.el spoke hixie-76; uvicorn answered 400,
+   and the client's synchronous reconnect recursed to =max-lisp-eval-depth=.
+2. protocol: the client rebuilds state by replaying deltas and asserts each
+   update has one; the server sent snapshots wrapped as =[]= deltas.
+
+* Shape
+Fixing (1) only exposed (2). Each layer looked like the whole problem until
+the one below it worked. The client's API surface into the transport was
+four functions, so the shim was small; the server had to learn the client's
+protocol, not the other way round, because the client is the artifact being
+preserved.
+
+* Do instead
+- Count the call sites into the transport before choosing shim vs port.
+- Fire reconnect callbacks only for connections that were ever open.
+- Synthesize the old protocol server-side from current storage, and declare
+  any client edit in the experiment's PROOF.

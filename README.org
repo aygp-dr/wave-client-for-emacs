@@ -51,6 +51,15 @@ Add to your Emacs configuration:
 (wave-list-mode)
 #+end_src
 
+* Screenshots
+
+The 2010 client, unmodified apart from its transport shim, against the local
+server (=gmake server db-seed screenshots=):
+
+[[file:docs/screenshots/wave-inbox.png]]
+
+[[file:docs/screenshots/wave-detail.png]]
+
 * Features
 
 ** Local Wave Server

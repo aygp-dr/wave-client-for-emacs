@@ -1,0 +1,9 @@
+#+TITLE: .meta — wave-client-for-emacs
+
+Portable findings from reviving a 2010 Emacs Wave client against a modern
+local server. This directory holds only what generalizes past this repo.
+
+| file | what it says |
+|------+--------------|
+| finding-a-scripted-gui-emacs-fails-silently.org | Emacs.app's cwd and hook order turn script errors into idle frames |
+| finding-an-old-client-needs-the-old-wire-not-the-old-api.org | keep the API, replace the wire; the server speaks the client's protocol |

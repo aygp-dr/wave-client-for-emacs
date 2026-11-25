@@ -1,0 +1,23 @@
+#+TITLE: A scripted GUI Emacs fails silently
+
+* Incident
+Screenshot script for Emacs.app (experiments/011). Three runs timed out at
+60s with no output file. Batch Emacs loaded the same script fine.
+
+* Causes
+1. Emacs.app starts with =default-directory= = =~=, not the launching shell's
+   cwd. A relative =-l path= fails to load; the GUI shows the error in
+   =*Messages*= and waits.
+2. =emacs-startup-hook= has already run when =-l= files are processed. A
+   hook added there never fires.
+
+* Shape
+A GUI process has no stderr you are reading, so every load-time error looks
+like a hang. Batch-mode checks do not catch either cause: batch has the
+shell's cwd, and nothing waits on the hook.
+
+* Do instead
+- Pass absolute paths to =-l=; inside the script, anchor on =load-file-name=.
+- Schedule work with =run-with-timer= at load, not a startup hook.
+- Wrap the entry point in =condition-case= that writes the error to a file
+  and =kill-emacs= with nonzero status; log each step to a file.
