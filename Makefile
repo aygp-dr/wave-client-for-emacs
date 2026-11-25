@@ -194,7 +194,7 @@ wave-monitor: ## Monitor WebSocket updates in real-time
 	$(PYTHON) scripts/wave-dashboard.py --ws
 
 # Emacs batch mode targets
-EMACS ?= $(HOME)/opt/emacs-30-amd64-freebsd/bin/emacs
+EMACS ?= $(or $(EMACS_BIN),$(wildcard $(HOME)/opt/emacs-30-amd64-freebsd/bin/emacs),emacs)
 EMACS_BATCH = $(EMACS) -Q --batch -L lisp
 
 elisp-check-syntax: ## Check elisp syntax by byte-compiling
