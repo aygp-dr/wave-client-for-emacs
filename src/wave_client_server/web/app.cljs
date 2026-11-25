@@ -218,7 +218,9 @@
    [:h1 "Wave"]
    [:span.spacer]
    (when me
-     [:span.me (avatar (:address me)) [:span (:address me)]])])
+     [:span.me (avatar (:address me)) [:span (:address me)]])
+   (when (:is_admin me) [:a {:href "/admin"} "Admin"])
+   [:a {:href "/logout" :title "Clears the mock login; Basic auth stays until the browser forgets it"} "Sign out"]])
 
 (defn navigation-view [{:keys [folders folder contacts]}]
   [:nav.pane.nav

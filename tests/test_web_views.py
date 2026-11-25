@@ -1,7 +1,7 @@
-"""Browser views (src/wave_client_server/web.py): /admin and /app.
+"""Browser views (src/wave_client_server/web.py): /login, /admin and /app.
 
-The pages themselves require HTTP Basic, so the browser prompts on first load
-and reuses the credentials for the page's /api fetches. Each test that needs
+The pages take HTTP Basic or the /login mock cookie, and redirect to /login
+without either. Each test that needs
 a user inserts its own uniquely named one, and removes it afterwards.
 """
 
@@ -43,10 +43,92 @@ def local_part(address):
 
 
 @pytest.mark.parametrize("path, realm", [("/admin", "wave-admin"), ("/app", "wave")])
-def test_no_credentials_is_401_with_challenge(path, realm):
-    response = client.get(path)
+def test_no_credentials_with_mock_login_off_is_401_with_challenge(path, realm, monkeypatch):
+    monkeypatch.setenv("WAVE_MOCK_LOGIN", "0")
+    response = client.get(path, follow_redirects=False)
     assert response.status_code == 401
     assert response.headers["www-authenticate"] == f'Basic realm="{realm}"'
+    assert client.get("/login").status_code == 404
+
+
+@pytest.mark.parametrize("path", ["/admin", "/app"])
+def test_no_credentials_redirects_to_login(path):
+    response = TestClient(app).get(path, follow_redirects=False)
+    assert response.status_code == 303
+    assert response.headers["location"] == "/login"
+
+
+def test_api_without_credentials_stays_401():
+    assert TestClient(app).get("/api/me").status_code == 401
+
+
+@pytest.fixture
+def mock_users(monkeypatch):
+    """An admin and a plain user sharing one wave, offered on /login."""
+    tag = uuid.uuid4().hex[:6]
+    admin, plain = f"adm{tag}@localhost", f"pln{tag}@localhost"
+    wave_id = f"localhost!w+mock{tag}"
+    now = datetime.utcnow()
+    db = SessionLocal()
+    db.add(Wave(wave_id=wave_id, creator=admin))
+    db.add(Wavelet(wave_id=wave_id, wavelet_id="localhost!conv+root", creator=admin,
+                   creation_time=now, last_modified_time=now, version=1,
+                   participants=[admin, plain], docs={"main": {"content": ["hello"]}}))
+    db.commit()
+    db.close()
+    monkeypatch.setenv("WAVE_MOCK_USERS", f"{local_part(admin)},{local_part(plain)},ghost{tag}")
+    monkeypatch.setenv("WAVE_ADMINS", local_part(admin))
+    yield admin, plain
+    db = SessionLocal()
+    db.query(Wavelet).filter_by(wave_id=wave_id).delete()
+    db.query(Wave).filter_by(wave_id=wave_id).delete()
+    db.commit()
+    db.close()
+
+
+def test_login_page_lists_known_mock_users_and_marks_admin(mock_users):
+    admin, plain = mock_users
+    text = TestClient(app).get("/login").text
+    assert f'<option value="{admin}">{local_part(admin)} (admin)</option>' in text
+    assert f'<option value="{plain}">{local_part(plain)}</option>' in text
+    assert "ghost" not in text, "users in no wave cannot sign in, so are not offered"
+
+
+def test_mock_login_opens_app_and_api(mock_users):
+    _, plain = mock_users
+    browser = TestClient(app)
+    response = browser.post("/login", data={"user": plain, "to": "/app"}, follow_redirects=False)
+    assert (response.status_code, response.headers["location"]) == (303, "/app")
+    assert browser.get("/app").status_code == 200
+    me = browser.get("/api/me").json()
+    assert (me["address"], me["is_admin"]) == (plain, False)
+    assert browser.get("/admin", follow_redirects=False).headers["location"] == "/login?error=not-admin"
+    assert browser.get("/api/admin/stats").status_code == 401
+    browser.get("/logout")
+    assert browser.get("/app", follow_redirects=False).status_code == 303
+
+
+def test_mock_admin_reaches_admin_page_and_api(mock_users):
+    admin, _ = mock_users
+    browser = TestClient(app)
+    response = browser.post("/login", data={"user": admin, "to": "/admin"}, follow_redirects=False)
+    assert response.headers["location"] == "/admin"
+    assert browser.get("/admin").status_code == 200
+    assert browser.get("/api/admin/stats").status_code == 200
+    assert browser.get("/api/me").json()["is_admin"] is True
+
+
+def test_admin_user_by_basic_auth_reaches_admin(mock_users):
+    admin, plain = mock_users
+    assert client.get("/api/admin/stats", auth=(local_part(admin), local_part(admin))).status_code == 200
+    assert client.get("/api/admin/stats", auth=(local_part(plain), local_part(plain))).status_code == 401
+
+
+def test_login_rejects_users_not_offered(mock_users):
+    browser = TestClient(app)
+    response = browser.post("/login", data={"user": "mallory"}, follow_redirects=False)
+    assert response.headers["location"] == "/login?error=unknown"
+    assert "wave_mock_user" not in browser.cookies
 
 
 def test_admin_wrong_credentials_is_401():

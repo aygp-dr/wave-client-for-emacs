@@ -113,7 +113,7 @@
 
 (defn admin-view [current]
   [:div
-   [:header.topbar [:h1 "Wave Admin"] [:span.spacer]]
+   [:header.topbar [:h1 "Wave Admin"] [:span.spacer] [:a {:href "/app"} "Wave"] [:a {:href "/logout"} "Sign out"]]
    (when-let [message (:error current)]
      [:div.error message " " [:button {:on {:click #(swap! state assoc :error nil)}} "dismiss"]])
    [:main.admin-grid

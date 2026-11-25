@@ -5,10 +5,13 @@ Maps the state-carrying elements of the 2009 Wave UI (experiments/014) onto
 REST. Conversations still render over the FedOne websocket (fedone.py); this
 module only adds what the FedOne protocol never carried per user.
 
-Auth is HTTP Basic, mock-grade:
-  admin    WAVE_ADMIN_USER / WAVE_ADMIN_PASSWORD (default admin:admin)
+Auth is mock-grade, HTTP Basic or a mock-login cookie:
+  admin    WAVE_ADMIN_USER / WAVE_ADMIN_PASSWORD (default admin:admin), or
+           any user named in WAVE_ADMINS (default alice)
   users    any known address; password = local part (alice@localhost:alice),
            or WAVE_USER_PASSWORD for all users when set.
+  cookie   wave_mock_user, set by the /login dropdown (WAVE_MOCK_USERS);
+           WAVE_MOCK_LOGIN=0 disables it.
 Usernames may be given as the full address or the local part.
 
 Imported at the bottom of wave_server.py, after the models exist.
@@ -22,7 +25,7 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, Field
 from sqlalchemy import (
@@ -106,27 +109,95 @@ def normalize_address(username: str) -> str:
     return username if "@" in username else f"{username}@{DOMAIN}"
 
 
+# Mock login: a cookie naming the user, set by the /login dropdown (web.py).
+# No password, so it is as strong as the mock Basic scheme (password = name).
+# WAVE_MOCK_LOGIN=0 turns it off and leaves Basic only.
+MOCK_SESSION_COOKIE = "wave_mock_user"
+
+
+def mock_login_enabled() -> bool:
+    return os.getenv("WAVE_MOCK_LOGIN", "1") != "0"
+
+
+def mock_login_users() -> list[str]:
+    """Addresses offered on /login (WAVE_MOCK_USERS, default alice,bob,charlie,dave)."""
+    names = os.getenv("WAVE_MOCK_USERS", "alice,bob,charlie,dave").split(",")
+    return [normalize_address(name.strip()) for name in names if name.strip()]
+
+
+def admin_addresses() -> set[str]:
+    """Users who are also admins over all of Wave (WAVE_ADMINS, default alice)."""
+    return {normalize_address(name.strip()) for name in os.getenv("WAVE_ADMINS", "alice").split(",") if name.strip()}
+
+
+def is_admin(address: str) -> bool:
+    return address in admin_addresses()
+
+
+def basic_user(credentials: HTTPBasicCredentials, db: Session) -> str | None:
+    address = normalize_address(credentials.username)
+    expected = os.getenv("WAVE_USER_PASSWORD") or address.split("@", 1)[0]
+    if address in known_users(db) and _equal(credentials.password, expected):
+        return address
+    return None
+
+
+def cookie_user(request: Request, db: Session) -> str | None:
+    if not mock_login_enabled():
+        return None
+    name = request.cookies.get(MOCK_SESSION_COOKIE)
+    if not name:
+        return None
+    address = normalize_address(name)
+    return address if address in known_users(db) else None
+
+
+def signed_in_user(request: Request, credentials: HTTPBasicCredentials | None, db: Session) -> str | None:
+    """Basic credentials if given (wrong ones are a 401), else the mock cookie."""
+    if credentials is not None:
+        address = basic_user(credentials, db)
+        if address is None:
+            raise _unauthorized("wave")
+        return address
+    return cookie_user(request, db)
+
+
 def current_user(
+    request: Request,
     credentials: HTTPBasicCredentials | None = Depends(user_security),
     db: Session = Depends(get_db),
 ) -> str:
-    if credentials is None:
-        raise _unauthorized("wave")
-    address = normalize_address(credentials.username)
-    expected = os.getenv("WAVE_USER_PASSWORD") or address.split("@", 1)[0]
-    if address not in known_users(db) or not _equal(credentials.password, expected):
+    address = signed_in_user(request, credentials, db)
+    if address is None:
         raise _unauthorized("wave")
     return address
 
 
-def current_admin(credentials: HTTPBasicCredentials | None = Depends(admin_security)) -> str:
-    if credentials is None:
+def signed_in_admin(request: Request, credentials: HTTPBasicCredentials | None, db: Session) -> str | None:
+    """admin:admin (WAVE_ADMIN_USER/PASSWORD), or a user in WAVE_ADMINS signed
+    in by Basic or the mock cookie. Wrong Basic credentials are a 401."""
+    if credentials is not None:
+        user_ok = _equal(credentials.username, os.getenv("WAVE_ADMIN_USER", "admin"))
+        password_ok = _equal(credentials.password, os.getenv("WAVE_ADMIN_PASSWORD", "admin"))
+        if user_ok and password_ok:
+            return credentials.username
+        address = basic_user(credentials, db)
+        if address is not None and is_admin(address):
+            return address
         raise _unauthorized("wave-admin")
-    user_ok = _equal(credentials.username, os.getenv("WAVE_ADMIN_USER", "admin"))
-    password_ok = _equal(credentials.password, os.getenv("WAVE_ADMIN_PASSWORD", "admin"))
-    if not (user_ok and password_ok):
+    address = cookie_user(request, db)
+    return address if address is not None and is_admin(address) else None
+
+
+def current_admin(
+    request: Request,
+    credentials: HTTPBasicCredentials | None = Depends(admin_security),
+    db: Session = Depends(get_db),
+) -> str:
+    address = signed_in_admin(request, credentials, db)
+    if address is None:
         raise _unauthorized("wave-admin")
-    return credentials.username
+    return address
 
 
 # ---------------------------------------------------------------- models
@@ -178,6 +249,7 @@ class Me(BaseModel):
     address: str
     name: str
     avatar: str
+    is_admin: bool = False
 
 
 class Contact(Participant):
@@ -462,7 +534,7 @@ router = APIRouter(prefix="/api", tags=["user"])
 
 @router.get("/me", response_model=Me)
 def me(user: str = Depends(current_user)) -> Me:
-    return Me(**participant(user).model_dump())
+    return Me(**participant(user).model_dump(), is_admin=is_admin(user))
 
 
 @router.get("/folders", response_model=list[FolderCount])
