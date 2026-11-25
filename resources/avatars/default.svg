@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <title>unknown participant</title>
+  <rect width="64" height="64" rx="6" fill="#e3e8ee"/>
+  <circle cx="32" cy="25" r="12" fill="#a7b4c2"/>
+  <path d="M10 58 C10 42 20 38 32 38 C44 38 54 42 54 58 Z" fill="#a7b4c2"/>
+</svg>

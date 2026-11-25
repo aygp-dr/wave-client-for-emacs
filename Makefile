@@ -15,7 +15,7 @@ setup: deps ## Initial project setup
 
 ##@ Development
 
-.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo screenshots screenshots-macos gastown-sim gastown-sim-live
+.PHONY: help deps-check install dev test test-python test-elisp lint lint-python format server dashboard .env README.md mock-server mock-validate mock-test test-connection test-api ws-listen ws-open-wave ws-test ws-test-interactive rest-client rest-client-mock rest-client-interactive wave-dashboard wave-monitor elisp-check-syntax elisp-load-test elisp-list-waves elisp-version elisp-http-inbox elisp-batch-demo avatars screenshots screenshots-macos gastown-sim gastown-sim-live
 
 help: ## Show this help message
 	@echo "Available targets:"
@@ -236,6 +236,9 @@ elisp-http-inbox: ## Fetch inbox via HTTP (simpler than WebSocket, requires serv
 
 elisp-batch-demo: ## Run comprehensive batch mode demo (requires server)
 	@$(EMACS_BATCH) -l scripts/wave-batch-demo.el
+
+avatars: ## Regenerate mock user avatars (resources/avatars, deterministic)
+	@python3 scripts/gen-avatars.py
 
 screenshots: ## Capture screenshots of Wave client (requires server; X11, or Emacs.app on macOS)
 ifeq ($(shell uname -s),Darwin)

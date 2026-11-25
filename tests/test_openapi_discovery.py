@@ -26,3 +26,12 @@ def test_spec_has_servers_and_readable_operation_ids():
 def test_version_is_single_sourced():
     assert client.get("/").json()["version"] == __version__
     assert client.get("/openapi.json").json()["info"]["version"] == __version__
+
+
+def test_avatars_served_with_manifest():
+    manifest = client.get("/avatars/manifest.json").json()
+    assert manifest["default"] == "default.svg"
+    alice = client.get("/avatars/" + manifest["avatars"]["alice@localhost"])
+    assert alice.status_code == 200
+    assert alice.headers["content-type"].startswith("image/svg+xml")
+    assert client.get("/avatars/default.svg").status_code == 200

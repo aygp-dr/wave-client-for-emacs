@@ -1,0 +1,33 @@
+{
+  "size": 64,
+  "default": "default.svg",
+  "avatars": {
+    "admin@localhost": "admin@localhost.svg",
+    "alice@localhost": "alice@localhost.svg",
+    "bob@localhost": "bob@localhost.svg",
+    "book@gastown.local": "book@gastown.local.svg",
+    "case@gastown.local": "case@gastown.local.svg",
+    "charlie@localhost": "charlie@localhost.svg",
+    "cli@localhost": "cli@localhost.svg",
+    "deacon@gastown.local": "deacon@gastown.local.svg",
+    "deckard@gastown.local": "deckard@gastown.local.svg",
+    "goldie@gastown.local": "goldie@gastown.local.svg",
+    "kaylee@gastown.local": "kaylee@gastown.local.svg",
+    "mayor@gastown.local": "mayor@gastown.local.svg",
+    "molly@gastown.local": "molly@gastown.local.svg",
+    "polecat-furiosa@gastown.local": "polecat-furiosa@gastown.local.svg",
+    "public@localhost": "public.svg",
+    "refinery@gastown.local": "refinery@gastown.local.svg",
+    "samantha@gastown.local": "samantha@gastown.local.svg",
+    "scotty@gastown.local": "scotty@gastown.local.svg",
+    "system@localhost": "system@localhost.svg",
+    "test@localhost": "test@localhost.svg",
+    "testuser@localhost": "testuser@localhost.svg",
+    "uatu@gastown.local": "uatu@gastown.local.svg",
+    "unknown@localhost": "unknown@localhost.svg",
+    "user1@localhost": "user1@localhost.svg",
+    "user2@localhost": "user2@localhost.svg",
+    "wintermute@gastown.local": "wintermute@gastown.local.svg",
+    "witness@gastown.local": "witness@gastown.local.svg"
+  }
+}
