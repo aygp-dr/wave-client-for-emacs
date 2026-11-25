@@ -170,3 +170,21 @@ def test_new_wave_and_participant(scenario):
         db.query(UserWaveState).filter_by(wave_id=new_id).delete()
         db.commit()
         db.close()
+
+
+def test_change_is_pushed_to_open_websocket_channel(scenario):
+    import json as jsonlib
+    owner, friend, wave = scenario["owner"], scenario["friend"], scenario["wave"]
+    with client.websocket_connect("/socket") as socket:
+        socket.send_text(jsonlib.dumps({"version": 0, "sequenceNumber": 7, "messageType": "ProtocolOpenRequest",
+                                        "messageJson": jsonlib.dumps({"1": owner, "2": wave})}))
+        initial = jsonlib.loads(socket.receive_text())
+        assert initial["sequenceNumber"] == 7
+        created = client.post(f"/api/waves/{wave}/blips", json={"text": "pushed", "parent": "b+r1"},
+                              auth=auth(friend)).json()
+        pushed = jsonlib.loads(socket.receive_text())
+        assert pushed["sequenceNumber"] == 7
+        body = jsonlib.loads(pushed["messageJson"])
+        assert body["2"][0]["1"]["1"] == 0, "full resend from version 0 resets the client's wavelet"
+        documents = {op["3"]["1"] for delta in body["2"] for op in delta["3"] if "3" in op}
+        assert created["id"] in documents

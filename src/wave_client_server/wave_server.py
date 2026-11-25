@@ -1,11 +1,13 @@
 import json
 import logging
 import os
+import re
 from datetime import datetime
 from datetime import datetime as dt
 from enum import Enum
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote
 
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -260,6 +262,33 @@ class ConnectionManager:
         self.channel_callbacks: dict[int, str] = {}
         self.wave_channels: dict[str, int] = {}
         self.channel_counter = 0
+        # (websocket, wave id, sequence number) per ProtocolOpenRequest
+        self.subscriptions: list[tuple[WebSocket, str, int]] = []
+
+    def subscribe(self, websocket: WebSocket, wave_id: str, sequence_number: int) -> None:
+        self.subscriptions.append((websocket, wave_id, sequence_number))
+
+    async def push_wave(self, wave_id: str | None) -> None:
+        """Re-send synthesized updates to channels open on WAVE_ID and on the
+        index wave. Each update restarts from version 0, which makes the 2010
+        client reset and replay the wavelet, so a full resend is a valid
+        live update. WAVE_ID None (a new wave) refreshes index channels only."""
+        if not self.subscriptions:
+            return
+        db = SessionLocal()
+        try:
+            wavelets = db.query(Wavelet).all()
+        finally:
+            db.close()
+        for websocket, subscribed, sequence_number in list(self.subscriptions):
+            if subscribed not in (wave_id, fedone.INDEX_WAVE_ID):
+                continue
+            try:
+                for update in fedone.updates_for_open_request(subscribed, wavelets, sequence_number):
+                    await websocket.send_text(json.dumps(update))
+            except Exception:
+                logger.info("Dropping dead subscription to %s", subscribed)
+                self.subscriptions = [s for s in self.subscriptions if s[0] is not websocket]
 
     async def connect(self, websocket: WebSocket, client_id: str):
         logger.info(f"WebSocket connection attempt from client: {client_id}")
@@ -271,6 +300,7 @@ class ConnectionManager:
         logger.debug(f"Active connections: {list(self.active_connections.keys())}")
 
     def disconnect(self, websocket: WebSocket, client_id: str):
+        self.subscriptions = [s for s in self.subscriptions if s[0] is not websocket]
         if client_id in self.active_connections:
             self.active_connections[client_id].remove(websocket)
             if not self.active_connections[client_id]:
@@ -349,6 +379,11 @@ async def log_requests(request, call_next):
 
     response = await call_next(request)
     logger.info(f"Response status: {response.status_code}")
+    # Live updates: any successful change under /api/waves reaches open channels.
+    if request.method == "POST" and response.status_code < 400:
+        changed = re.match(r"^/api/waves(?:/([^/]+))?", request.url.path)
+        if changed:
+            await manager.push_wave(unquote(changed.group(1)) if changed.group(1) else None)
     return response
 
 
@@ -511,19 +546,9 @@ async def submit_delta(
     db.refresh(wavelet)
 
     # Broadcast update via WebSocket
-    update_message = {
-        "version": 0,
-        "sequenceNumber": manager.get_channel_number(wave_id),
-        "messageType": "ProtocolWaveletUpdate",
-        "messageJson": json.dumps(
-            {
-                "1": f"wave://localhost/{wave_id}/{submission.waveletName.waveletId}",
-                "2": [],  # deltas
-                "4": {"1": wavelet.version, "2": wavelet.history_hash or ""},
-            }
-        ),
-    }
-    await manager.broadcast(json.dumps(update_message))
+    # Live update for open channels is sent by the request middleware
+    # (manager.push_wave); the old broadcast carried "2": [], which trips the
+    # client's (assert deltas) (experiments/013, divergence 16).
 
     return SubmitResponse(
         success=True,
@@ -565,6 +590,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
                     db.close()
                 for update in updates:
                     await websocket.send_text(json.dumps(update))
+                manager.subscribe(websocket, wave_id, message.get("sequenceNumber", 1))
 
             elif message.get("messageType") == "ProtocolSubmitRequest":
                 # Handle submit requests

@@ -80,3 +80,11 @@ target-version = ['py311']
 minversion = "8.0"
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.mutmut]
+# Scope: the modules whose bugs would mislead the Emacs client.
+# Run: HYPOTHESIS_PROFILE=mutation uv run --extra test --extra dev mutmut run
+paths_to_mutate = ["src/wave_client_server/user_api.py", "src/wave_client_server/fedone.py"]
+tests_dir = ["tests/test_user_api.py", "tests/test_fedone.py", "tests/test_properties.py", "tests/conftest.py"]
+also_copy = ["resources", "src/wave_client_server"]
+pytest_add_cli_args = ["-p", "no:warnings", "-q", "-p", "no:cacheprovider"]
