@@ -1,0 +1,77 @@
+{
+  "chrome_version": "158.0.8127.89",
+  "app_console": [],
+  "app_me": "erin@localhost",
+  "app_folders": [
+    "Inbox\n3",
+    "Active\n0",
+    "All\n11",
+    "By me\n2",
+    "History\n2",
+    "Spam\n0",
+    "Trash\n0",
+    "Later\n1",
+    "Proj x\n3",
+    "alice",
+    "bob",
+    "charlie",
+    "dave",
+    "frank",
+    "ivan",
+    "judy",
+    "mallory",
+    "niaj",
+    "olivia",
+    "peggy",
+    "rupert",
+    "sybil",
+    "trent",
+    "victor",
+    "walter"
+  ],
+  "row_before_open": {
+    "class": "wave-row unread",
+    "badge": [
+      "7"
+    ]
+  },
+  "unread_blips_on_open": 7,
+  "row_after_open": {
+    "class": "wave-row selected",
+    "badge": []
+  },
+  "participants": 8,
+  "gadget_header_before": [
+    "Yes (0)",
+    "No (3)",
+    "Maybe (0)"
+  ],
+  "gadget_header_after": [
+    "Yes (1)",
+    "No (2)",
+    "Maybe (0)"
+  ],
+  "gadget_yes_voters": [
+    "erin@localhost"
+  ],
+  "reply_nested_under": [
+    "b+g2x4r3"
+  ],
+  "archive_removed_from_inbox": true,
+  "unarchive_returned_to_inbox": true,
+  "page_url_has_userinfo_in_location_href": false,
+  "admin_console": [],
+  "admin_stats": [
+    "0.2.1\nversion",
+    "healthy\nhealth",
+    "18\nwaves",
+    "99\nwavelets",
+    "17\nusers",
+    "0\nopen connections"
+  ],
+  "admin_user_rows": 17,
+  "admin_wave_rows": 18,
+  "admin_raw_wavelets": 9,
+  "admin_raw_has_reply": true,
+  "user_creds_on_admin": "Page.goto: net::ERR_INVALID_AUTH_CREDENTIALS at http://erin:erin@localhost:9896/admin"
+}
