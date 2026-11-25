@@ -32,9 +32,168 @@ DOMAIN = "localhost"
 PUBLIC = f"public@{DOMAIN}"
 NAMES = ["alice", "bob", "charlie", "dave", "erin", "frank", "grace", "heidi", "ivan", "judy",
          "mallory", "niaj", "olivia", "peggy", "rupert", "sybil", "trent", "victor", "walter"]
-WORDS = ["wave", "protocol", "emacs", "delta", "blip", "thread", "gadget", "federation", "inbox",
-         "operational", "transform", "sandbox", "playback", "robot", "extension", "client"]
 BASE_TIME = datetime(2026, 1, 1, 9, 0, 0)
+
+
+@dataclass(frozen=True)
+class Theme:
+    """A kind of conversation Wave users had in 2009-2010.
+
+    Titles are what a creator would call the wave; the opener is the rest of
+    the root blip; the chain is the conversation in order, so the n-th reply
+    of a wave says the n-th thing and threads read as a discussion rather
+    than word salad. Dates put the wave in its era."""
+    name: str
+    start: datetime
+    titles: tuple[str, ...]
+    opener: tuple[str, ...]
+    chain: tuple[str, ...]
+
+
+THEMES: tuple[Theme, ...] = (
+    Theme(
+        "io2010-live", datetime(2010, 5, 19, 9, 0),
+        titles=(
+            "Live Wave: Developing with HTML5 Wednesday May 19, at 3:00pm-4:00pm, Room #5 (More Info)",
+            "Live Wave: Measure in milliseconds redux: Meet Speed Tracer Wednesday May 19, at 10:45am-11:45am",
+            "Live Wave: How Google builds APIs",
+            "Live Wave: BigQuery and Prediction APIs",
+            "Live Wave: Google Charts Toolkit: a unified approach for creating dynamic charts on the web",
+            "Live Wave: Beyond design: Creating positive user experiences",
+            "Google I/O 2010: Opening up Closure Library",
+        ),
+        opener=(
+            "This is the official live wave for the session.",
+            "Add questions as replies; the speakers will take them at the end.",
+            "Slides and video will be posted after the conference.",
+        ),
+        chain=(
+            "Session starting now, room is packed.",
+            "Is there a video of this one for those of us not in Moscone?",
+            "Q: will the API be open to everyone, or invite only for now?",
+            "+1 to that question",
+            "They said invite only during the preview, open later this year.",
+            "Slides link please?",
+            "Posted on the session page, see the More Info link.",
+            "Great demo. Does this work offline?",
+            "The offline answer was: not yet, but they are looking at it.",
+            "Thanks all, see you at the after party.",
+        ),
+    ),
+    Theme(
+        "sandbox-2009", datetime(2009, 6, 1, 10, 0),
+        titles=(
+            "So how was Google I/O for you?",
+            "Who has invites left?",
+            "Wave sandbox: anyone else seeing playback lag on long waves?",
+            "New to Wave: anyone want to go through the features?",
+            "Wave etiquette: when do you reply inline vs at the bottom?",
+        ),
+        opener=(
+            "Looking for fellow sandbox account holders who want to get some waves going.",
+            "I got my sandbox account after the keynote and have no contacts yet.",
+        ),
+        chain=(
+            "I suppose they will not mind if we just started adding them.",
+            "It really is like email if it were invented today.",
+            "Watching other people type in real time is the strangest part.",
+            "Firefox gets slow once a wave passes a couple of hundred blips.",
+            "Chrome is much faster with it.",
+            "Try playback on this wave, it is fun to watch it grow.",
+            "The developer preview opens to 100,000 people on September 30.",
+            "I have 8 invites, reply here with your address.",
+            "Inline replies get confusing after the third level.",
+        ),
+    ),
+    Theme(
+        "fedone", datetime(2009, 7, 22, 14, 0),
+        titles=(
+            "FedOne: build from hg trunk fails with ant",
+            "Federating with wavesandbox.com over XMPP",
+            "Running the FedOne reference server behind Openfire",
+            "Is anyone running Wave in a Box in production?",
+        ),
+        opener=(
+            "Followed the getting-started page, the server starts but the client cannot connect.",
+            "Logs below.",
+        ),
+        chain=(
+            "Which Java version? It needs Java 6.",
+            "The server runs as an XMPP external component, so check the component port in Openfire.",
+            "The certificate has to match the domain you federate as.",
+            "run-server.sh first, then run-client-console.sh with your user@domain.",
+            "That fixed it, the console client sees my waves now.",
+            "Federating with the sandbox needs an allow-list entry on their side.",
+            "The websocket client branch is newer than the console client, try that.",
+            "Pinning to an older hg revision avoids the protocol change from last week.",
+        ),
+    ),
+    Theme(
+        "emacs-client", datetime(2010, 8, 1, 20, 0),
+        titles=(
+            "Emacs Wave client: websocket mode",
+            "M-x wave-list shows nothing",
+            "Rendering blips with ewoc in the Emacs client",
+            "Emacs client: reply support?",
+        ),
+        opener=(
+            "The Emacs client talks to a FedOne server over a websocket.",
+            "Load wave-client.el and run M-x wave-list.",
+        ),
+        chain=(
+            "Set wave-client-connection-method to websocket first.",
+            "It needs a FedOne server from the August 2010 revisions; newer ones changed the wire format.",
+            "Works for me on Emacs 23.1.",
+            "Blips render with ewoc, one node per blip.",
+            "The unread count comes from the index wave.",
+            "Replies are read-only for now, the submit side is not wired up.",
+            "Patches welcome, it is all on code.google.com.",
+        ),
+    ),
+    Theme(
+        "robots-gadgets", datetime(2010, 2, 8, 11, 0),
+        titles=(
+            "Friday lunch: who is in?",
+            "Writing a robot on App Engine with the Robots API v2",
+            "My robot keeps replying to itself",
+            "Gadget state: shared per wave or per user?",
+        ),
+        opener=(
+            "Vote with the gadget below.",
+            "Robot code is on appspot, capabilities are declared in the robot's profile.",
+        ),
+        chain=(
+            "In, as long as it is not the same place as last week.",
+            "Maybe, depends on the release.",
+            "The robot gets a BLIP_SUBMITTED event for its own blips too, filter on the author.",
+            "Gadget state is shared by everyone on the wave.",
+            "Use the participant id as the key if you want per-user state.",
+            "v2 lets the robot reply in the same request, no more proxying.",
+            "Count me out, deadline Friday.",
+        ),
+    ),
+    Theme(
+        "end-of-wave", datetime(2010, 8, 4, 18, 0),
+        titles=(
+            "Google stops developing Wave as a standalone product",
+            "Export your waves before the shutdown",
+            "Wave goes to Apache: what happens to FedOne?",
+        ),
+        opener=(
+            "Announced today on the official blog.",
+            "The site stays up through the end of the year.",
+        ),
+        chain=(
+            "Did not see that coming after I/O.",
+            "The protocol and FedOne are open source, so the code lives on.",
+            "Export to PDF works per wave; there is no bulk export yet.",
+            "Wave in a Box is going to the Apache incubator.",
+            "I will keep the Emacs client running against a local server.",
+            "Concurrent editing will show up in other products.",
+        ),
+    ),
+)
+THEMES_BY_NAME = {theme.name: theme for theme in THEMES}
 
 
 @dataclass
@@ -55,6 +214,7 @@ class WaveSpec:
     participants: list[str]
     blips: list[BlipSpec]
     start_minutes: int
+    era_start: datetime = BASE_TIME  # the theme's date; blips count from here
 
 
 @dataclass
@@ -79,18 +239,24 @@ class World:
 
 # ---------------------------------------------------------------- strategies
 
-def text_strategy(edgy: bool) -> st.SearchStrategy[str]:
-    """Realistic word salad, or (edgy) arbitrary printable unicode."""
-    words = st.lists(st.sampled_from(WORDS), min_size=1, max_size=14).map(" ".join)
-    if not edgy:
-        return words
+def unicode_text() -> st.SearchStrategy[str]:
     printable = st.characters(blacklist_categories=("Cs", "Cc", "Co", "Cn"))
-    return st.one_of(words, st.text(printable, min_size=1, max_size=120).map(str.strip).filter(bool))
+    return st.text(printable, min_size=1, max_size=120).map(str.strip).filter(bool)
+
+
+def themed(lines: st.SearchStrategy[str], edgy: bool) -> st.SearchStrategy[str]:
+    """A theme's line, or (edgy) sometimes arbitrary printable unicode."""
+    return st.one_of(lines, unicode_text()) if edgy else lines
+
+
+def chain_lines(theme: Theme, number: int, count: int) -> list[str]:
+    """COUNT consecutive lines of THEME's conversation, starting at reply NUMBER."""
+    return [theme.chain[(number + offset) % len(theme.chain)] for offset in range(count)]
 
 
 @st.composite
 def wave_specs(draw: st.DrawFn, index: int, users: list[str], edgy: bool, prefix: str = "s") -> WaveSpec:
-    text = text_strategy(edgy)
+    theme = draw(st.sampled_from(THEMES))
     creator = draw(st.sampled_from(users))
     others = [u for u in users if u != creator]
     invited = draw(st.lists(st.sampled_from(others), unique=True, max_size=len(others))) if others else []
@@ -99,13 +265,17 @@ def wave_specs(draw: st.DrawFn, index: int, users: list[str], edgy: bool, prefix
         participants.append(PUBLIC)
     authors = [p for p in participants if p != PUBLIC]
 
-    title = draw(st.one_of(text, text.map(lambda t: (t + " ") * 6).map(str.strip)))
-    root = BlipSpec("b+root", creator, None, [title, *draw(st.lists(text, max_size=3))], 0)
+    title = draw(themed(st.sampled_from(theme.titles), edgy))
+    opener = draw(st.lists(themed(st.sampled_from(theme.opener), edgy), max_size=3))
+    root = BlipSpec("b+root", creator, None, [title, *opener], 0)
     blips = [root]
     for number in range(draw(st.integers(0, 7))):
         parent = draw(st.sampled_from([b.blip_id for b in blips]))
+        lines = chain_lines(theme, number, draw(st.integers(1, 3)))
+        if edgy and draw(st.booleans()):
+            lines[0] = draw(unicode_text())
         blips.append(BlipSpec(f"b+{prefix}{index}r{number}", draw(st.sampled_from(authors)), parent,
-                              draw(st.lists(text, min_size=1, max_size=3)), 5 * (number + 1)))
+                              lines, 5 * (number + 1)))
     if draw(st.integers(0, 3)) == 0:
         host = draw(st.sampled_from(blips))
         voters = draw(st.lists(st.sampled_from(authors), unique=True))
@@ -113,8 +283,9 @@ def wave_specs(draw: st.DrawFn, index: int, users: list[str], edgy: bool, prefix
         for voter in voters:
             columns[draw(st.sampled_from(sorted(columns)))].append(voter)
         host.gadget = columns
+    # Within two weeks of the theme's date, so a dataset reads as its era.
     return WaveSpec(f"{DOMAIN}!w+{prefix}{index}", creator, title, participants, blips,
-                    draw(st.integers(0, 60 * 24 * 30)))
+                    draw(st.integers(0, 60 * 24 * 14)), theme.start)
 
 
 @st.composite
@@ -149,7 +320,7 @@ def known_users(world: World) -> list[str]:
 # ---------------------------------------------------------------- writer
 
 def blip_time(wave: WaveSpec, blip: BlipSpec) -> datetime:
-    return BASE_TIME + timedelta(minutes=wave.start_minutes + blip.minutes)
+    return wave.era_start + timedelta(minutes=wave.start_minutes + blip.minutes)
 
 
 def write_world(session: Any, world: World) -> None:
