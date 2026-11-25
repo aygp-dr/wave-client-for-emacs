@@ -22,6 +22,8 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
+from wave_client_server import fedone
+
 # Create logs directory
 os.makedirs("logs", exist_ok=True)
 
@@ -517,31 +519,19 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
                 msg_data = json.loads(message.get("messageJson", "{}"))
                 wave_id = msg_data.get("2", "indexwave!indexwave")
 
-                # Send initial wavelet update
+                # The 2010 client rebuilds wavelets by replaying deltas, so
+                # answer with deltas synthesized from the stored snapshots.
                 db = SessionLocal()
                 try:
-                    wavelets = (
-                        db.query(Wavelet).filter(Wavelet.wave_id == wave_id).all()
+                    updates = fedone.updates_for_open_request(
+                        wave_id,
+                        db.query(Wavelet).all(),
+                        message.get("sequenceNumber", 1),
                     )
-                    for wavelet in wavelets:
-                        update = {
-                            "version": 0,
-                            "sequenceNumber": message.get("sequenceNumber", 1),
-                            "messageType": "ProtocolWaveletUpdate",
-                            "messageJson": json.dumps(
-                                {
-                                    "1": f"wave://localhost/{wavelet.wave_id}/{wavelet.wavelet_id}",
-                                    "2": [],  # deltas
-                                    "4": {
-                                        "1": wavelet.version,
-                                        "2": wavelet.history_hash or "",
-                                    },
-                                }
-                            ),
-                        }
-                        await websocket.send_text(json.dumps(update))
                 finally:
                     db.close()
+                for update in updates:
+                    await websocket.send_text(json.dumps(update))
 
             elif message.get("messageType") == "ProtocolSubmitRequest":
                 # Handle submit requests

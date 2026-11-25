@@ -333,11 +333,13 @@ updated."
                      ,(let ((doc (gethash 'digest (wave-wavelet-docs wavelet))))
                         (if (null doc)
                             ""
-                          ;; TODO(ohler): extract character content
-                          ;; from document properly
-                          (format "%S" (wave-doc-content doc))))
+                          ;; Character content only; elements dropped.
+                          (mapconcat #'identity
+                                     (remove-if-not #'stringp
+                                                    (wave-doc-content doc))
+                                     "")))
                      :unread 0             ; we don't know
-                     :creator "author"     ; we don't know
+                     :creator ,(or (wave-wavelet-creator wavelet) "author")
                      ))))
     (sort* plists #'string< :key (lambda (plist) (plist-get plist :id)))))
 

@@ -220,36 +220,9 @@ elisp-load-test: ## Test that all elisp files load without errors
 		-l wave-list \
 		--eval "(message \"All wave-client modules loaded successfully\")"
 
-elisp-list-waves: ## List waves from server in batch mode (requires running server)
+elisp-list-waves: ## List waves through the real websocket client (requires running server)
 	@echo "Fetching waves from localhost:9898..."
-	@$(EMACS_BATCH) \
-		--eval "(require 'cl)" \
-		-l wave-util \
-		-l wave-data \
-		-l websocket \
-		-l wave-client-websocket \
-		-l wave-client \
-		--eval "(progn \
-			(setq wave-client-connection-method 'websocket) \
-			(setq wave-client-ws-url \"ws://localhost:9898/ws\") \
-			(setq wave-client-user \"batch@localhost\") \
-			(setq wave-debug t) \
-			(defvar batch-inbox-received nil) \
-			(wave-client-ws-connect wave-client-ws-url) \
-			(dotimes (_ 10) (accept-process-output nil 0.5)) \
-			(wave-ws-get-inbox \
-			  (lambda (inbox) \
-			    (setq batch-inbox-received t) \
-			    (message \"=== INBOX (%d waves) ===\" (length inbox)) \
-			    (dolist (wave inbox) \
-			      (message \"  %s: %s\" \
-			        (plist-get wave :id) \
-			        (plist-get wave :digest))))) \
-			(dotimes (_ 20) \
-			  (unless batch-inbox-received \
-			    (accept-process-output nil 0.5))) \
-			(unless batch-inbox-received \
-			  (message \"Timeout waiting for inbox response\")))"
+	@$(EMACS_BATCH) -l scripts/wave-ws-inbox.el
 
 elisp-version: ## Show Emacs version being used
 	@$(EMACS) --version | head -1
