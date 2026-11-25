@@ -611,6 +611,11 @@ from wave_client_server import user_api  # noqa: E402
 app.include_router(user_api.router)
 app.include_router(user_api.admin_router)
 
+# Browser views (/admin, /app); after user_api, whose auth they reuse.
+from wave_client_server import web  # noqa: E402
+
+app.include_router(web.router)
+
 
 if __name__ == "__main__":
     import uvicorn
