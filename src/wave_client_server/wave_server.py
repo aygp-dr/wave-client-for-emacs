@@ -330,7 +330,11 @@ def init_demo_data(db: Session):
 @app.middleware("http")
 async def log_requests(request, call_next):
     logger.info(f"Incoming request: {request.method} {request.url}")
-    logger.debug(f"Headers: {dict(request.headers)}")
+    logger.debug(
+        "Headers: %s",
+        {k: ("<redacted>" if k.lower() in ("authorization", "cookie") else v)
+         for k, v in request.headers.items()},
+    )
 
     # Log request body for POST/PUT
     if request.method in ["POST", "PUT"]:
@@ -529,6 +533,7 @@ async def submit_delta(
     )
 
 
+@app.websocket("/socket")  # path in the 2010 README (experiments/001)
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
     await manager.connect(websocket, client_id)
@@ -572,6 +577,13 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str = "default"):
     except Exception as e:
         logger.error(f"WebSocket error: {e}", exc_info=True)
         manager.disconnect(websocket, client_id)
+
+
+# Per-user and admin API; imported last because it uses the models above.
+from wave_client_server import user_api  # noqa: E402
+
+app.include_router(user_api.router)
+app.include_router(user_api.admin_router)
 
 
 if __name__ == "__main__":

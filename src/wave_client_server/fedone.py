@@ -57,12 +57,15 @@ def mutate_document(doc_id: str, components: list[Component]) -> Operation:
     return {"3": {"1": doc_id, "2": {"1": components}}}
 
 
-def snapshot_to_components(content: Iterable[Any]) -> list[Component]:
+def snapshot_to_components(content: Iterable[Any],
+                           gadget_votes: dict[str, dict[str, list[str]]] | None = None) -> list[Component]:
     """Translate stored snapshot content to element/character components.
 
     Strings become characters; {"type": t, "attributes": {...}} becomes an
     empty element <t .../>. Content not already starting with a line gets
     one, since the client fills a paragraph each time a line element closes.
+    A gadget element gets its vote tallies (from the wavelet's "gadgets" doc)
+    as yes/no/maybe attributes of comma-separated addresses.
     """
     components: list[Component] = []
     items = list(content)
@@ -74,12 +77,17 @@ def snapshot_to_components(content: Iterable[Any]) -> list[Component]:
                 components.append(characters(item))
         elif isinstance(item, dict) and "type" in item:
             attributes = {key: str(value) for key, value in (item.get("attributes") or {}).items()}
+            if item["type"] == "gadget" and gadget_votes is not None:
+                tally = gadget_votes.get(attributes.get("id", "gadget"), {})
+                for choice in ("yes", "no", "maybe"):
+                    attributes[choice] = ",".join(tally.get(choice, []))
             components += [element_start(item["type"], attributes), element_end()]
     return components
 
 
-def blip_components(content: Iterable[Any]) -> list[Component]:
-    return [element_start("body"), *snapshot_to_components(content), element_end()]
+def blip_components(content: Iterable[Any],
+                    gadget_votes: dict[str, dict[str, list[str]]] | None = None) -> list[Component]:
+    return [element_start("body"), *snapshot_to_components(content, gadget_votes), element_end()]
 
 
 def plain_text(content: Iterable[Any]) -> str:
@@ -151,25 +159,41 @@ def conversation_update(wave_id: str, wavelets: list[Any], sequence_number: int)
 
     The root wavelet's main doc becomes blip b+root; each other stored wavelet
     (the seed keeps replies as separate b+ wavelets) becomes one more blip,
-    authored by its creator so blip contributors come out right.
+    authored by its creator so blip contributors come out right. A blip whose
+    docs carry {"thread": {"parent": id}} is nested in a <thread> inside its
+    parent, which the client renders indented; otherwise it follows the root.
     """
     if not wavelets:
         return None
     root = next((w for w in wavelets if "conv+root" in w.wavelet_id), wavelets[0])
     replies = [w for w in wavelets if w is not root]
 
-    blips: list[tuple[str, str, list[Any]]] = []  # (blip id, author, content)
-    root_docs = root.docs or {}
+    def blip_id(wavelet: Any) -> str:
+        local = local_part(wavelet.wavelet_id)
+        return local if local.startswith("b+") else f"b+{local}"
+
     root_author = root.creator or f"system@{DOMAIN}"
-    blips.append(("b+root", root_author, root_docs.get("main", {}).get("content", [])))
-    for reply in replies:
-        reply_docs = reply.docs or {}
-        blips.append((
-            local_part(reply.wavelet_id) if local_part(reply.wavelet_id).startswith("b+")
-            else f"b+{local_part(reply.wavelet_id)}",
-            reply.creator or root_author,
-            reply_docs.get("main", {}).get("content", []),
-        ))
+    blips: list[tuple[str, str, Any]] = [("b+root", root_author, root)]
+    blips += [(blip_id(reply), reply.creator or root_author, reply) for reply in replies]
+    known = {bid for bid, _, _ in blips}
+    children: dict[str, list[str]] = {}
+    top_level: list[str] = []
+    for bid, _, wavelet in blips[1:]:
+        parent = ((wavelet.docs or {}).get("thread") or {}).get("parent")
+        if parent and parent in known and parent not in ("b+root", bid):
+            children.setdefault(parent, []).append(bid)
+        else:
+            top_level.append(bid)
+
+    def blip_elements(bid: str) -> list[Component]:
+        elements = [element_start("blip", {"id": bid})]
+        if children.get(bid):
+            elements.append(element_start("thread", {"id": f"t+{local_part(bid)[2:]}"}))
+            for child in children[bid]:
+                elements += blip_elements(child)
+            elements.append(element_end())
+        elements.append(element_end())
+        return elements
 
     participants: list[str] = list(root.participants or [root_author])
     for reply in replies:
@@ -178,16 +202,18 @@ def conversation_update(wave_id: str, wavelets: list[Any], sequence_number: int)
                 participants.append(participant)
 
     manifest = [element_start("conversation")]
-    for blip_id, _, _ in blips:
-        manifest += [element_start("blip", {"id": blip_id}), element_end()]
+    for bid in ["b+root", *top_level]:
+        manifest += blip_elements(bid)
     manifest.append(element_end())
 
     authored_ops: list[tuple[str, list[Operation]]] = [
         (root_author, [*(add_participant(p) for p in participants),
                        mutate_document("conversation", manifest)]),
     ]
-    for blip_id, author, content in blips:
-        authored_ops.append((author, [mutate_document(blip_id, blip_components(content))]))
+    for bid, author, wavelet in blips:
+        docs = wavelet.docs or {}
+        authored_ops.append((author, [mutate_document(
+            bid, blip_components(docs.get("main", {}).get("content", []), docs.get("gadgets", {})))]))
 
     return wavelet_update(wavelet_url(wave_id, f"{DOMAIN}!conv+root"), authored_ops, sequence_number)
 
