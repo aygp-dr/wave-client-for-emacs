@@ -1,0 +1,7 @@
+{"t": 0.0, "dir": "handshake", "frame": {"status": "HTTP/1.1 101 WebSocket Protocol Handshake", "challenge_ok": true}}
+{"t": 0.0, "dir": "send", "frame": {"messageType": "ProtocolOpenRequest", "sequenceNumber": 1, "message": {"1": "alice@local.net", "2": "local.net/w+oracle4", "3": [""]}}}
+{"t": 0.005, "dir": "recv", "frame": {"messageType": "ProtocolWaveletUpdate", "sequenceNumber": 1, "message": {"1": "local.net/w+oracle4/~/dummy+root", "2": [], "7": "ch4"}}}
+{"t": 0.006, "dir": "recv", "frame": {"messageType": "ProtocolWaveletUpdate", "sequenceNumber": 1, "message": {"1": "local.net/w+oracle4/~/dummy+root", "2": [], "6": true}}}
+{"t": 3.002, "dir": "send", "frame": {"messageType": "ProtocolSubmitRequest", "sequenceNumber": 2, "message": {"1": "local.net/w+oracle4/~/conv+root", "2": {"1": {"1": 0, "2": "776176653A2F2F6C6F63616C2E6E65742F772B6F7261636C65342F636F6E762B726F6F74"}, "2": "alice@local.net", "3": [{"1": "alice@local.net"}, {"3": {"1": "b+oracle1", "2": {"1": [{"3": {"1": "body"}}, {"3": {"1": "line"}}, {"4": true}, {"2": "hello from the oracle"}, {"4": true}]}}}]}, "3": "ch4"}}}
+{"t": 3.017, "dir": "recv", "frame": {"messageType": "ProtocolSubmitResponse", "sequenceNumber": 2, "message": {"1": 2, "3": {"1": 2.0, "2": "A01E8BE1B618609B5C70C4BCD250B9397AABF1CF"}}}}
+{"t": 3.018, "dir": "recv", "frame": {"messageType": "ProtocolWaveletUpdate", "sequenceNumber": 1, "message": {"1": "local.net/w+oracle4/~/conv+root", "2": [], "3": {"1": 2.0, "2": "A01E8BE1B618609B5C70C4BCD250B9397AABF1CF"}, "7": "ch4"}}}

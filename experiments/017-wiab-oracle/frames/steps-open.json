@@ -1,0 +1,1 @@
+[{"messageType": "ProtocolOpenRequest", "message": {"1": "alice@local.net", "2": "local.net/w+oracle1", "3": [""]}, "wait": 5}]

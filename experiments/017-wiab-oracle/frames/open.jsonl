@@ -1,0 +1,4 @@
+{"t": 0.0, "dir": "handshake", "frame": {"status": "HTTP/1.1 101 WebSocket Protocol Handshake", "challenge_ok": true}}
+{"t": 0.001, "dir": "send", "frame": {"messageType": "ProtocolOpenRequest", "sequenceNumber": 1, "message": {"1": "alice@local.net", "2": "local.net/w+oracle1", "3": [""]}}}
+{"t": 0.03, "dir": "recv", "frame": {"messageType": "ProtocolWaveletUpdate", "sequenceNumber": 1, "message": {"1": "local.net/w+oracle1/~/dummy+root", "2": [], "7": "ch1"}}}
+{"t": 0.039, "dir": "recv", "frame": {"messageType": "ProtocolWaveletUpdate", "sequenceNumber": 1, "message": {"1": "local.net/w+oracle1/~/dummy+root", "2": [], "6": true}}}
